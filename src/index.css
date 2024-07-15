@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.leaflet-popup-content-wrapper {
+  width: fit-content !important;
+  border-radius: 0;
+}
+
+.leaflet-popup-content {
+  width: fit-content !important;
+  margin: 0;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  color: black;
+}
+
+.leaflet-container a.leaflet-popup-close-button:hover,
+.leaflet-container a.leaflet-popup-close-button:focus {
+  color: white;
+}
+
+.css-1nbsiwm-MuiRating-root {
+  font-size: 16px !important;
+}
+.leaflet-touch .leaflet-control-geocoder-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.leaflet-control-geocoder-form {
+  display: block;
+  height: 0px;
+  overflow: hidden;
+}
+
+.leaflet-control-geocoder-expanded .leaflet-control-geocoder-form {
+  height: 30px;
+}
+
+.leaflet-control-geocoder-form input {
+  font-size: 120%;
+  border: 0;
+  background-color: transparent;
+  width: 0;
+  height: 0px;
+  transition: width 0.5s ease;
+}
+
+.leaflet-control-geocoder-expanded .leaflet-control-geocoder-form input {
+  width: 246px;
+  height: 30px;
+  transition: width 0.5s ease;
+}
+
+
+/* Layers */
+
+
+
+/* Customize the Layer Control container */
+.leaflet-control-layers {
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Shadow for a 3D effect */
+  font-family: 'Arial', sans-serif; /* Custom font */
+}
+
+/* Customize the Layer Control toggle button */
+.leaflet-control-layers-toggle {
+  border-radius: 5px; /* Rounded corners */
+  width: 30px; /* Custom width */
+  height: 30px; /* Custom height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff; /* White icon */
+  font-size: 20px; /* Increase icon size */
+}
+
+/* Customize the Layer Control list */
+.leaflet-control-layers-list {
+  padding: 10px; /* Add padding */
+}
+
+/* Customize the individual layer items */
+.leaflet-control-layers-list label {
+  display: flex;
+  align-items: center;
+  padding: 5px 0; /* Add padding between items */
+}
+
+/* Customize the layer checkbox */
+.leaflet-control-layers-list input[type="checkbox"] {
+  margin-right: 10px; /* Space between checkbox and label */
+}
+
+/* Customize hover effect on the layer items */
+.leaflet-control-layers-list label:hover {
+  background-color: rgba(0, 123, 255, 0.1); /* Light blue background on hover */
+}
+
+/* Adjust the width of the control layers list */
+.leaflet-control-layers-expanded .leaflet-control-layers-list {
+  width: 200px; /* Custom width */
+}
