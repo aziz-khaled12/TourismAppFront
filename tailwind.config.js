@@ -3,10 +3,15 @@
 module.exports = {
   content: [
     "./index.html",
-    "./src/components/*.{jsx,tsx}", // Adjust the path to your React components directory
+    "./src/**/*.{js,jsx,ts,tsx}", // Include all relevant file extensions
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "#212121",
+        secondary: "#E0E0E0",
+      },
+    },
   },
   plugins: [],
-}
+};

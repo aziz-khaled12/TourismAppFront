@@ -1,63 +1,90 @@
-import React, { useEffect, useState } from "react";
-import { useMap } from "react-leaflet";
-import L from "leaflet";
-import "leaflet-control-geocoder/dist/Control.Geocoder.css";
-import "leaflet-control-geocoder";
+import React, { useEffect, useRef, useState } from "react";
+import { List, ListItemButton, ListItemText, TextField } from "@mui/material";
 
-const GeocoderControl = () => {
-  const map = useMap();
-  const openCageApiKey = "97d01976f74a4244a84f4d077642de7f"; // Replace with your OpenCage API key
-  const [marker, setMarker] = useState(null);
+const GeocoderComponent = ({data, type}) => {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+  const debounceTimeoutRef = useRef(null);
 
   useEffect(() => {
-    const geocoder = L.Control.Geocoder.opencage({
-      geocodingQueryParams: {
-        key: openCageApiKey,
-        countrycode: "dz",
-        limit: 10,
-        language: "en",
-      },
-    });
-
-    const geocoderControl = L.Control.geocoder({
-      query: "",
-      placeholder: "Search here...",
-      defaultMarkGeocode: false,
-      geocoder,
-    }).addTo(map);
-
-    const handleMarkGeocode = (e) => {
-      const latlng = e.geocode.center;
-      console.log("Geocode result:", e.geocode);
-      if (latlng) {
-        console.log("Flying to:", latlng);
-        map.flyTo(latlng, 15, {
-          animate: true,
-          duration: 1.5, // Duration of animation in seconds
-        });
-
-        // Add or update marker
-        if (marker) {
-          marker.setLatLng(latlng);
-        } else {
-          const newMarker = L.marker(latlng).addTo(map);
-          setMarker(newMarker);
-        }
-      } else {
-        console.error("No latlng found in geocode result:", e.geocode);
+    const handleSearch = () => {
+      if (query.trim() === "") {
+        setResults([]);
+        return;
       }
+
+      const filteredData = data.filter((instance) =>
+        instance.name.toLowerCase().includes(query.toLowerCase())
+      );
+      setResults(filteredData);
     };
 
-    // Attach event listener
-    geocoderControl.on("markgeocode", handleMarkGeocode);
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+
+    debounceTimeoutRef.current = setTimeout(handleSearch, 500); // 500ms debounce delay
 
     return () => {
-      geocoderControl.off("markgeocode", handleMarkGeocode);
-      map.removeControl(geocoderControl);
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
     };
-  }, [map, openCageApiKey, marker]);
+  }, [query, data]);
 
-  return null;
+  const handleResultClick = () => {
+    setResults([]);
+  };
+
+  useEffect(() => {
+    console.log(results);
+  }, [results]);
+
+  const containerRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (containerRef.current && !containerRef.current.contains(event.target)) {
+      setResults([]); // Clear results when clicking outside
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <div ref={containerRef} className="w-full h-full ">
+      <TextField
+        id="outlined-search"
+        type="search"
+        value={query}
+        className="!bg-gray-50 !rounded-lg !w-full"
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder={`Search for a ${type}`}
+      />
+
+      {results.length > 0 && (
+        <List
+          sx={{ width: "100%", maxWidth: 360 }}
+          className="!mt-2 rounded-lg !w-full !bg-secondary"
+        >
+          {results.map((result, index) => (
+            <ListItemButton
+              key={index}
+              onClick={() => handleResultClick(result)}
+            >
+              <ListItemText
+                primary={<span className="!text-xs">{result.name}</span>}
+              />
+            </ListItemButton>
+          ))}
+        </List>
+      )}
+    </div>
+  );
 };
 
-export default GeocoderControl;
+export default GeocoderComponent;

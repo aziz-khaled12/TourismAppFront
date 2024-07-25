@@ -1,5 +1,8 @@
+import React from "react";
 import hotelImage from "../assets/hotelImage.jpg";
 import Rating from "@mui/material/Rating";
+
+
 const HotelCard = ({ name, address, rating, num }) => (
   <div className="h-30 w-[250px]">
     <div className="relative">

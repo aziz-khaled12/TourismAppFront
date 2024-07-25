@@ -1,6 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@300;400;500;700;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+*{
+  font-family: 'Zen Kaku Gothic Antique', sans-serif;
+}
+
 
 .leaflet-popup-content-wrapper {
   width: fit-content !important;
@@ -104,4 +110,26 @@
 /* Adjust the width of the control layers list */
 .leaflet-control-layers-expanded .leaflet-control-layers-list {
   width: 200px; /* Custom width */
+}
+
+/* Popup  */
+.popup-content {
+  display: block; /* Ensure the content is displayed */
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
+/*MUI*/
+
+.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root{
+  border-radius: 8px !important;
+}
+
+.css-sghohy-MuiButtonBase-root-MuiButton-root{
+  text-transform: none !important;
+}
+
+.z-500{
+  z-index: 500;
 }
