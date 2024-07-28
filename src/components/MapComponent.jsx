@@ -7,7 +7,6 @@ import {
   Popup,
 } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
-import GeocoderControl from "./GeocoderControl";
 import "leaflet/dist/leaflet.css";
 import "leaflet-control-geocoder/dist/Control.Geocoder.css";
 import LocateControl from "./LocateControl ";
@@ -18,8 +17,27 @@ import HotelCard from "./HotelCard";
 import NominatimSearch from "./NominatimSearch";
 
 const MapComponent = () => {
- 
 
+  const [hotels, setHotels] = useState([])
+ 
+  const fetchHotels = async () => {
+    const response = await fetch("https://overpass-api.de/api/interpreter", {
+      method: "POST",
+      body: `
+          [out:json];
+          area["ISO3166-1"="DZ"][admin_level=2];
+          node["tourism"="hotel"](area);
+          out body;
+        `,
+    });
+    const data = await response.json();
+    console.log(data)
+    return data.elements;
+  };
+
+  useEffect(() => {
+    fetchHotels()
+  }, [])
   return (
     <MapContainer
       center={[36.7372, 3.0869]}

@@ -1,51 +1,89 @@
 import React, { useEffect, useRef, useState } from "react";
-import { List, ListItemButton, ListItemText, TextField } from "@mui/material";
+import {
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  TextField,
+} from "@mui/material";
+import { HiOutlineLocationMarker } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
+import { GetWilayas } from "../datafetch/locations";
+import { useAuth } from "../context/AuthContext";
 
-const GeocoderComponent = ({data, type}) => {
+const GeocoderComponent = () => {
   const [query, setQuery] = useState("");
+  const [wilayas, setWilayas] = useState();
   const [results, setResults] = useState([]);
   const debounceTimeoutRef = useRef(null);
+  const { accessToken } = useAuth();
+  const [notFound, setNotFound] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const handleSearch = () => {
-      if (query.trim() === "") {
-        setResults([]);
-        return;
-      }
-
-      const filteredData = data.filter((instance) =>
-        instance.name.toLowerCase().includes(query.toLowerCase())
-      );
-      setResults(filteredData);
+    const fetchWilayas = async () => {
+      await GetWilayas(setWilayas, accessToken);
     };
+    fetchWilayas();
+  }, [accessToken]);
 
-    if (debounceTimeoutRef.current) {
-      clearTimeout(debounceTimeoutRef.current);
-    }
+  useEffect(() => {
+    if (wilayas) {
+      const handleSearch = () => {
+        if (query.trim() === "") {
+          setResults([]);
+          return;
+        }
+        const filteredData = wilayas
+          .filter((instance) => instance.name.toLowerCase().includes(query.toLowerCase()))
+          .slice(0, 5);
 
-    debounceTimeoutRef.current = setTimeout(handleSearch, 500); // 500ms debounce delay
+        if (filteredData.length === 0) {
+          setResults([]);
+          setNotFound(true);
+        } else {
+          setResults(filteredData);
+        }
+      };
 
-    return () => {
       if (debounceTimeoutRef.current) {
         clearTimeout(debounceTimeoutRef.current);
       }
-    };
-  }, [query, data]);
 
-  const handleResultClick = () => {
+      debounceTimeoutRef.current = setTimeout(handleSearch, 500); // 500ms debounce delay
+
+      return () => {
+        if (debounceTimeoutRef.current) {
+          clearTimeout(debounceTimeoutRef.current);
+        }
+      };
+    }
+  }, [query, wilayas]);
+
+  const handleResultClick = (wilaya) => {
+    console.log("selected wilaya: ", wilaya)
+    navigate(`/hotel/${wilaya}`);
     setResults([]);
   };
 
   useEffect(() => {
-    console.log(results);
-  }, [results]);
+    if (results.length > 0 || query.length === 0) {
+      setNotFound(false);
+    }
+  }, [results, query]);
 
   const containerRef = useRef(null);
 
   const handleClickOutside = (event) => {
     if (containerRef.current && !containerRef.current.contains(event.target)) {
-      setResults([]); // Clear results when clicking outside
+      setResults([]);
+      setNotFound(false);
     }
+  };
+
+  const handleBack = () => {
+    navigate("/"); // Go back one page in the browser history
   };
 
   useEffect(() => {
@@ -55,32 +93,73 @@ const GeocoderComponent = ({data, type}) => {
     };
   }, []);
 
+  useEffect(() => {
+    console.log(results);
+  }, [results]);
+
   return (
-    <div ref={containerRef} className="w-full h-full ">
-      <TextField
-        id="outlined-search"
-        type="search"
-        value={query}
-        className="!bg-gray-50 !rounded-lg !w-full"
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder={`Search for a ${type}`}
-      />
+    <div ref={containerRef} className="w-full h-full flex justify-center">
+      <div className="w-full flex justify-around items-center relative">
+        <TextField
+          id="outlined-search"
+          type="search"
+          value={query}
+          className="!bg-gray-50 !rounded-full !w-[80%] !relative"
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={`Search for a Place`}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "gray", // default border color
+              },
+              "&:hover fieldset": {
+                borderColor: "gray", // border color on hover
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "green", // border color when focused
+              },
+            },
+          }}
+        />
+
+        <span className="text-[#616161] underline cursor-pointer" onClick={handleBack}>
+          Cancel
+        </span>
+      </div>
 
       {results.length > 0 && (
         <List
-          sx={{ width: "100%", maxWidth: 360 }}
-          className="!mt-2 rounded-lg !w-full !bg-secondary"
+          sx={{ width: "340px" }}
+          className="!mt-2 rounded-lg !bg-secondary !absolute z-10 !top-32 !border-green-800 !border !border-solid"
         >
           {results.map((result, index) => (
             <ListItemButton
               key={index}
-              onClick={() => handleResultClick(result)}
+              onClick={() => handleResultClick(result.name)}
             >
+              <ListItemIcon>
+                <HiOutlineLocationMarker className="text-green-800" />
+              </ListItemIcon>
               <ListItemText
-                primary={<span className="!text-xs">{result.name}</span>}
+                primary={
+                  <span className="!text-sm !font-[500]">{result.name}</span>
+                }
               />
             </ListItemButton>
           ))}
+        </List>
+      )}
+
+      {notFound && (
+        <List
+        sx={{ width: "340px" }}
+        className="!mt-2 rounded-lg !bg-secondary !absolute z-10 !top-32 !border-green-800 !border !border-solid"
+        >
+          <ListItem>
+            <ListItemText
+              primary={<span className="!text-sm !font-bold">Not Found</span>}
+            />
+          </ListItem>
         </List>
       )}
     </div>

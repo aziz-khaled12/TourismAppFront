@@ -128,7 +128,7 @@ const Signup = () => {
       <div className="w-full flex items-center justify-center">
         <div className="flex w-full items-center flex-col">
           <form
-            className="w-[410px] bg-[#f9f9f9] p-10 rounded-3xl"
+            className="w-[370px] bg-[#f9f9f9] p-6 rounded-3xl"
             onSubmit={handleSubmit}
           >
             <div className="mb-8">

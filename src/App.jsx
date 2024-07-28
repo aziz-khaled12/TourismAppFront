@@ -7,6 +7,7 @@ import Home from "./components/Home";
 import HotelSearch from "./components/HotelSearch";
 import { useAuth } from "./context/AuthContext";
 import PortectedRoutes from "./utils/PortectedRoutes";
+import HotelResults from "./components/HotelResults";
 function App() {
   const { isAuthenticated } = useAuth();
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route element={<PortectedRoutes />}>
             <Route path="/" element={<Home />} />
             <Route path="/hotel" element={<HotelSearch />} />
+            <Route path="/hotel/:wilaya" element={<HotelResults />} />
             <Route path="/map" element={<MapComponent />} />
           </Route>
         </Routes>{" "}

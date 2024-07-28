@@ -13,3 +13,17 @@ export const GetHotels = async (setHotels, token) => {
     console.log(error);
   }
 };
+
+
+export const GetWilayas = async (setWilayas, token) => {
+  
+  try {
+    const res = await axios.get("http://127.0.0.1:3000/locations/wilaya", {
+      headers: { Authorization: `${token}` },
+    });
+    setWilayas(res.data);
+    console.log(res.data)
+  } catch (error) {
+    console.log(error);
+  }
+};
