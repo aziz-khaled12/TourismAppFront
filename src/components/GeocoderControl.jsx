@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
-import { GetWilayas } from "../datafetch/locations";
+import { GetWilayas } from "../datafetch/hotels";
 import { useAuth } from "../context/AuthContext";
 
 const GeocoderComponent = () => {
@@ -63,7 +63,7 @@ const GeocoderComponent = () => {
 
   const handleResultClick = (wilaya) => {
     console.log("selected wilaya: ", wilaya)
-    navigate(`/hotel/${wilaya}`);
+    navigate(`/hotels/${wilaya}`);
     setResults([]);
   };
 
@@ -130,7 +130,7 @@ const GeocoderComponent = () => {
       {results.length > 0 && (
         <List
           sx={{ width: "340px" }}
-          className="!mt-2 rounded-lg !bg-secondary !absolute z-10 !top-32 !border-green-800 !border !border-solid"
+          className="!mt-2 rounded-lg !bg-secondary !absolute z-10 !top-24 !border-green-800 !border !border-solid"
         >
           {results.map((result, index) => (
             <ListItemButton

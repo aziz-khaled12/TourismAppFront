@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import GeocoderComponent from "./GeocoderControl";
-import { GetHotels } from "../datafetch/locations";
+import { GetHotels } from "../datafetch/hotels";
 import { useAuth } from "../context/AuthContext";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { MdNearMe } from "react-icons/md";
@@ -22,7 +22,7 @@ const popularLocations = [
 ];
 const HotelSearch = () => {
   const [hotels, setHotels] = useState();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { accessToken } = useAuth();
   useEffect(() => {
     const fetchHotels = async () => {
@@ -31,40 +31,41 @@ const HotelSearch = () => {
     fetchHotels();
   }, []);
 
-
   const handleSelect = (wilaya) => {
-    navigate(`/hotel/${wilaya}`)
-  }
-
+    navigate(`/hotels/${wilaya}`);
+  };
 
   return (
-    <div className="w-full min-h-screen flex items-center flex-col m-auto">
-      <div className="w-[95%] m-auto">
-        <div className="w-full flex items-center mt-4 p-2">
+    <div className="w-full min-h-screen flex items-center flex-col m-auto justify-between p-5">
+      <div className="w-[95%] mx-auto ">
+        <div className="w-full flex items-center mt-4 p-2 justify-start">
           <GeocoderComponent data={hotels} type="place" />
         </div>
 
-        <div className="p-4 w-full">
-          <div className="text-md my-4 font-[500]">Popular destinations</div>
+        <div className="w-full">
+          <div className="text-xl my-4 font-[600]">Popular destinations</div>
           <List
             sx={{ width: "100%" }}
-            className="!mt-2 rounded-lg !w-full !bg-secondary"
+            className="!mt-2 rounded-lg !w-full !bg-[#d8d8d8]"
           >
             {popularLocations.map((location, index) => {
               return (
                 <ListItemButton
                   key={index}
-                  className={`!h-[60px] !border-white !border-solid ${
+                  className={`!border-white !border-solid p-4 ${
                     index !== popularLocations.length - 1 ? "!border-b-2" : ""
                   }`}
-                  onClick={() => {handleSelect(location.name)}}
+                  onClick={() => {
+                    handleSelect(location.name);
+                  }}
                 >
-                  <ListItemIcon>
-                    <HiOutlineLocationMarker className="text-2xl" />
+                  <ListItemIcon className="!text-black !opacity-60">
+                    <HiOutlineLocationMarker className="text-3xl" />
                   </ListItemIcon>
                   <ListItemText
+                    className="!py-2 "
                     primary={
-                      <span className="!text-md !font-[500]">
+                      <span className="!text-lg !font-[600]">
                         {location.name}
                       </span>
                     }
@@ -77,13 +78,15 @@ const HotelSearch = () => {
       </div>
       <div className="w-full p-4 flex items-center justify-center">
         <Button
-          className="!bg-green-800 !p-4 !rounded-full"
+          className="!bg-green-700 !p-5 !rounded-full !text-xl"
           variant="contained"
-          startIcon={<MdNearMe />}
+          startIcon={<MdNearMe className="!text-2xl" />}
         >
           Near me
         </Button>
       </div>
+
+   
     </div>
   );
 };

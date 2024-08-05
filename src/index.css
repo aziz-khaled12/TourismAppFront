@@ -6,7 +6,7 @@
 @tailwind utilities;
 
 *{
-    font-family: "Lato", sans-serif;
+    font-family: "Lato", sans-serif !important;
 }
 
 
@@ -135,3 +135,59 @@
 .z-500{
   z-index: 500;
 }
+
+/* calander in the searchResults component */
+.rdrDateDisplayWrapper{
+  padding: 16px 16px 0px 16px;
+}
+.rdrDateDisplayWrapper, .rdrCalendarWrapper{
+  border-radius: 20px;
+}
+
+.rdrDateDisplayWrapper, .rdrCalendarWrapper{
+  width: 400px;
+  height: 450px;
+  font-size: 16px;
+}
+
+.rdrDateDisplayItem + .rdrDateDisplayItem, .rdrDateDisplayItemActive{
+  border-radius: 14px;
+}
+
+.rdrDateDisplayItem{
+  border-radius: 14px;
+}
+.rdrMonths{
+  height: 300px;
+}
+
+.rdrInRange, .rdrStartEdge, .rdrDayEndOfMonth .rdrDayInPreview, .rdrDayEndOfMonth .rdrDayStartPreview, .rdrDayEndOfWeek .rdrDayInPreview, .rdrDayEndOfWeek .rdrDayStartPreview, .rdrDayEndPreview, .rdrEndEdge{
+  color:   #15803D !important;
+}
+
+.rdrDayToday .rdrDayNumber span:after{
+  color:   #15803D !important;
+  background:   #15803D;
+}
+
+.rdrMonth{
+  width: 100%;
+  font-weight: bold;
+}
+
+.rdrDays{
+  width: 100%;
+}
+
+.rdrDayNumber span{
+  font-weight: bold;
+}
+
+.rdrWeekDay{
+  font-weight: bold;
+}
+
+.custom-box-shadow {
+  @apply shadow-custom;
+}
+

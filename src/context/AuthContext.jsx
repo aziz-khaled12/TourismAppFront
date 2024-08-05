@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('token');
       const res = await axios.post('http://127.0.0.1:3000/auth/verify-token', {}, {
         headers: {
-          'Authorization': token
+          Authorization: `Bearer ${token}`
         }
       });
       if (res.status === 200) {
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
         window.alert("session expired please login")
       }
     } catch (err) {
-      if (err.response && err.response.status === 401 || err.response.status === 500) {
+      if (accessToken && err.response && err.response.status === 401 || err.response.status === 500) {
         // Token is invalid or expired
         localStorage.removeItem('user');
         localStorage.removeItem('token');
@@ -107,8 +107,9 @@ export const AuthProvider = ({ children }) => {
         role,
       });
 
-      if (res.status && res.status == 200) {
-        const token = res.data.token;
+      if (response.status && response.status == 200) {
+        console.log(response)
+        const token = response.data;
         const decodedToken = jwtDecode(token);
         const user = decodedToken.user_data;
 

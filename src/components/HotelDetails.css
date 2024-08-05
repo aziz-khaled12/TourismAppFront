@@ -1,0 +1,4 @@
+/* Leaflet Map */
+.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom{
+    border-radius: 10px;
+}

@@ -13,16 +13,16 @@ const HotelCard = ({ name, address, rating, num }) => (
     </div>
     <div className="p-2 items-start justify-between w-full h-[30%]">
       <h4 className="my-1 font-[500] text-xl">{name}</h4>
-      <h1 className="my-1 text-base">{address}</h1>
+      <h1 className="my-1 text-base"> {address}</h1>
       <div className="my-2 text-base flex items-center gap-1">
-        {rating}{" "}
+        {rating} 
         <Rating
           name="read-only"
           value={rating}
           precision={0.5}
           size="small"
           readOnly
-        />{" "}
+        /> 
         ({num})
       </div>
     </div>

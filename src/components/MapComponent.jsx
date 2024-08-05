@@ -11,33 +11,24 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-control-geocoder/dist/Control.Geocoder.css";
 import LocateControl from "./LocateControl ";
 import LocateUser from "./LocateUser";
-import "leaflet/dist/leaflet.css"; // Leaflet styles
 import "react-leaflet-markercluster/dist/styles.min.css";
 import HotelCard from "./HotelCard";
 import NominatimSearch from "./NominatimSearch";
+import { GetHotels } from "../datafetch/hotels";
+import { useAuth } from "../context/AuthContext";
+import { GetRestaurants } from "../datafetch/restaurants";
 
 const MapComponent = () => {
+  const [hotels, setHotels] = useState([]);
+  const { accessToken } = useAuth();
 
-  const [hotels, setHotels] = useState([])
- 
   const fetchHotels = async () => {
-    const response = await fetch("https://overpass-api.de/api/interpreter", {
-      method: "POST",
-      body: `
-          [out:json];
-          area["ISO3166-1"="DZ"][admin_level=2];
-          node["tourism"="hotel"](area);
-          out body;
-        `,
-    });
-    const data = await response.json();
-    console.log(data)
-    return data.elements;
+    await GetHotels(setHotels, accessToken);
   };
 
   useEffect(() => {
-    fetchHotels()
-  }, [])
+    fetchHotels();
+  }, []);
   return (
     <MapContainer
       center={[36.7372, 3.0869]}
@@ -75,9 +66,9 @@ const MapComponent = () => {
               <Marker position={[hotel.lat, hotel.lon]} key={index}>
                 <Popup>
                   <HotelCard
-                    name={hotel.tags.name}
-                    address={hotel.tags["addr:street"]}
-                    rating={4.5}
+                    name={hotel.name}
+                    address={hotel.road}
+                    rating={hotel.rating}
                     num={234}
                   />
                 </Popup>
@@ -85,7 +76,6 @@ const MapComponent = () => {
             );
           })}
       </MarkerClusterGroup>
-
       <NominatimSearch />
     </MapContainer>
   );

@@ -1,55 +1,46 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import discoverImage from "../assets/discover2.jpg";
-import { MdOutlineRestaurant } from "react-icons/md";
-import { FaHotel } from "react-icons/fa6";
-import { MdCarRental } from "react-icons/md";
-import { FaTaxi } from "react-icons/fa6";
-import { MdAttractions } from "react-icons/md";
+import discoverImage from "../assets/discover1.jpg";
 import { IconButton, Typography } from "@mui/material";
-import { GetRoles } from "../datafetch/users";
 import LocationCard from "./LocationCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Link } from "react-router-dom";
+import {RiBuildingLine, RiCarLine, RiHotelLine, RiTaxiLine, RiRestaurant2Line} from "react-icons/ri"
 
 const Home = () => {
   const services = [
     {
       id: 0,
-      icon: <FaHotel className="text-2xl" />,
+      icon: <RiHotelLine className="text-2xl" />,
       name: "Hotels",
       link: "/hotel",
     },
     {
       id: 1,
-      icon: <FaTaxi className="text-2xl" />,
+      icon: <RiTaxiLine className="text-2xl" />,
       name: "Taxi",
     },
     {
       id: 2,
-      icon: <MdOutlineRestaurant className="text-2xl" />,
+      icon: <RiRestaurant2Line className="text-2xl" />,
       name: "Restaurants",
     },
     {
       id: 3,
-      icon: <MdCarRental className="text-2xl" />,
+      icon: <RiCarLine className="text-2xl" />,
       name: "Car rental",
     },
     {
       id: 4,
-      icon: <MdAttractions className="text-2xl" />,
+      icon: <RiBuildingLine className="text-2xl" />,
       name: "Places",
     },
   ];
   const [loading, setLoading] = useState(true);
-  const { accessToken, user, verifyToken, isAuthenticated } = useAuth();
+  const { accessToken, user } = useAuth();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      verifyToken();
-    }
-  }, [accessToken, isAuthenticated]);
+
 
   useEffect(() => {
     if (accessToken && user) {
@@ -94,8 +85,8 @@ const Home = () => {
             Discover
           </div>
         </div>
-        <section className="w-full p-2 h-fit">
-          <div className="w-full flex gap-2 items-center justify-center">
+        <section className="w-full p-2 h-fit mt-5">
+          <div className="w-full flex gap-2 items-center justify-around">
             {services.map((service) => {
               return (
                 <Link

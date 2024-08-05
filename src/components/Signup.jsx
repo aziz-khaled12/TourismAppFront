@@ -35,7 +35,7 @@ const Signup = () => {
   const [roles, setRoles] = useState();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
-  const [logged, setIsLogged] = useState(false)
+  const [isLogged, setIsLogged] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -101,6 +101,12 @@ const Signup = () => {
       setLoading(false);
     }
   });
+
+  useEffect(() => {
+    if (isLogged) {
+      navigate("/");
+    }
+  }, [isLogged]);
 
   return loading ? (
     <>
