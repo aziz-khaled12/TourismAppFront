@@ -1,6 +1,9 @@
-import React, { useState, useContext, createContext, useEffect } from "react";
+import React, { useState, useContext, createContext } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+
+
+const url = import.meta.env.VITE_LOCAL_BACK_END_URL
 
 const AuthContext = createContext({
   user: null,
@@ -28,9 +31,11 @@ export const AuthProvider = ({ children }) => {
 
 
   const verifyToken = async () => {
+
+    console.log(url)
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.post('http://127.0.0.1:3000/auth/verify-token', {}, {
+      const res = await axios.post(`${url}/auth/verify-token`, {}, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -68,7 +73,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password, setError, setIsLogged) => {
     try {
-      const res = await axios.post("http://127.0.0.1:3000/auth/login", {
+      const res = await axios.post(`${url}/auth/login`, {
         email,
         password,
       });
@@ -100,7 +105,7 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (email, password, username, role, setIsLogged, setError) => {
     try {
-      const response = await axios.post("http://127.0.0.1:3000/auth/signup", {
+      const response = await axios.post(`${url}/auth/signup`, {
         email,
         password,
         username,

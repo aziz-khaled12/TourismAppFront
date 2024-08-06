@@ -1,8 +1,12 @@
 import axios from "axios";
 
+
+const url = import.meta.env.VITE_LOCAL_BACK_END_URL
+
+
 export const GetHotels = async (setHotels, token) => {
   try {
-    const res = await axios.get("http://127.0.0.1:3000/hotels", {
+    const res = await axios.get(`${url}/hotels`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setHotels(res.data);
@@ -15,7 +19,7 @@ export const GetHotels = async (setHotels, token) => {
 export const GetWilayaHotels = async (setHotels, wilaya, token) => {
   try {
     const res = await axios.get(
-      `http://127.0.0.1:3000/hotels/${wilaya}`,
+      `${url}/hotels/${wilaya}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -31,7 +35,7 @@ export const GetWilayaHotels = async (setHotels, wilaya, token) => {
 
 export const GetWilayas = async (setWilayas, token) => {
   try {
-    const res = await axios.get("http://127.0.0.1:3000/locations/wilaya", {
+    const res = await axios.get(`${url}/locations/wilaya`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setWilayas(res.data);
@@ -43,7 +47,7 @@ export const GetWilayas = async (setWilayas, token) => {
 
 export const GetHotel = async (setHotel, hotelId, token) => {
   try {
-    const res = await axios.get(`http://127.0.0.1:3000/hotels/info/${hotelId}`, {
+    const res = await axios.get(`${url}/hotels/info/${hotelId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setHotel(res.data);

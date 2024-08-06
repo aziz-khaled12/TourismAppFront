@@ -58,6 +58,11 @@ const Login = () => {
     }
   });
 
+  useEffect(() => {
+    console.log('import.meta.env:', import.meta.env);
+  }, []);
+  
+
   return (
     <>
       <div className="w-full min-h-screen flex items-center justify-center flex-col m-auto">

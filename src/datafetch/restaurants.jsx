@@ -1,8 +1,11 @@
 import axios from "axios";
 
+
+const url = import.meta.env.VITE_LOCAL_BACK_END_URL
+
 export const GetRestaurants = async (setRestaurants, token) => {
   try {
-    const res = await axios.get("http://127.0.0.1:3000/restaurants", {
+    const res = await axios.get(`${url}/restaurants`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setRestaurants(res.data);
@@ -14,7 +17,7 @@ export const GetRestaurants = async (setRestaurants, token) => {
 
 export const GetWilayaRestaurants = async (setRestaurants, wilaya, token) => {
   try {
-    const res = await axios.get(`http://127.0.0.1:3000/restaurants/${wilaya}`, {
+    const res = await axios.get(`${url}/restaurants/${wilaya}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -29,7 +32,7 @@ export const GetWilayaRestaurants = async (setRestaurants, wilaya, token) => {
 export const GetRestaurant = async (setRestaurant, restaurantId, token) => {
   try {
     const res = await axios.get(
-      `http://127.0.0.1:3000/restaurants/info/${restaurantId}`,
+      `${url}/restaurants/info/${restaurantId}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -44,7 +47,7 @@ export const GetRestaurant = async (setRestaurant, restaurantId, token) => {
 export const GetNearby = async (setNearby, lat, lon, radius, token) => {
   try {
     const res = await axios.get(
-      `http://127.0.0.1:3000/restaurants/nearby?lat=${lat}&lon=${lon}&radius=${radius}`,
+      `${url}/restaurants/nearby?lat=${lat}&lon=${lon}&radius=${radius}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
