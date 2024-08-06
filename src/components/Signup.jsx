@@ -17,7 +17,6 @@ import { Link } from "react-router-dom";
 import { GetRoles } from "../datafetch/users";
 import { useAuth } from "../context/AuthContext";
 const Signup = () => {
-
   const { signup } = useAuth();
   const [formData, setFormData] = useState({
     userName: "",
