@@ -3,7 +3,6 @@ import axios from "axios";
 
 const url = import.meta.env.VITE_LOCAL_BACK_END_URL
 
-
 export const GetHotels = async (setHotels, token) => {
   try {
     const res = await axios.get(`${url}/hotels`, {
