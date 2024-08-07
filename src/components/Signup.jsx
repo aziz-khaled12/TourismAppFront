@@ -13,10 +13,12 @@ import {
 import "./TextField.css";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple, FaFacebook } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GetRoles } from "../datafetch/users";
 import { useAuth } from "../context/AuthContext";
 const Signup = () => {
+
+  const navigate = useNavigate()
   const { signup } = useAuth();
   const [formData, setFormData] = useState({
     userName: "",
@@ -100,6 +102,12 @@ const Signup = () => {
       setLoading(false);
     }
   });
+
+  useEffect(() => {
+    if (isLogged) {
+      navigate("/");
+    }
+  }, [isLogged]);
 
   return loading ? (
     <>

@@ -5,10 +5,12 @@ import { FcGoogle } from "react-icons/fc";
 import { FaApple, FaFacebook, FaGoogle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { login, accessToken, user } = useAuth();
   const [isLogged, setIsLogged] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -49,6 +51,12 @@ const Login = () => {
       await login(formData.email, formData.password, setError, setIsLogged);
     }
   };
+
+  useEffect(() => {
+    if (isLogged) {
+      navigate("/");
+    }
+  });
 
   useEffect(() => {
     console.log('import.meta.env:', import.meta.env);
