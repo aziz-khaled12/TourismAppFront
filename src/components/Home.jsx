@@ -20,6 +20,7 @@ const Home = () => {
       id: 1,
       icon: <RiTaxiLine className="text-2xl" />,
       name: "Taxi",
+      link: "/login",
     },
     {
       id: 2,
