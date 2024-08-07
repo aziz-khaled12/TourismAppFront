@@ -42,7 +42,7 @@ const HotelDetails = () => {
       key: d.key,
     }));
 
-  const radius = 3000;
+  const radius = 1;
 
   const [turncate, setTurncate] = useState(true);
 

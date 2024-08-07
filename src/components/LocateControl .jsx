@@ -10,7 +10,7 @@ const LocateControl = () => {
   useEffect(() => {
     const locateControl = L.control.locate({
       position: "bottomright",
-      setView: "untilPan",
+      setView: "once",
       keepCurrentZoomLevel: true,
       drawCircle: false,
       flyTo: true,

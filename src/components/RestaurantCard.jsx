@@ -21,13 +21,13 @@ const RestaurantCard = ({ resto, link }) => {
   return (
     resto && (
       <>
-        <Button onClick={goToResto} className="!text-primary !w-full">
-          <div className="w-full flex items-center justify-between">
-            <div className="w-[100px] h-[100px]">
-              <img src={RestoImage} alt="resto" className="w-full h-full" />
+        <Button onClick={goToResto} className="!text-primary !w-full !mb-4">
+          <div className="w-full flex items-center justify-start">
+            <div className="w-[100px] h-[100px] mr-6">
+              <img src={RestoImage} alt="resto" className="w-full h-full rounded-lg" />
             </div>
 
-            <div className="flex flex-col items-start justify-between w-[225px]">
+            <div className="flex flex-col items-start justify-between">
               <div className="text-lg font-[600]">
                 <TruncateMarkup lines={1}>
                   <p>{resto.name}</p>
@@ -43,8 +43,8 @@ const RestaurantCard = ({ resto, link }) => {
               </div>
               <Rating
                 readOnly
-                icon={<FaStar fontSize="inherit" className="!mr-1" />}
-                emptyIcon={<FaRegStar fontSize="inherit" className="!mr-1" />}
+                icon={<FaStar fontSize="inherit" className="!mr-2" />}
+                emptyIcon={<FaRegStar fontSize="inherit" className="!mr-2" />}
                 defaultValue={resto.rating}
               ></Rating>
             </div>

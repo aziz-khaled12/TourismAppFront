@@ -14,7 +14,7 @@ const Home = () => {
       id: 0,
       icon: <RiHotelLine className="text-2xl" />,
       name: "Hotels",
-      link: "/hotel",
+      link: "/hotels",
     },
     {
       id: 1,
@@ -26,6 +26,7 @@ const Home = () => {
       id: 2,
       icon: <RiRestaurant2Line className="text-2xl" />,
       name: "Restaurants",
+      link: "/restaurants",
     },
     {
       id: 3,

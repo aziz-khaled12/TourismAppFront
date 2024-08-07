@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { GetWilayas } from "../datafetch/hotels";
 import { useAuth } from "../context/AuthContext";
 
-const GeocoderComponent = () => {
+const HotelSearchBox = () => {
   const [query, setQuery] = useState("");
   const [wilayas, setWilayas] = useState();
   const [results, setResults] = useState([]);
@@ -166,4 +166,4 @@ const GeocoderComponent = () => {
   );
 };
 
-export default GeocoderComponent;
+export default HotelSearchBox;

@@ -72,7 +72,7 @@ const HotelResults = () => {
   }, [accessToken, wilaya]);
 
   const handleBack = () => {
-    navigate("/hotel");
+    navigate("/hotels");
   };
 
   const toggleDrawer = (newOpen, option) => () => {

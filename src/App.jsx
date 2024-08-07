@@ -4,24 +4,25 @@ import { Routes, Route } from "react-router-dom";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import Home from "./components/Home";
-import HotelSearch from "./components/HotelSearch";
 import { useAuth } from "./context/AuthContext";
+import SwipeableTemporaryDrawer from "./components/SwipeableTemporaryDrawer";
 import PortectedRoutes from "./utils/PortectedRoutes";
+import HotelSearch from "./components/HotelSearch";
 import HotelResults from "./components/HotelResults";
 import HotelDetails from "./components/HotelDetails";
-import SwipeableTemporaryDrawer from "./components/SwipeableTemporaryDrawer";
+import RestaurantSearch from "./components/RestaurantSearch";
+import RestaurantResults from "./components/RestaurantResults";
+import RestaurantDetails from "./components/RestaurantDetails";
 
 function App() {
   const { verifyToken, isAuthenticated, accessToken } = useAuth();
 
   useEffect(() => {
-
     verifyToken();
 
     const intervalId = setInterval(verifyToken, 15000);
     return () => clearInterval(intervalId);
   }, []);
-
 
   return (
     <>
@@ -31,9 +32,18 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route element={<PortectedRoutes />}>
             <Route path="/" element={<Home />} />
-            <Route path="/hotel" element={<HotelSearch />} />
+            <Route path="/hotels" element={<HotelSearch />} />
             <Route path="/hotels/:wilaya" element={<HotelResults />} />
             <Route path="/hotels/:wilaya/:id" element={<HotelDetails />} />
+            <Route path="/restaurants" element={<RestaurantSearch />} />
+            <Route
+              path="/restaurants/:wilaya"
+              element={<RestaurantResults />}
+            />
+            <Route
+              path="/restaurants/:wilaya/:id"
+              element={<RestaurantDetails />}
+            />
             <Route path="/map" element={<MapComponent />} />
             <Route path="/test" element={<SwipeableTemporaryDrawer />} />
           </Route>
