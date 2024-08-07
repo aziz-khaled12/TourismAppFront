@@ -101,12 +101,6 @@ const Signup = () => {
     }
   });
 
-  useEffect(() => {
-    if (isLogged) {
-      navigate("/");
-    }
-  }, [isLogged]);
-
   return loading ? (
     <>
       <div className="w-full min-h-screen flex items-center justify-center flex-col m-auto">
