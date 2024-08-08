@@ -10,7 +10,6 @@ import {
   ListItemText,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { GetRestaurants } from "../datafetch/restaurants";
 import RestaurantSearchBox from "./RestaurantSearchBox";
 
 const popularLocations = [
@@ -21,15 +20,8 @@ const popularLocations = [
   { name: "Annaba" },
 ];
 const RestaurantSearch = () => {
-  const [restaurants, setRestaurants] = useState();
   const navigate = useNavigate();
-  const { accessToken } = useAuth();
-  useEffect(() => {
-    const fetchRestaurants = async () => {
-      await GetRestaurants(setRestaurants, accessToken);
-    };
-    fetchRestaurants();
-  }, []);
+
 
   const handleSelect = (wilaya) => {
     navigate(`/restaurants/${wilaya}`);

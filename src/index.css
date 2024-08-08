@@ -136,6 +136,12 @@
   z-index: 500;
 }
 
+/* MUI Button */
+.css-1fu7jd5-MuiButtonBase-root-MuiButton-root, .css-jt6ki8-MuiButtonBase-root-MuiButton-root{
+  text-transform: none !important;
+}
+
+
 /* calander in the searchResults component */
 .rdrDateDisplayWrapper{
   padding: 16px 16px 0px 16px;

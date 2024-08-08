@@ -13,6 +13,7 @@ import HotelDetails from "./components/HotelDetails";
 import RestaurantSearch from "./components/RestaurantSearch";
 import RestaurantResults from "./components/RestaurantResults";
 import RestaurantDetails from "./components/RestaurantDetails";
+import HotelDashboard from "./components/HotelsInterface/HotelDashboard";
 
 function App() {
   const { verifyToken, isAuthenticated, accessToken } = useAuth();
@@ -35,6 +36,7 @@ function App() {
             <Route path="/hotels" element={<HotelSearch />} />
             <Route path="/hotels/:wilaya" element={<HotelResults />} />
             <Route path="/hotels/:wilaya/:id" element={<HotelDetails />} />
+            <Route path="/hotels/dashboard" element={<HotelDashboard />} />
             <Route path="/restaurants" element={<RestaurantSearch />} />
             <Route
               path="/restaurants/:wilaya"

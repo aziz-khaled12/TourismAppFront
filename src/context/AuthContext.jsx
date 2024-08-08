@@ -2,15 +2,15 @@ import React, { useState, useContext, createContext } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
-
-const url = import.meta.env.VITE_LOCAL_BACK_END_URL
+const url = import.meta.env.VITE_LOCAL_BACK_END_URL;
 
 const AuthContext = createContext({
   user: null,
   accessToken: null,
   isAuthenticated: false,
   login: (email, password, setError, setIsLogged) => Promise.resolve(undefined),
-  signup: (email, password, username, role, setIsLogged, setError) => Promise.resolve(undefined),
+  signup: (email, password, username, role, setIsLogged, setError) =>
+    Promise.resolve(undefined),
   verifyToken: () => Promise.resolve(undefined),
   logout: () => {},
 });
@@ -29,44 +29,51 @@ export const AuthProvider = ({ children }) => {
     return storedToken ? storedToken : null;
   });
 
-
   const verifyToken = async () => {
+    if (accessToken) {
+      console.log(url);
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.post(
+          `${url}/auth/verify-token`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (res.status === 200) {
+          console.log("everything is good");
+        } else {
+          // Token is invalid
+          localStorage.removeItem("user");
+          localStorage.removeItem("token");
+          localStorage.removeItem("isLogged");
 
-    console.log(url)
-    try {
-      const token = localStorage.getItem('token');
-      const res = await axios.post(`${url}/auth/verify-token`, {}, {
-        headers: {
-          Authorization: `Bearer ${token}`
+          setIsAuthenticated();
+          setAccessToken();
+          setUser();
+
+          window.alert("session expired please login");
         }
-      });
-      if (res.status === 200) {
-        console.log("everything is good")
-      } else {
-        // Token is invalid
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-        localStorage.removeItem('isLogged');
-        
-        setIsAuthenticated();
-        setAccessToken();
-        setUser();
+      } catch (err) {
+        if (
+          (accessToken && err.response && err.response.status === 401) ||
+          err.response.status === 500
+        ) {
+          // Token is invalid or expired
+          localStorage.removeItem("user");
+          localStorage.removeItem("token");
+          localStorage.removeItem("isLogged");
 
-        window.alert("session expired please login")
-      }
-    } catch (err) {
-      if (accessToken && err.response && err.response.status === 401 || err.response.status === 500) {
-        // Token is invalid or expired
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-        localStorage.removeItem('isLogged');
-        
-        setIsAuthenticated();
-        setAccessToken();
-        setUser();
+          setIsAuthenticated();
+          setAccessToken();
+          setUser();
 
-        window.location.href = '/login';
-      } else {
+          window.location.href = "/login";
+        } else {
+        }
       }
     }
   };
@@ -103,7 +110,14 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const signup = async (email, password, username, role, setIsLogged, setError) => {
+  const signup = async (
+    email,
+    password,
+    username,
+    role,
+    setIsLogged,
+    setError
+  ) => {
     try {
       const response = await axios.post(`${url}/auth/signup`, {
         email,
@@ -113,7 +127,7 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (response.status && response.status == 200) {
-        console.log(response)
+        console.log(response);
         const token = response.data;
         const decodedToken = jwtDecode(token);
         const user = decodedToken.user_data;
@@ -130,7 +144,7 @@ export const AuthProvider = ({ children }) => {
         setError("Something went wrong");
       }
     } catch (err) {
-        setError(err.response.data.error)
+      setError(err.response.data.error);
     }
   };
 
@@ -145,7 +159,15 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, accessToken, isAuthenticated, login, logout, signup, verifyToken }}
+      value={{
+        user,
+        accessToken,
+        isAuthenticated,
+        login,
+        logout,
+        signup,
+        verifyToken,
+      }}
     >
       {children}
     </AuthContext.Provider>

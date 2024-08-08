@@ -15,6 +15,7 @@ module.exports = {
         secondary: "#E0E0E0",
         lightText: "#74767e",
         lightBackground: "#eaeaea",
+        lightBackgroundHover: "#eaeaea",
       },
     },
   },
