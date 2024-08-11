@@ -138,7 +138,7 @@ const Login = () => {
                 <Button
                   type="button"
                   variant="contained"
-                  className="!bg-white !text-primary !rounded-lg !p-3 !mb-4 w-full"
+                  className="!bg-white !text-primary !rounded-lg !p-3 !mb-4 w-full !normal-case"
                 >
                   <FcGoogle className="absolute left-5 text-xl" /> Sign up with
                   Google
@@ -146,7 +146,7 @@ const Login = () => {
                 <Button
                   type="button"
                   variant="contained"
-                  className="!bg-white !text-primary !rounded-lg !p-3 !mb-4 w-full"
+                  className="!bg-white !text-primary !rounded-lg !p-3 !mb-4 w-full !normal-case"
                 >
                   <FaFacebook className="text-blue-800 absolute left-5 text-xl" />
                   Log in with Facebook
@@ -154,7 +154,7 @@ const Login = () => {
                 <Button
                   type="button"
                   variant="contained"
-                  className=" !bg-white !text-primary !rounded-lg !p-3 !mb-4 w-full"
+                  className=" !bg-white !text-primary !rounded-lg !p-3 !mb-4 w-full !normal-case"
                 >
                   <FaApple className="absolute left-5 text-xl" />
                   Log in with Apple

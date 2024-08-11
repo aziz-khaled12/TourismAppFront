@@ -185,7 +185,7 @@ const HotelResults = () => {
                   <IoCalendarNumberOutline className="!text-2xl !flex !items-center" />
                 }
                 onClick={toggleDrawer(true, 1)}
-                className="!min-w-[220px] !rounded-full !font-semibold !px-4 !py-3 !text-lg !normal-case !text-black items-baseline !border !border-[#9e9e9e] !border-solid"
+                className="!min-w-[220px] !rounded-full !font-semibold !px-4 !py-3 !text-md !normal-case !text-black items-baseline !border !border-[#9e9e9e] !border-solid"
               >
                 {date[0].startDate.getDate()}{" "}
                 {monthNames[date[0].startDate.getMonth()]}
@@ -306,7 +306,7 @@ const HotelResults = () => {
                   <Button
                     onClick={applyDate}
                     variant="contained"
-                    className="!text-xl !py-4 !px-5 !rounded-full !bg-green-700"
+                    className="!text-xl !py-4 !px-5 !rounded-full !bg-green-700 !normal-case"
                   >
                     Apply Changes
                   </Button>
@@ -363,7 +363,7 @@ const HotelResults = () => {
                     <Button
                       onClick={confirmDetails}
                       variant="contained"
-                      className="!text-xl !py-4 !px-5 !rounded-full !bg-green-700"
+                      className="!text-xl !py-4 !px-5 !rounded-full !bg-green-700 !normal-case"
                     >
                       Apply Changes
                     </Button>

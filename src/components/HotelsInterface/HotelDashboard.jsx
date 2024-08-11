@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -15,25 +15,35 @@ import { MdSpaceDashboard } from "react-icons/md";
 import { IoBed } from "react-icons/io5";
 import { FaCalendarCheck } from "react-icons/fa";
 import { Logout, PersonAdd, Settings } from "@mui/icons-material";
+import Rooms from "./Rooms";
+import { GetData } from "../../datafetch/users";
+import { useAuth } from "../../context/AuthContext";
+
 
 const HotelDashboard = () => {
-  const [activeSection, setActiveSection] = useState("dashboard"); // State to track the active section
 
+
+  const [activeSection, setActiveSection] = useState("rooms"); // State to track the active section
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const { user, accessToken, logout} = useAuth() 
+
 
   const sideButtons = [
     {
+      id: 0,
       name: "Dashboard",
       value: "dashboard",
       icon: <MdSpaceDashboard />,
     },
     {
+      id: 1,
       name: "Rooms",
       value: "rooms",
       icon: <IoBed />,
     },
     {
+      id: 2,
       name: "Bookings",
       value: "bookings",
       icon: <FaCalendarCheck />,
@@ -91,17 +101,7 @@ const HotelDashboard = () => {
       case "rooms":
         return (
           <>
-            <div className="mb-6 font-[500] text-xl">Rooms</div>
-            <Card>
-              <CardContent>
-                <Typography variant="h5" component="div">
-                Rooms
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  This is the Rooms section content.
-                </Typography>
-              </CardContent>
-            </Card>
+            <Rooms></Rooms>
           </>
         );
       case "bookings":
@@ -111,7 +111,7 @@ const HotelDashboard = () => {
             <Card>
               <CardContent>
                 <Typography variant="h5" component="div">
-                Bookings
+                  Bookings
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   This is the Bookings section content.
@@ -126,63 +126,17 @@ const HotelDashboard = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen ">
-      {/* Navbar */}
-      <nav className=" py-4 px-6 text-primary flex justify-between items-center">
-        <h1 className="text-2xl">My Dashboard</h1>
-        <IconButton
-          onClick={handleClick}
-          size="small"
-          sx={{ ml: 2 }}
-          aria-controls={open ? "account-menu" : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
-        >
-          <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
-        </IconButton>
-        <Menu
-          anchorEl={anchorEl}
-          id="account-menu"
-          open={open}
-          onClose={handleClose}
-          onClick={handleClose}
-          transformOrigin={{ horizontal: "right", vertical: "top" }}
-          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-        >
-          <MenuItem onClick={handleClose}>
-            <Avatar /> Profile
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <Avatar /> My account
-          </MenuItem>
-          <Divider />
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <PersonAdd fontSize="small" />
-            </ListItemIcon>
-            Add another account
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Settings fontSize="small" />
-            </ListItemIcon>
-            Settings
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Logout fontSize="small" />
-            </ListItemIcon>
-            Logout
-          </MenuItem>
-        </Menu>
-      </nav>
-
+    <div className="flex h-screen ">
       {/* Main Content */}
-      <div className="flex flex-1">
+      <div className="flex">
         {/* Sidebar */}
-        <aside className="w-64 text-primary p-8">
+        <aside className="w-64 text-primary p-8 shadow-lg">
+
           <ul>
-            <li className="mb-12">
+            <li className="p-4 mb-5" key={3}>
+            <h1 className="text-2xl">My Dashboard</h1>
+            </li>
+            <li className="mb-12" key={4}>
               <Button
                 variant="contained"
                 fullWidth
@@ -195,10 +149,10 @@ const HotelDashboard = () => {
               </Button>
             </li>
 
-            {sideButtons.map((thing, index) => {
+            {sideButtons.map((thing) => {
               return (
                 <>
-                  <li key={index} className="mb-2">
+                  <li key={thing.id} className="mb-2">
                     <Button
                       startIcon={thing.icon}
                       variant={`${
@@ -220,7 +174,56 @@ const HotelDashboard = () => {
             })}
           </ul>
         </aside>
-
+      </div>
+      <div className="flex flex-col h-screen w-full">
+        {/* Navbar */}
+        <nav className=" py-4 px-6 text-primary flex justify-end items-center">
+          <IconButton
+            onClick={handleClick}
+            size="small"
+            sx={{ ml: 2 }}
+            aria-controls={open ? "account-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+          >
+            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            id="account-menu"
+            open={open}
+            onClose={handleClose}
+            onClick={handleClose}
+            transformOrigin={{ horizontal: "right", vertical: "top" }}
+            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+          >
+            <MenuItem onClick={handleClose}>
+              <Avatar /> Profile
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <Avatar /> My account
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <PersonAdd fontSize="small" />
+              </ListItemIcon>
+              Add another account
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <Settings fontSize="small" />
+              </ListItemIcon>
+              Settings
+            </MenuItem>
+            <MenuItem onClick={logout}>
+              <ListItemIcon>
+                <Logout fontSize="small" />
+              </ListItemIcon>
+              Logout
+            </MenuItem>
+          </Menu>
+        </nav>
         {/* Content Area */}
         <main className="flex-1 p-6">{renderContent()}</main>
       </div>

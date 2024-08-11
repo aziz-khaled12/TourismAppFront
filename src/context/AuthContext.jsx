@@ -17,7 +17,7 @@ const AuthContext = createContext({
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = JSON.parse(localStorage.getItem("user"));
     return storedUser ? storedUser : null;
   });
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -89,7 +89,10 @@ export const AuthProvider = ({ children }) => {
         const decodedToken = jwtDecode(token);
         const user = decodedToken.user_data;
 
-        localStorage.setItem("user", user);
+        console.log("user:", user);
+        
+
+        localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("token", token);
         localStorage.setItem("isLogged", true);
 
@@ -151,7 +154,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
-    localStorage.removeItem("access-token");
+    localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("employer");
     localStorage.removeItem("isAuthenticated");
