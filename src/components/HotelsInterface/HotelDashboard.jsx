@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Card,
@@ -16,7 +16,6 @@ import { IoBed } from "react-icons/io5";
 import { FaCalendarCheck } from "react-icons/fa";
 import { Logout, PersonAdd, Settings } from "@mui/icons-material";
 import Rooms from "./Rooms";
-import { GetData } from "../../datafetch/users";
 import { useAuth } from "../../context/AuthContext";
 
 
@@ -26,7 +25,7 @@ const HotelDashboard = () => {
   const [activeSection, setActiveSection] = useState("rooms"); // State to track the active section
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const { user, accessToken, logout} = useAuth() 
+  const { logout } = useAuth() 
 
 
   const sideButtons = [

@@ -9,6 +9,7 @@ module.exports = {
     extend: {
       boxShadow: {
         custom: "0px 0px 22px -6px black !important",
+        upperFade: "0px -20px 17px 13px #f9f9f9",
       },
       colors: {
         primary: "#212121",
