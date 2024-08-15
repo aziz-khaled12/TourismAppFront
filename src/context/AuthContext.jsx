@@ -17,7 +17,7 @@ const AuthContext = createContext({
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
+    const storedUser = localStorage.getItem("user");
     return storedUser ? storedUser : null;
   });
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
