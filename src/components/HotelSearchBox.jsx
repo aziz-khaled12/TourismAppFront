@@ -5,12 +5,15 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  InputAdornment,
   TextField,
 } from "@mui/material";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import { GetWilayas } from "../datafetch/hotels";
 import { useAuth } from "../context/AuthContext";
+import { styled } from "@mui/material/styles";
+import { CiSearch } from "react-icons/ci";
 
 const HotelSearchBox = () => {
   const [query, setQuery] = useState("");
@@ -20,6 +23,12 @@ const HotelSearchBox = () => {
   const { accessToken } = useAuth();
   const [notFound, setNotFound] = useState(false);
   const navigate = useNavigate();
+
+  const StyledTextField = styled(TextField)({
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "9999px", // Rounded border
+    },
+  });
 
   useEffect(() => {
     const fetchWilayas = async () => {
@@ -36,7 +45,9 @@ const HotelSearchBox = () => {
           return;
         }
         const filteredData = wilayas
-          .filter((instance) => instance.name.toLowerCase().includes(query.toLowerCase()))
+          .filter((instance) =>
+            instance.name.toLowerCase().includes(query.toLowerCase())
+          )
           .slice(0, 5);
 
         if (filteredData.length === 0) {
@@ -62,7 +73,7 @@ const HotelSearchBox = () => {
   }, [query, wilayas]);
 
   const handleResultClick = (wilaya) => {
-    console.log("selected wilaya: ", wilaya)
+    console.log("selected wilaya: ", wilaya);
     navigate(`/hotels/${wilaya}`);
     setResults([]);
   };
@@ -98,17 +109,26 @@ const HotelSearchBox = () => {
   }, [results]);
 
   return (
-    <div ref={containerRef} className="w-full h-full flex justify-center">
-      <div className="w-full flex justify-around items-center relative">
+    <div ref={containerRef} className="w-full h-full flex justify-center relative">
+      <div className="w-full flex justify-between items-center relative">
         <TextField
           id="outlined-search"
           type="search"
           value={query}
-          className="!bg-gray-50 !rounded-full !w-[80%] !relative"
+          className="!bg-gray-50 !w-[80%] !relative"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <CiSearch className=" text-4xl" />
+              </InputAdornment>
+            ),
+          }}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={`Search for a Place`}
           sx={{
+            borderRadius: "99px",
             "& .MuiOutlinedInput-root": {
+              borderRadius: "99px",
               "& fieldset": {
                 borderColor: "gray", // default border color
               },
@@ -122,15 +142,17 @@ const HotelSearchBox = () => {
           }}
         />
 
-        <span className="text-[#616161] underline cursor-pointer" onClick={handleBack}>
-          Cancel
+        <span
+          className="text-[#616161] underline cursor-pointer"
+          onClick={handleBack}
+        >
+          CANCEL
         </span>
       </div>
 
       {results.length > 0 && (
         <List
-          sx={{ width: "340px" }}
-          className="!mt-2 rounded-lg !bg-secondary !absolute z-10 !top-24 !border-green-800 !border !border-solid"
+          sx={{ width: "100%", backgroundColor: "#e0e0e0", border: "solid 1px #15803d", top: "120%", position: "absolute", zIndex: "10", borderRadius: "10px"}}
         >
           {results.map((result, index) => (
             <ListItemButton
@@ -138,7 +160,7 @@ const HotelSearchBox = () => {
               onClick={() => handleResultClick(result.name)}
             >
               <ListItemIcon>
-                <HiOutlineLocationMarker className="text-green-800" />
+                <HiOutlineLocationMarker className="text-green-700" />
               </ListItemIcon>
               <ListItemText
                 primary={
@@ -152,8 +174,8 @@ const HotelSearchBox = () => {
 
       {notFound && (
         <List
-        sx={{ width: "340px" }}
-        className="!mt-2 rounded-lg !bg-secondary !absolute z-10 !top-32 !border-green-800 !border !border-solid"
+          sx={{ width: "90%" }}
+          className="!mt-2 rounded-lg !bg-secondary !absolute z-10 !top-32 !border-green-700 !border !border-solid"
         >
           <ListItem>
             <ListItemText

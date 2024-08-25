@@ -101,6 +101,10 @@ const Rooms = () => {
     },
   ];
 
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
   const handleEditOpen = (room) => {
     setSelectedRoom(room); // Set the selected room data
     setOpenEdit(true);
@@ -177,11 +181,14 @@ const Rooms = () => {
           oldRoom={selectedRoom}
         />
       )}
-      <DeleteRoomModal
-        open={openDelete}
-        setOpen={setOpenDelete}
-        room={selectedDeleteRoom}
-      />
+      {hotel && (
+        <DeleteRoomModal
+          open={openDelete}
+          setOpen={setOpenDelete}
+          room={selectedDeleteRoom}
+          hotelId={hotel.id}
+        />
+      )}
     </>
   );
 };

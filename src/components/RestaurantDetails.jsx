@@ -33,7 +33,7 @@ const RestaurantDetails = () => {
   }, []);
 
   const goBack = () => {
-    navigate(`/restaurants/${wilaya}`);
+    navigate(-1);
   };
 
   const longText =

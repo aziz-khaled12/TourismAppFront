@@ -114,10 +114,10 @@ const HotelDetails = () => {
   );
 
   useEffect(() => {
-    if (hotel && restaurants.length > 0) {
+    if (hotel) {
       setLoading(false);
     }
-  }, [hotel, restaurants]);
+  }, [hotel]);
 
   return loading ? (
     <>
@@ -276,7 +276,10 @@ const HotelDetails = () => {
             {restaurants &&
               restaurants.map((resto, index) => (
                 <SwiperSlide key={index}>
-                  <RestaurantCard resto={resto} link={"/"}></RestaurantCard>
+                  <RestaurantCard
+                    resto={resto}
+                    wilaya={wilaya}
+                  ></RestaurantCard>
                 </SwiperSlide>
               ))}
           </Swiper>
@@ -299,6 +302,9 @@ const HotelDetails = () => {
             </div>
           </div>
           <Button
+            onClick={() => {
+              navigate(`/hotels/${wilaya}/${hotel.id}/rooms`);
+            }}
             variant="contained"
             className="!text-xl !font-bold !p-4 !w-[200px]  !bg-green-700 !rounded-full !max-w-80"
           >

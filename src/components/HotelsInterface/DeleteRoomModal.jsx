@@ -1,46 +1,49 @@
 import { Button, Modal } from "@mui/material";
 import React, { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 
-const DeleteRoomModal = ({ open, setOpen, room }) => {
+const DeleteRoomModal = ({ open, setOpen, room, hotelId }) => {
+  const url = import.meta.env.VITE_LOCAL_BACK_END_URL;
+
   const [loading, setLoading] = useState(false);
+  const { accessToken } = useAuth();
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleDelete = async (room) => {
-    e.preventDefault();
-
-    const form = new FormData();
-    form.append("capacity", room.capacity);
-    form.append("number", room.number);
-    form.append("price", room.price);
-    form.append("image", room.image);
-    form.append("oldImageUrl", room.image_url);
-    form.append("hotel_id", hotel.id);
-
+  
+  const handleDelete = async () => {
+    const queryParams = new URLSearchParams({
+      capacity: room.capacity,
+      number: room.number,
+      price: room.price,
+      oldImageUrl: room.image_url,
+      hotel_id: hotelId,
+    });
+  
     try {
       setLoading(true);
-      const response = await fetch(`${url}/hotels//room/${room.id}`, {
+      const response = await fetch(`${url}/hotels/room/${room.id}?${queryParams}`, {
         method: "DELETE",
-        body: form,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-
+  
       if (response.ok) {
         setLoading(false);
         const data = await response.json();
         console.log("Room Deleted:", data);
-        handleClose(); // Close modal after successful submission
+        handleClose();
       } else {
-        console.error("Failed to Edit room:", response.statusText);
+        console.error("Failed to delete room:", response.statusText);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
+  
 
   return (
     <>
@@ -54,11 +57,26 @@ const DeleteRoomModal = ({ open, setOpen, room }) => {
               Confirming will permanently delete this room's data. Are you sure
               you want to proceed?
             </h1>
-            <div className="w-full flex items-center justify-end gap-4">
-              <Button variant="contained" color="error" className="!normal-case">
+            <div
+              className="w-full flex items-center justify-end gap-4"
+              onClick={handleDelete}
+            >
+              <Button
+                variant="contained"
+                color="error"
+                className="!normal-case"
+              >
                 Confirm
               </Button>
-              <Button variant="contained" className="!bg-primary">Cancel</Button>
+              <Button
+                variant="contained"
+                className="!bg-primary"
+                onClick={() => {
+                  setOpen(false);
+                }}
+              >
+                Cancel
+              </Button>
             </div>
           </div>
         </div>

@@ -22,7 +22,8 @@ export const GetWilayaRestaurants = async (setRestaurants, wilaya, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    setRestaurants(res.data);
+    const sortedRestaurants = res.data.sort((a, b) => b.rating - a.rating);
+    setRestaurants(sortedRestaurants);
     console.log(res.data);
   } catch (error) {
     console.log(error);

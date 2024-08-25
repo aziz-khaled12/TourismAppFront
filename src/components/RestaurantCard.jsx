@@ -7,12 +7,15 @@ import { FaRegStar, FaStar } from "react-icons/fa";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import TruncateMarkup from "react-truncate-markup";
 
+
 const RestaurantCard = ({ resto, wilaya }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
     console.log("resto: ", resto);
   }, [resto]);
+
+
 
   const goToResto = () => {
     navigate(`/restaurants/${wilaya}/${resto.id}`);

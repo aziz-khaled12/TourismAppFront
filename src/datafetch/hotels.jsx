@@ -25,8 +25,8 @@ export const GetWilayaHotels = async (setHotels, wilaya, token) => {
         },
       }
     );
-    setHotels(res.data);
-    console.log(res.data);
+    const sortedHotels = res.data.sort((a, b) => b.rating - a.rating);
+    setHotels(sortedHotels)
   } catch (error) {
     console.log(error);
   }

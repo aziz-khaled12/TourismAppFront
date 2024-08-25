@@ -16,13 +16,15 @@ import { GoPeople } from "react-icons/go";
 import { VscSettings } from "react-icons/vsc";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchLikedItems } from "../redux/likesSlice";
 import "swiper/css";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 
 const HotelResults = () => {
-  const { accessToken } = useAuth();
+  const { accessToken, user } = useAuth();
   const { wilaya } = useParams();
   const navigate = useNavigate();
   const [hotels, setHotels] = useState([]);
@@ -63,6 +65,19 @@ const HotelResults = () => {
     "Dec",
   ];
 
+
+
+  const dispatch = useDispatch();
+  const likedItems = useSelector((state) => state.likes.likedItems);
+  const status = useSelector((state) => state.likes.status);
+
+  useEffect(() => {
+    if (status === "idle" && accessToken && user) {
+      dispatch(fetchLikedItems({ user, token: accessToken, type: "hotel"}));
+    }
+  }, [dispatch, status, user, accessToken]);
+
+
   useEffect(() => {
     console.log(date);
     console.log();
@@ -71,6 +86,7 @@ const HotelResults = () => {
   useEffect(() => {
     GetWilayaHotels(setHotels, wilaya, accessToken);
   }, [accessToken, wilaya]);
+
 
   const handleBack = () => {
     navigate("/hotels");
@@ -177,7 +193,7 @@ const HotelResults = () => {
       </div>
 
       <div className="flex items-center justify-around m-4 w-full">
-        <div className="flex w-full ml-4">
+        <div className="flex w-full ml-4 h-[60px]">
           <Swiper spaceBetween={10} slidesPerView={3}>
             <SwiperSlide className="!min-w-[220px]">
               <Button
@@ -382,7 +398,7 @@ const HotelResults = () => {
       </SwipeableDrawer>
 
       {hotels.length > 0 ? (
-        <div>
+        <div className="w-full">
           {hotels.map((hotel, index) => (
             <HotelResultCard
               key={index}
@@ -391,6 +407,7 @@ const HotelResults = () => {
               rooms={rooms}
               people={people}
               date={date}
+              liked={likedItems.includes(hotel.id)}
             />
           ))}
         </div>

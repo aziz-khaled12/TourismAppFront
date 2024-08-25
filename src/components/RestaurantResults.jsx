@@ -56,6 +56,7 @@ const RestaurantResults = () => {
         <div className="w-full flex justify-between p-4 mb-3">
           <div className="flex items-center font-[600] text-xl ">
             <SlArrowLeft className="mr-3 cursor-pointer" onClick={handleBack} />
+            
             Restaurants in {wilaya}
           </div>
           <div className="flex items-center text-3xl ">

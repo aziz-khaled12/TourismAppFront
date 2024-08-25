@@ -2,13 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import discoverImage from "../assets/discover1.jpg";
 import {
-  Avatar,
-  Divider,
+
   IconButton,
-  ListItemIcon,
-  Menu,
-  MenuItem,
-  Typography,
+
 } from "@mui/material";
 import LocationCard from "./LocationCard";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -26,15 +22,13 @@ import carRentalImage2 from "../assets/carRental2.jpg";
 import hotelRoomImage from "../assets/hotelRoom.jpg";
 import restaurantImage2 from "../assets/resto2.jpg";
 import taxiImage2 from "../assets/taxi2.jpg";
-import homeImage from "../assets/homeImage.jpg";
-import homeImage2 from "../assets/homeImage2.jpg";
-import homeImage3 from "../assets/homeImage3.jpg";
+import backgroundThing from "../assets/backgroundThing.png"
 import { OneEightyRingWithBg } from "react-svg-spinners";
-import homePageTree from "../assets/homepageTree.jpg";
-import { Logout, PersonAdd, Settings } from "@mui/icons-material";
-import { Pagination, Navigation } from "swiper/modules";
+import { Pagination } from "swiper/modules";
+import mountainImage from "../assets/landingMountain.jpg"
 import "swiper/css/pagination";
-import "swiper/css/navigation";
+import Navbar from "./Navbar";
+
 
 const Home = () => {
   const navigate = useNavigate();
@@ -82,9 +76,7 @@ const Home = () => {
   const [selected, setSelected] = useState();
   const [loading, setLoading] = useState(true);
   const { accessToken, user } = useAuth();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const { logout } = useAuth();
+
 
   const handleHover = (name) => {
     setSelected(name);
@@ -98,13 +90,6 @@ const Home = () => {
     navigate(link);
   };
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   useEffect(() => {
     if (accessToken && user) {
@@ -120,105 +105,45 @@ const Home = () => {
     </>
   ) : (
     <>
-      <div className="w-full">
-        <nav className="w-full absolute top-0 px-4 py-2 shadow-xl sm:block hidden z-10">
-          <div className="w-[90%] flex justify-between items-center m-auto">
-            <div className="font-semibold text-2xl text-white">
-              <span className="text-green-950">Tourism </span>App
-            </div>
-            <div className="w-[50%] ">
-              <ul className="flex m-auto w-[80%] justify-between items-center">
-                <li className="hover:cursor-pointer hover:text-green-950 duration-200 font-semibold text-sm md:text-base text-white">
-                  Home
-                </li>
-                <li className="hover:cursor-pointer hover:text-green-950 duration-200 font-semibold text-sm md:text-base text-white">
-                  Discover
-                </li>
+ 
+      <div className="w-full sm:px-10 md:px-15 lg:px-20 sm:pt-11 sm:pb-16">
+        <div className="hidden sm:block absolute -top-[100px] -right-[450px]">
+          <img src={backgroundThing} alt="thing" className="w-full h-full" />
+        </div>
+        <div className="hidden sm:block absolute bottom-[50%] rotate-90 -left-[460px]">
+          <img src={backgroundThing} alt="thing" className="w-full h-full" />
+        </div>
+       <Navbar />
 
-                <li className="hover:cursor-pointer hover:text-green-950 duration-200 font-semibold text-sm md:text-base text-white">
-                  About
-                </li>
-              </ul>
-            </div>
-            <div className="font-medium text-base text-white">
-              <IconButton
-                onClick={handleClick}
-                size="small"
-                sx={{ ml: 2 }}
-                aria-controls={open ? "account-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-              >
-                <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
-              </IconButton>
-              <Menu
-                anchorEl={anchorEl}
-                id="account-menu"
-                open={open}
-                onClose={handleClose}
-                onClick={handleClose}
-                transformOrigin={{ horizontal: "right", vertical: "top" }}
-                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-              >
-                <MenuItem onClick={handleClose}>
-                  <Avatar /> Profile
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <Avatar /> My account
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={handleClose}>
-                  <ListItemIcon>
-                    <PersonAdd fontSize="small" />
-                  </ListItemIcon>
-                  Add another account
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <ListItemIcon>
-                    <Settings fontSize="small" />
-                  </ListItemIcon>
-                  Settings
-                </MenuItem>
-                <MenuItem onClick={logout}>
-                  <ListItemIcon>
-                    <Logout fontSize="small" />
-                  </ListItemIcon>
-                  Logout
-                </MenuItem>
-              </Menu>
-            </div>
-          </div>
-        </nav>
-
-        <div className="relative sm:hidden h-[50vh] w-full overflow-hidden">
+        <div className="relative mb-7 sm:hidden h-[50vh] w-full overflow-hidden ">
           <img src={discoverImage} alt="discover" className="w-full h-full" />
-          <div className="text-2xl absolute left-2 z-10 font-[600] top-10">
+          <div className="text-3xl absolute left-6 z-10 font-[600] top-20 text-white">
             Discover
           </div>
         </div>
 
-        <div className="hidden relative w-full sm:flex items-center h-[95vh]">
-          <div className="absolute h-[95vh] w-full bg-black opacity-50 top-0"></div>
-          <div className="w-[60%] lg:w-[45%] absolute p-8">
-            <div>
-              <h1 className="text-3xl md:text-5xl text-white font-bold mb-8">
-                Discover Algeria Like Never Before.
-              </h1>
-              <p className="text-base md:text-lg text-white opacity-90 font-medium">
-                Unveil the hidden gems of Algeria, from the vast Sahara Desert
-                to the stunning Mediterranean coastline. Our app guides you
-                through breathtaking landscapes, ancient ruins, and vibrant
-                cities.
-              </p>
-            </div>
+      
+        <div className="hidden relarive w-full sm:flex items-center justify-evenly h-[95vh]">
+          <div className="md:w-full lg:w-[45%] text-center lg:text-start">
+            <h1 className="!leading-snug md:text-6xl sm:text-5xl text-primary font-bold mb-8 ">
+              Discover <span className="text-green-700"> Algeria </span>  Like Never Before.
+            </h1>
+            <p className="text-base sm:text-base md:text-lg text-primary opacity-90 font-medium">
+              Unveil the hidden gems of Algeria, from the vast Sahara Desert to
+              the stunning Mediterranean coastline. Our app guides you through
+              breathtaking landscapes, ancient ruins, and vibrant cities.
+            </p>
           </div>
-          <img src={homeImage3} alt="" className="w-full h-full max-h-[95vh]" />
+          <div className="w-[40%] hidden lg:block rounded-2xl ">
+            <img src={mountainImage} alt="mountain" className="w-full h-auto max-h-[80vh] rounded-2xl"/>
+          </div>
         </div>
 
-        <section className="w-full p-4 h-fit relative z-50 sm:shadow-upperFade">
-          <div className="w-[90%] mx-auto my-10 sm:block hidden">
-            <div className="text-4xl font-semibold mb-10 text-center hidden sm:block">
-              Services
+        <section className="w-full h-fit relative z-50">
+          <div className="w-full my-10 sm:block hidden">
+          <div className="text-start">
+              <p className="font-medium sm:text-base tracking-widest text-green-700 mb-2">SERVICES</p>
+              <h1 className="font-semibold sm:mb-5 sm:text-3xl lg:text-4xl text-primary mb-8">Everything you need in one place</h1>
             </div>
             <div className="hidden sm:flex w-full items-center justify-between p-4">
               <Swiper
@@ -286,7 +211,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="w-full flex gap-2 items-center justify-around sm:hidden">
+          <div className="w-full flex gap-2 items-start justify-around sm:hidden">
             {services.map((service) => {
               return (
                 <Link
@@ -309,10 +234,14 @@ const Home = () => {
           </div>
         </section>
         <section className="w-full flex justify-center p-2 my-10">
-          <div className="w-[90%] flex  flex-col justify-center">
-            <h1 className="text-2xl sm:text-4xl font-semibold sm:mb-10 sm:text-center ">
-              Locations
-            </h1>
+          <div className="w-full flex  flex-col justify-center">
+            <div className="text-start hidden sm:block">
+              <p className="font-medium text-base tracking-widest text-green-700 mb-2">LOCATIONS</p>
+              <h1 className="font-semibold hidden sm:block sm:mb-5 sm:text-3xl lg:text-4xl text-primary mb-8">Explore Nearby Locations</h1>
+            </div>
+            <div className="sm:hidden block text-start text-xl mb-5 font-medium text-primary">
+                Trending Location
+            </div>
             <div className="flex w-full">
               <Swiper
                 pagination={{
@@ -330,15 +259,14 @@ const Home = () => {
                     slidesPerView: 4,
                   },
                 }}
-                spaceBetween={30}
-                slidesPerView={2}
+                spaceBetween={20}
+                slidesPerView={1.5}
               >
                 {images.map((image, index) => (
                   <SwiperSlide key={index}>
                     <LocationCard></LocationCard>
                   </SwiperSlide>
                 ))}
-                <SwiperSlide></SwiperSlide>
               </Swiper>
             </div>
           </div>

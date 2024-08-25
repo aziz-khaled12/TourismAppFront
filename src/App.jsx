@@ -14,6 +14,7 @@ import RestaurantSearch from "./components/RestaurantSearch";
 import RestaurantResults from "./components/RestaurantResults";
 import RestaurantDetails from "./components/RestaurantDetails";
 import HotelDashboard from "./components/HotelsInterface/HotelDashboard";
+import HotelRooms from "./components/HotelRooms";
 
 function App() {
   const { verifyToken, isAuthenticated, accessToken } = useAuth();
@@ -27,7 +28,7 @@ function App() {
 
   return (
     <>
-      <div className="w-full bg-[#f9f9f9]">
+      <div className="w-full bg-[#f9f9f9] relative overflow-hidden">
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
@@ -36,6 +37,7 @@ function App() {
             <Route path="/hotels" element={<HotelSearch />} />
             <Route path="/hotels/:wilaya" element={<HotelResults />} />
             <Route path="/hotels/:wilaya/:id" element={<HotelDetails />} />
+            <Route path="/hotels/:wilaya/:id/rooms" element={<HotelRooms />} />
             <Route path="/hotels/dashboard" element={<HotelDashboard />} />
             <Route path="/restaurants" element={<RestaurantSearch />} />
             <Route

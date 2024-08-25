@@ -35,7 +35,7 @@ const RestaurantSearch = () => {
         </div>
 
         <div className="w-full">
-          <div className="text-xl my-4 font-[600]">Popular destinations</div>
+          <div className="text-base my-4 font-[600]">Popular destinations</div>
           <List
             sx={{ width: "100%" }}
             className="!mt-2 rounded-lg !w-full !bg-lightBackground"

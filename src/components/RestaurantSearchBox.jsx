@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
+  InputAdornment,
   List,
   ListItem,
   ListItemButton,
@@ -11,6 +12,7 @@ import { HiOutlineLocationMarker } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import { GetWilayas } from "../datafetch/hotels";
 import { useAuth } from "../context/AuthContext";
+import { CiSearch } from "react-icons/ci";
 
 const RestaurantSearchBox = () => {
   const [query, setQuery] = useState("");
@@ -104,11 +106,19 @@ const RestaurantSearchBox = () => {
           id="outlined-search"
           type="search"
           value={query}
-          className="!bg-gray-50 !rounded-full !w-[80%] !relative"
+          className="!bg-gray-50 !w-[80%] !relative"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <CiSearch className=" text-4xl" />
+              </InputAdornment>
+            ),
+          }}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={`Search for a Place`}
           sx={{
             "& .MuiOutlinedInput-root": {
+              borderRadius: "99px",
               "& fieldset": {
                 borderColor: "gray", // default border color
               },

@@ -12,8 +12,7 @@ export const GetRoles = async (setRoles) => {
 };
 
 export const GetData = async (user, setHotel, token) => {
-  console.log(user);
-
+  console.log(user)
   try {
     const res = await axios.get(`${url}/users/data/hotel/${user.id}`, {headers: {Authorization: `Bearer ${token}`}})
 
@@ -24,3 +23,18 @@ export const GetData = async (user, setHotel, token) => {
     
   }
 };
+
+export const GetLiked = async (user, setLiked, token) => {
+  try {
+    const res = await axios.get(`${url}/users/likes`, {
+      user: user,
+      headers: {Authorization: `Bearer ${token}`}
+    })
+
+    if ( res.status == 200 ) {
+      setLiked(res.data)
+    }
+  } catch (error) {
+    
+  }
+}

@@ -28,13 +28,13 @@ const HotelSearch = () => {
 
   return (
     <div className="w-full min-h-screen flex items-center flex-col m-auto justify-between p-5">
-      <div className="w-[95%] mx-auto ">
-        <div className="w-full flex items-center mt-4 p-2 justify-start">
+      <div className="w-full">
+        <div className="w-full flex items-center mt-8  justify-start">
           <HotelSearchBox/>
         </div>
 
-        <div className="w-full">
-          <div className="text-xl my-4 font-[600]">Popular destinations</div>
+        <div className="w-full mt-8">
+          <div className="text-base mb-5 font-medium">Popular destinations</div>
           <List
             sx={{ width: "100%" }}
             className="!mt-2 rounded-lg !w-full !bg-[#eaeaea]"
@@ -56,7 +56,7 @@ const HotelSearch = () => {
                   <ListItemText
                     className="!py-2 "
                     primary={
-                      <span className="!text-lg !font-[600]">
+                      <span className="text-lg font-medium">
                         {location.name}
                       </span>
                     }
@@ -67,11 +67,11 @@ const HotelSearch = () => {
           </List>
         </div>
       </div>
-      <div className="w-full p-4 flex items-center justify-center">
+      <div className="w-full p-4 flex items-center justify-center ">
         <Button
-          className="!bg-green-700 !p-5 !rounded-full !text-xl"
+          sx={{backgroundColor: "#15803d", borderRadius: "99px", padding: "16px", fontSize: "18px", fontWeight: "500", textTransform: "none"}}
           variant="contained"
-          startIcon={<MdNearMe className="!text-2xl" />}
+          startIcon={<MdNearMe className="text-lg" />}
         >
           Near me
         </Button>
