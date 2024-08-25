@@ -1,17 +1,17 @@
 import { Button, InputAdornment, Modal, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { MdCloudUpload } from "react-icons/md";
-import { useAuth } from "../../context/AuthContext";
-import { GetData } from "../../datafetch/users";
 import { OneEightyRingWithBg } from "react-svg-spinners";
+import { useDispatch, useSelector } from 'react-redux';
+import { modifyRoom } from '../../redux/hotelInterface/roomsSlice';
+import { useAuth } from "../../context/AuthContext";
 
-const url = import.meta.env.VITE_LOCAL_BACK_END_URL;
 
-const EditRoomModal = ({ open, setOpen, oldRoom }) => {
-  const { accessToken, user } = useAuth();
-  const [loading, setLoading] = useState(false)
 
-  const [hotel, setHotel] = useState();
+const EditRoomModal = ({ open, setOpen, oldRoom, hotel }) => {
+  const dispatch = useDispatch();
+  const { status, error } = useSelector((state) => state.rooms);
+  const {accessToken} = useAuth()
   const [formData, setFormData] = useState({
     capacity: oldRoom.capacity,
     number: oldRoom.number,
@@ -45,31 +45,9 @@ const EditRoomModal = ({ open, setOpen, oldRoom }) => {
     form.append("oldImageUrl", oldRoom.image_url);
     form.append("hotel_id", hotel.id);
 
-    try {
-        setLoading(true)
-      const response = await fetch(`${url}/hotels//room/${oldRoom.id}`, {
-        method: "PUT",
-        body: form,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (response.ok) {
-        setLoading(false)
-        const data = await response.json();
-        console.log("Room Edited:", data);
-        handleClose(); // Close modal after successful submission
-      } else {
-        console.error("Failed to Edit room:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
+    await dispatch(modifyRoom({ roomId: oldRoom.id, roomData: form, accessToken: accessToken }));
   };
-  useEffect(() => {
-    GetData(user, setHotel, accessToken);
-  }, []);
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -161,10 +139,10 @@ const EditRoomModal = ({ open, setOpen, oldRoom }) => {
             <Button
               type="submit"
               variant="contained"
-              disabled={loading}
+              disabled={status === "loading"}
               className="!bg-primary !rounded-lg !p-3 w-full !text-base"
             >
-               {loading ? <OneEightyRingWithBg color="#74767e" /> : "Edit Room"}
+               {status === "loading" ? <OneEightyRingWithBg color="#74767e" /> : "Edit Room"}
             </Button>
           </form>
         </div>

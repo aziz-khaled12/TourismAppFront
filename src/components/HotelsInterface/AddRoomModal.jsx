@@ -1,16 +1,16 @@
 import { Button, InputAdornment, Modal, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { MdCloudUpload } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { addRoom } from "../../redux/hotelInterface/roomsSlice.js";
 import { useAuth } from "../../context/AuthContext";
-import { GetData } from "../../datafetch/users";
 
+const AddRoomModal = ({ open, setOpen, hotel }) => {
+  console.log(hotel);
+  const { accessToken } = useAuth();
+  const dispatch = useDispatch();
+  const { status } = useSelector((state) => state.rooms);
 
-const url = import.meta.env.VITE_LOCAL_BACK_END_URL;
-
-const AddRoomModal = ({ open, setOpen }) => {
-  const { accessToken, user } = useAuth();
-
-  const [hotel, setHotel] = useState();
   const [formData, setFormData] = useState({
     capacity: 0,
     number: 0,
@@ -42,29 +42,24 @@ const AddRoomModal = ({ open, setOpen }) => {
     form.append("image", formData.image);
     form.append("hotel_id", hotel.id);
 
-    try {
-      const response = await fetch(`${url}/hotels/room`, {
-        method: "POST",
-        body: form,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+    console.log("entered, form: ", form);
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Room added:", data);
+    try {
+      const resultAction = await dispatch(
+        addRoom({ roomData: form, accessToken: accessToken })
+      );
+
+      if (addRoom.fulfilled.match(resultAction)) {
+        console.log("Room added successfully:", resultAction.payload);
         handleClose(); // Close modal after successful submission
       } else {
-        console.error("Failed to add room:", response.statusText);
+        console.error("Failed to add room:", resultAction.payload);
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.log(error);
     }
   };
-  useEffect(() => {
-    GetData(user, setHotel, accessToken);
-  }, []);
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -155,7 +150,26 @@ const AddRoomModal = ({ open, setOpen }) => {
               variant="contained"
               className="!bg-primary !rounded-lg !p-3 w-full !text-base"
             >
-              Add Room
+              {status === "loading" ? (
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <style>{`.spinner_z9k8{color: white;transform-origin:center;animation:spinner_StKS .75s infinite linear}@keyframes spinner_StKS{100%{transform:rotate(360deg)}}`}</style>
+                  <path
+                    d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+                    opacity=".25"
+                  />
+                  <path
+                    d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
+                    className="spinner_z9k8"
+                  />
+                </svg>
+              ) : (
+                "Add Room"
+              )}
             </Button>
           </form>
         </div>

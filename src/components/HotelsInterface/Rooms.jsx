@@ -9,18 +9,16 @@ import { GetData } from "../../datafetch/users";
 import AddRoomModal from "./AddRoomModal";
 import DeleteRoomModal from "./DeleteRoomModal";
 import EditRoomModal from "./EditRoomModal";
-import { OneEightyRingWithBg } from "react-svg-spinners";
-
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchRooms } from "../../redux/hotelInterface/roomsSlice";
 
 const Rooms = () => {
-  const url = import.meta.env.VITE_LOCAL_BACK_END_URL;
+  const dispatch = useDispatch();
+  const { rooms } = useSelector((state) => state.rooms);
   const { accessToken, user } = useAuth();
   const [hotel, setHotel] = useState();
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const [rooms, setRooms] = useState(<OneEightyRingWithBg />);
-
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [selectedDeleteRoom, setSelectedDeleteRoom] = useState(null);
 
@@ -101,9 +99,14 @@ const Rooms = () => {
     },
   ];
 
+  
   useEffect(() => {
     console.log(user);
   }, [user]);
+
+  useEffect(() => {
+    console.log(hotel);
+  }, [hotel]);
 
   const handleEditOpen = (room) => {
     setSelectedRoom(room); // Set the selected room data
@@ -122,22 +125,8 @@ const Rooms = () => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const fetchHotelRooms = async () => {
-      try {
-        const result = await axios.get(`${url}/hotels/rooms/${hotel.id}`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
-        if (result.status == 200) {
-          console.log(result.data);
-          setRooms(result.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     if (hotel) {
-      fetchHotelRooms();
+      dispatch(fetchRooms({hotelId: hotel.id, accessToken: accessToken}));
     }
   }, [hotel]);
 
@@ -173,12 +162,13 @@ const Rooms = () => {
           )}
         </div>
       </div>
-      <AddRoomModal open={open} setOpen={setOpen} />
+      <AddRoomModal open={open} setOpen={setOpen} hotel={hotel} />
       {selectedRoom && (
         <EditRoomModal
           open={openEdit}
           setOpen={setOpenEdit}
           oldRoom={selectedRoom}
+          hotel={hotel}
         />
       )}
       {hotel && (

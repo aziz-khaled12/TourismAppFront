@@ -1,12 +1,16 @@
 import { Button, Modal } from "@mui/material";
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { useDispatch, useSelector } from 'react-redux';
+
+import { deleteRoom } from '../../redux/hotelInterface/roomsSlice';
+
 
 const DeleteRoomModal = ({ open, setOpen, room, hotelId }) => {
   const url = import.meta.env.VITE_LOCAL_BACK_END_URL;
-
-  const [loading, setLoading] = useState(false);
-  const { accessToken } = useAuth();
+  const dispatch = useDispatch();
+  const { rooms, status, error } = useSelector((state) => state.rooms);
+  const {accessToken} = useAuth()
 
   const handleClose = () => {
     setOpen(false);
@@ -20,28 +24,10 @@ const DeleteRoomModal = ({ open, setOpen, room, hotelId }) => {
       price: room.price,
       oldImageUrl: room.image_url,
       hotel_id: hotelId,
-    });
+    }).toString();
   
-    try {
-      setLoading(true);
-      const response = await fetch(`${url}/hotels/room/${room.id}?${queryParams}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-  
-      if (response.ok) {
-        setLoading(false);
-        const data = await response.json();
-        console.log("Room Deleted:", data);
-        handleClose();
-      } else {
-        console.error("Failed to delete room:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
+    await dispatch(deleteRoom({ roomId: room.id, queryParams, accessToken: accessToken }));
+
   };
   
 

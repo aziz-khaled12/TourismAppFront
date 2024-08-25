@@ -20,7 +20,7 @@ export const GetData = async (user, setHotel, token) => {
       setHotel(res.data)
     }
   } catch (error) {
-    
+    console.log(error)
   }
 };
 
