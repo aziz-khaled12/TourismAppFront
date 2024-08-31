@@ -1,9 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import FiltersDrawer from "./FiltersDrawer";
 import { useNavigate, useParams } from "react-router-dom";
 import { SlArrowLeft } from "react-icons/sl";
 import HotelRoomCard from "./HotelRoomCard";
+import "swiper/css";
+import FiltersSwiper from "./FiltersSwiper";
 
 const HotelRooms = () => {
   const url = import.meta.env.VITE_LOCAL_BACK_END_URL;
@@ -13,6 +16,17 @@ const HotelRooms = () => {
   const { accessToken } = useAuth();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [roomsNum, setRoomsNum] = useState(1);
+  const [people, setPeople] = useState(1);
+  const [selectedOption, setSelectedOption] = useState(2);
+  const [open, setOpen] = useState(false); // Set to true initially for testing
+  const [date, setDate] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ]);
 
   useEffect(() => {
     const fetchHotelRooms = async () => {
@@ -54,6 +68,31 @@ const HotelRooms = () => {
     }
   }, [price, rooms]);
 
+  const toggleDrawer = (newOpen, option) => () => {
+    setSelectedOption(option);
+    setOpen(newOpen);
+  };
+
+  const closeDrawer = () => {
+    setOpen(false);
+  };
+
+  const confirmDetails = (prePeople, preRooms) => {
+    setPeople(prePeople);
+    setRoomsNum(preRooms);
+    closeDrawer();
+  };
+
+  const applyDate = (preDate) => {
+    setDate(preDate);
+    closeDrawer();
+  };
+
+
+  useEffect(() => {
+    console.log(date);
+  }, [date])
+
   return loading ? (
     <>
       <div className="w-full min-h-screen flex items-center justify-center flex-col m-auto">
@@ -86,9 +125,35 @@ const HotelRooms = () => {
         </div>
       </div>
 
+      <FiltersSwiper
+        date={date}
+        people={people}
+        roomsNum={roomsNum}
+        toggleDrawer={toggleDrawer}
+      />
+
+      <FiltersDrawer
+        toggleDrawer={toggleDrawer}
+        applyDate={applyDate}
+        confirmDetails={confirmDetails}
+        roomsNum={roomsNum}
+        people={people}
+        open={open}
+        selectedOption={selectedOption}
+        setSelectedOption={setSelectedOption}
+      />
+
       <div>
         {rooms.map((room, index) => {
-          return <HotelRoomCard key={index} room={room} />;
+          return (
+            <HotelRoomCard
+              key={index}
+              room={room}
+              date={date}
+              people={people}
+              roomsNum={roomsNum}
+            />
+          );
         })}
       </div>
     </div>

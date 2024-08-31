@@ -7,7 +7,7 @@ import { useAuth } from "../context/AuthContext";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Button from "@mui/material/Button";
 import HotelResultCard from "./HotelResultCard";
-import { Skeleton, styled, Typography } from "@mui/material";
+import { styled } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { IoCalendarNumberOutline } from "react-icons/io5";
 import { MdArrowRightAlt } from "react-icons/md";
@@ -32,6 +32,7 @@ const HotelResults = () => {
   const [selectedOption, setSelectedOption] = useState(2);
   const [rooms, setRooms] = useState(1);
   const [preRooms, setPreRooms] = useState(rooms);
+  
   const [people, setPeople] = useState(1);
   const [prePeople, setPrePeople] = useState(people);
   const [open, setOpen] = useState(false); // Set to true initially for testing

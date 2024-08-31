@@ -1,11 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import discoverImage from "../assets/discover1.jpg";
-import {
-
-  IconButton,
-
-} from "@mui/material";
+import { IconButton } from "@mui/material";
 import LocationCard from "./LocationCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -22,14 +18,12 @@ import carRentalImage2 from "../assets/carRental2.jpg";
 import hotelRoomImage from "../assets/hotelRoom.jpg";
 import restaurantImage2 from "../assets/resto2.jpg";
 import taxiImage2 from "../assets/taxi2.jpg";
-import backgroundThing from "../assets/backgroundThing.png"
+import backgroundThing from "../assets/backgroundThing.png";
 import { OneEightyRingWithBg } from "react-svg-spinners";
 import { Pagination } from "swiper/modules";
-import mountainImage from "../assets/landingMountain.jpg"
+import mountainImage from "../assets/landingMountain.jpg";
 import "swiper/css/pagination";
 import Navbar from "./Navbar";
-
-
 const Home = () => {
   const navigate = useNavigate();
   const images = [1, 2, 4, 5, 6, 7, 8, 9, 0, 0];
@@ -77,7 +71,6 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const { accessToken, user } = useAuth();
 
-
   const handleHover = (name) => {
     setSelected(name);
   };
@@ -89,7 +82,6 @@ const Home = () => {
   const handleRedirect = (link) => {
     navigate(link);
   };
-
 
   useEffect(() => {
     if (accessToken && user) {
@@ -105,7 +97,6 @@ const Home = () => {
     </>
   ) : (
     <>
- 
       <div className="w-full sm:px-10 md:px-15 lg:px-20 sm:pt-11 sm:pb-16">
         <div className="hidden sm:block absolute -top-[100px] -right-[450px]">
           <img src={backgroundThing} alt="thing" className="w-full h-full" />
@@ -113,7 +104,7 @@ const Home = () => {
         <div className="hidden sm:block absolute bottom-[50%] rotate-90 -left-[460px]">
           <img src={backgroundThing} alt="thing" className="w-full h-full" />
         </div>
-       <Navbar />
+        <Navbar />
 
         <div className="relative mb-7 sm:hidden h-[50vh] w-full overflow-hidden ">
           <img src={discoverImage} alt="discover" className="w-full h-full" />
@@ -122,11 +113,11 @@ const Home = () => {
           </div>
         </div>
 
-      
         <div className="hidden relarive w-full sm:flex items-center justify-evenly h-[95vh]">
           <div className="md:w-full lg:w-[45%] text-center lg:text-start">
             <h1 className="!leading-snug md:text-6xl sm:text-5xl text-primary font-bold mb-8 ">
-              Discover <span className="text-green-700"> Algeria </span>  Like Never Before.
+              Discover <span className="text-green-700"> Algeria </span> Like
+              Never Before.
             </h1>
             <p className="text-base sm:text-base md:text-lg text-primary opacity-90 font-medium">
               Unveil the hidden gems of Algeria, from the vast Sahara Desert to
@@ -135,15 +126,23 @@ const Home = () => {
             </p>
           </div>
           <div className="w-[40%] hidden lg:block rounded-2xl ">
-            <img src={mountainImage} alt="mountain" className="w-full h-auto max-h-[80vh] rounded-2xl"/>
+            <img
+              src={mountainImage}
+              alt="mountain"
+              className="w-full h-auto max-h-[80vh] rounded-2xl"
+            />
           </div>
         </div>
 
         <section className="w-full h-fit relative z-50">
           <div className="w-full my-10 sm:block hidden">
-          <div className="text-start">
-              <p className="font-medium sm:text-base tracking-widest text-green-700 mb-2">SERVICES</p>
-              <h1 className="font-semibold sm:mb-5 sm:text-3xl lg:text-4xl text-primary mb-8">Everything you need in one place</h1>
+            <div className="text-start">
+              <p className="font-medium sm:text-base tracking-widest text-green-700 mb-2">
+                SERVICES
+              </p>
+              <h1 className="font-semibold sm:mb-5 sm:text-3xl lg:text-4xl text-primary mb-8">
+                Everything you need in one place
+              </h1>
             </div>
             <div className="hidden sm:flex w-full items-center justify-between p-4">
               <Swiper
@@ -236,11 +235,15 @@ const Home = () => {
         <section className="w-full flex justify-center p-2 my-10">
           <div className="w-full flex  flex-col justify-center">
             <div className="text-start hidden sm:block">
-              <p className="font-medium text-base tracking-widest text-green-700 mb-2">LOCATIONS</p>
-              <h1 className="font-semibold hidden sm:block sm:mb-5 sm:text-3xl lg:text-4xl text-primary mb-8">Explore Nearby Locations</h1>
+              <p className="font-medium text-base tracking-widest text-green-700 mb-2">
+                LOCATIONS
+              </p>
+              <h1 className="font-semibold hidden sm:block sm:mb-5 sm:text-3xl lg:text-4xl text-primary mb-8">
+                Explore Nearby Locations
+              </h1>
             </div>
             <div className="sm:hidden block text-start text-xl mb-5 font-medium text-primary">
-                Trending Location
+              Trending Location
             </div>
             <div className="flex w-full">
               <Swiper
