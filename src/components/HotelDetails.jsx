@@ -144,7 +144,7 @@ const HotelDetails = () => {
     <div className="w-full min-h-screen flex flex-col items-center justify-start mb-28">
       <section className="h-[47vh] w-full relative">
         <img
-          src={hotelRoomImage}
+          src={hotel.image_url[0]}
           alt="hotel room"
           className="w-full h-full relative"
         />

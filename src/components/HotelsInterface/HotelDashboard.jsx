@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -11,22 +11,38 @@ import {
   Menu,
   Divider,
 } from "@mui/material";
-import { MdSpaceDashboard } from "react-icons/md";
+import { MdOutlineMiscellaneousServices, MdSpaceDashboard } from "react-icons/md";
 import { IoBed } from "react-icons/io5";
 import { FaCalendarCheck } from "react-icons/fa";
 import { Logout, PersonAdd, Settings } from "@mui/icons-material";
 import Rooms from "./Rooms";
 import { useAuth } from "../../context/AuthContext";
-
+import Bookings from "./Bookings";
+import { GetData } from "../../datafetch/users";
+import Services from "./Services";
 
 const HotelDashboard = () => {
-
-
   const [activeSection, setActiveSection] = useState("rooms"); // State to track the active section
   const [anchorEl, setAnchorEl] = useState(null);
+  const [hotel, setHotel] = useState();
+  const [loading, setLoading] = useState(true);
   const open = Boolean(anchorEl);
-  const { logout } = useAuth() 
+  const { logout, user, accessToken } = useAuth();
 
+  const fetchHotelData = useCallback(async () => {
+    setLoading(true);
+    try {
+      await GetData(user, setHotel, accessToken);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [user, accessToken]);
+
+  useEffect(() => {
+    fetchHotelData();
+  }, [fetchHotelData]);
 
   const sideButtons = [
     {
@@ -47,7 +63,14 @@ const HotelDashboard = () => {
       value: "bookings",
       icon: <FaCalendarCheck />,
     },
+    {
+      id: 3,
+      name: "Services",
+      value: "services",
+      icon: <MdOutlineMiscellaneousServices />,
+    }
   ];
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -100,25 +123,84 @@ const HotelDashboard = () => {
       case "rooms":
         return (
           <>
-            <Rooms></Rooms>
+            {loading ? (
+              <div className="w-full min-h-screen flex items-center justify-center flex-col m-auto">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <style>{`.spinner_z9k8{transform-origin:center;animation:spinner_StKS .75s infinite linear}@keyframes spinner_StKS{100%{transform:rotate(360deg)}}`}</style>
+                  <path
+                    d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+                    opacity=".25"
+                  />
+                  <path
+                    d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
+                    className="spinner_z9k8"
+                  />
+                </svg>
+              </div>
+            ) : (
+              <Rooms hotel={hotel} />
+            )}
           </>
         );
       case "bookings":
         return (
           <>
-            <div className="mb-6 font-[500] text-xl">Bookings</div>
-            <Card>
-              <CardContent>
-                <Typography variant="h5" component="div">
-                  Bookings
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  This is the Bookings section content.
-                </Typography>
-              </CardContent>
-            </Card>
+            {loading ? (
+              <div className="w-full min-h-screen flex items-center justify-center flex-col m-auto">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <style>{`.spinner_z9k8{transform-origin:center;animation:spinner_StKS .75s infinite linear}@keyframes spinner_StKS{100%{transform:rotate(360deg)}}`}</style>
+                  <path
+                    d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+                    opacity=".25"
+                  />
+                  <path
+                    d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
+                    className="spinner_z9k8"
+                  />
+                </svg>
+              </div>
+            ) : (
+              <Bookings hotel={hotel} />
+            )}
           </>
         );
+        case "services":
+          return (
+            <>
+              {loading ? (
+                <div className="w-full min-h-screen flex items-center justify-center flex-col m-auto">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <style>{`.spinner_z9k8{transform-origin:center;animation:spinner_StKS .75s infinite linear}@keyframes spinner_StKS{100%{transform:rotate(360deg)}}`}</style>
+                    <path
+                      d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+                      opacity=".25"
+                    />
+                    <path
+                      d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
+                      className="spinner_z9k8"
+                    />
+                  </svg>
+                </div>
+              ) : (
+                <Services />
+              )}
+            </>
+          );
       default:
         return null;
     }
@@ -130,45 +212,44 @@ const HotelDashboard = () => {
       <div className="flex">
         {/* Sidebar */}
         <aside className="w-64 text-primary p-8 shadow-lg">
-
           <ul>
-            <li className="p-4 mb-5" key={3}>
-            <h1 className="text-2xl">My Dashboard</h1>
+            <li className="p-4 mb-5" key="header">
+              <h1 className="text-2xl">Tourism App</h1>
             </li>
-            <li className="mb-12" key={4}>
+            <li className="mb-12" key="hotel-button">
               <Button
                 variant="contained"
                 fullWidth
-                className="!bg-lightBackground !text-primary !flex !justify-center !p-4"
+                className="!bg-lightBackground !text-primary !p-4"
               >
                 <Avatar className="mr-4" sx={{ width: 32, height: 32 }}>
-                  M
+                  {hotel ? hotel.name[0] : "H"}
                 </Avatar>
-                <div className="font-[600] text-md">Mahfoudh lkalb</div>
+                <div className="font-[600] text-md">
+                  {hotel ? hotel.name : "Hotel Name"}
+                </div>
               </Button>
             </li>
 
             {sideButtons.map((thing) => {
               return (
-                <>
-                  <li key={thing.id} className="mb-2">
-                    <Button
-                      startIcon={thing.icon}
-                      variant={`${
-                        activeSection === thing.value ? "contained" : ""
-                      }`}
-                      className={`!px-4 !py-3 ${
-                        activeSection === thing.value
-                          ? "!bg-lightBackground !text-primary"
-                          : "!bg-transparent !text-primary hover:!bg-[#f1f1f1]"
-                      } !flex !items-center !justify-start`}
-                      fullWidth
-                      onClick={() => setActiveSection(thing.value)}
-                    >
-                      <div className="font-[600] text-md">{thing.name}</div>
-                    </Button>
-                  </li>
-                </>
+                <li key={thing.id} className="mb-2">
+                  <Button
+                    startIcon={thing.icon}
+                    variant={`${
+                      activeSection === thing.value ? "contained" : ""
+                    }`}
+                    className={`!px-4 !py-3 ${
+                      activeSection === thing.value
+                        ? "!bg-lightBackground !text-primary"
+                        : "!bg-transparent !text-primary hover:!bg-[#f1f1f1]"
+                    } !flex !items-center !justify-start`}
+                    fullWidth
+                    onClick={() => setActiveSection(thing.value)}
+                  >
+                    <div className="font-[600] text-md">{thing.name}</div>
+                  </Button>
+                </li>
               );
             })}
           </ul>

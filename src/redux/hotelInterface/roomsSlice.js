@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { useAuth } from '../../context/AuthContext';
 
 const url = import.meta.env.VITE_LOCAL_BACK_END_URL;
 
@@ -119,7 +118,7 @@ const roomsSlice = createSlice({
       })
       .addCase(deleteRoom.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.rooms = state.rooms.filter(room => room.id !== action.payload.id);
+        state.rooms = state.rooms.filter(room => room.id !== action.payload.rooms[0].id);
       })
       .addCase(deleteRoom.rejected, (state, action) => {
         state.status = 'failed';

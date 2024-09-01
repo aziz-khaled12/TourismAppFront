@@ -2,10 +2,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import likesReducer from './likesSlice';
 import roomsReducer from "./hotelInterface/roomsSlice"
+import bookingReducer from './hotelInterface/bookingSlice';
 
 export const store = configureStore({
   reducer: {
     likes: likesReducer,
     rooms: roomsReducer,
+    bookings: bookingReducer
   },
 });

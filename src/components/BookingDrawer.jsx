@@ -13,9 +13,9 @@ import { grey } from "@mui/material/colors";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-
-const url = import.meta.env.VITE_LOCAL_BACK_END_URL
-
+import { useDispatch, useSelector } from "react-redux";
+import { addBooking } from "../redux/hotelInterface/bookingSlice";
+const url = import.meta.env.VITE_LOCAL_BACK_END_URL;
 
 const BookingDrawer = ({
   toggleDrawer,
@@ -25,6 +25,9 @@ const BookingDrawer = ({
   roomsNum,
   room,
 }) => {
+  const dispatch = useDispatch();
+  const { status } = useSelector((state) => state.bookings);
+
   const [bookingData, setBookingData] = useState([]);
 
   useEffect(() => {
@@ -106,22 +109,21 @@ const BookingDrawer = ({
 
   const handleSubmit = async () => {
     try {
-      const res = await axios.post(
-        `${url}/interactions/booking`,
-        {
-          user_id: user.id,
-          hotel_id: id,
-          person_number: people,
-          room_id: room.id,
-          total_price,
-          booking_start: date[0].startDate,
-          booking_end: date[0].endDate,
-        },
-        { headers: { Authorization: `Bearer ${accessToken}` } }
+      const bookingData = new FormData();
+      bookingData.append("user_id", user.id);
+      bookingData.append("hotel_id", id);
+      bookingData.append("person_number", people);
+      bookingData.append("room_id", room.id);
+      bookingData.append("total_price", total_price);
+      bookingData.append("booking_start", date[0].startDate);
+      bookingData.append("booking_end", date[0].endDate);
+
+      dispatch(
+        addBooking({ bookingData: bookingData, accessToken: accessToken })
       );
-      if (res.status == 200) {
-        toggleDrawer(false)
-        console.log(res.data.message)
+
+      if (status === "succeeded") {
+        toggleDrawer(false);
       }
     } catch (error) {
       console.log(error);

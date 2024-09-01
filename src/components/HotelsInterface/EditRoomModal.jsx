@@ -19,8 +19,18 @@ const EditRoomModal = ({ open, setOpen, oldRoom, hotel }) => {
     hotel_id: "",
     image_url: oldRoom.image_url,
   });
-
   const [preview, setPreview] = useState(oldRoom.image_url);
+
+  useEffect(() => { 
+    setFormData({
+      capacity: oldRoom.capacity,
+      number: oldRoom.number,
+      price: oldRoom.price,
+      hotel_id: "",
+      image_url: oldRoom.image_url,
+    })
+    setPreview(oldRoom.image_url)
+  }, [oldRoom])
 
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });

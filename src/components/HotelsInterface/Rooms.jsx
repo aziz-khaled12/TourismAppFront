@@ -1,4 +1,4 @@
-import { Button, IconButton } from "@mui/material";
+import { Button, IconButton, Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid } from "@mui/x-data-grid";
@@ -12,19 +12,20 @@ import EditRoomModal from "./EditRoomModal";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRooms } from "../../redux/hotelInterface/roomsSlice";
 
-const Rooms = () => {
+const Rooms = ({ hotel }) => {
   const dispatch = useDispatch();
   const { rooms } = useSelector((state) => state.rooms);
   const { accessToken, user } = useAuth();
-  const [hotel, setHotel] = useState();
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [selectedDeleteRoom, setSelectedDeleteRoom] = useState(null);
+  const [open, setOpen] = useState(false);
+
 
   const columns = [
     {
-      field: "id",
+      field: "ID",
       headerName: "#",
       width: 70,
       renderCell: (params) => (
@@ -32,6 +33,14 @@ const Rooms = () => {
           {params.api.getRowIndexRelativeToVisibleRows(params.row.id) + 1}
         </div>
       ),
+      align: "center",
+      headerAlign: "center",
+    },
+
+    {
+      field: "id",
+      headerName: "Room ID",
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
@@ -80,18 +89,22 @@ const Rooms = () => {
       flex: 1,
       renderCell: (params) => (
         <div className="flex items-center justify-center gap-2 w-full h-full">
-          <IconButton
-            aria-label="edit"
-            onClick={() => handleEditOpen(params.row)}
-          >
-            <EditIcon className="text-primary" />
-          </IconButton>
-          <IconButton
-            aria-label="delete"
-            onClick={() => handleDeleteOpen(params.row)}
-          >
-            <DeleteIcon color="error" />
-          </IconButton>
+          <Tooltip title="Edit">
+            <IconButton
+              aria-label="edit"
+              onClick={() => handleEditOpen(params.row)}
+            >
+              <EditIcon className="text-primary" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete">
+            <IconButton
+              aria-label="delete"
+              onClick={() => handleDeleteOpen(params.row)}
+            >
+              <DeleteIcon color="error" />
+            </IconButton>
+          </Tooltip>
         </div>
       ),
       align: "center",
@@ -99,14 +112,9 @@ const Rooms = () => {
     },
   ];
 
-  
   useEffect(() => {
     console.log(user);
   }, [user]);
-
-  useEffect(() => {
-    console.log(hotel);
-  }, [hotel]);
 
   const handleEditOpen = (room) => {
     setSelectedRoom(room); // Set the selected room data
@@ -118,16 +126,9 @@ const Rooms = () => {
     setOpenDelete(true);
   };
 
-  useEffect(() => {
-    GetData(user, setHotel, accessToken);
-  }, []);
-
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (hotel) {
-      dispatch(fetchRooms({hotelId: hotel.id, accessToken: accessToken}));
-    }
+    dispatch(fetchRooms({ hotelId: hotel.id, accessToken: accessToken }));
   }, [hotel]);
 
   const handleOpen = () => {
@@ -163,6 +164,7 @@ const Rooms = () => {
         </div>
       </div>
       <AddRoomModal open={open} setOpen={setOpen} hotel={hotel} />
+
       {selectedRoom && (
         <EditRoomModal
           open={openEdit}
@@ -171,7 +173,7 @@ const Rooms = () => {
           hotel={hotel}
         />
       )}
-      {hotel && (
+      {selectedDeleteRoom && (
         <DeleteRoomModal
           open={openDelete}
           setOpen={setOpenDelete}

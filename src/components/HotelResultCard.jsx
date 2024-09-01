@@ -128,7 +128,7 @@ const HotelResultCard = ({ data, wilaya, rooms, people, date, liked }) => {
               </>
             )}
             <img
-              src={data.image_url != null ? data.image_url[1] : hotelImage}
+              src={data.image_url != null ? data.image_url[0] : hotelImage}
               alt="hotel"
               loading="lazy"
               onLoad={handleImageLoad}

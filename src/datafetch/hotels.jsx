@@ -55,3 +55,15 @@ export const GetHotel = async (setHotel, hotelId, token) => {
     console.log(error);
   }
 };
+
+export const GetBookings = async (token, hotel_id, setBookings) => {
+  try {
+    const res = await axios.get(`${url}/interactions/bookings?hotel_id=${hotel_id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setBookings(res.data)
+    console.log(res.data);
+  } catch (error) {
+    console.log(error)
+  }
+}
