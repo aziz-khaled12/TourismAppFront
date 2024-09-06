@@ -8,7 +8,7 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdCloudUpload } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "../../context/AuthContext";
@@ -17,7 +17,7 @@ import { addMenuItem } from "../../redux/restaurantsInterface/menuSlice";
 const AddMenuItemModal = ({ open, setOpen, restaurant }) => {
   const { accessToken } = useAuth();
   const dispatch = useDispatch();
-  const { status } = useSelector((state) => state.rooms);
+  const { status } = useSelector((state) => state.menu);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -40,6 +40,10 @@ const AddMenuItemModal = ({ open, setOpen, restaurant }) => {
     setFormData({ ...formData, image: event.target.files[0] });
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -59,10 +63,10 @@ const AddMenuItemModal = ({ open, setOpen, restaurant }) => {
         })
       );
 
-      if (addMenuItem.fulfilled.match(resultAction)) {
-        console.log("Item added successfully:", resultAction.payload);
+      if (status === "succeeded") {
         handleClose(); // Close modal after successful submission
-      } else {
+        console.log("Item added successfully:", resultAction.payload);
+      } else if (status === "failed") {
         console.error("Failed to add item:", resultAction.payload);
       }
     } catch (error) {
@@ -70,9 +74,13 @@ const AddMenuItemModal = ({ open, setOpen, restaurant }) => {
     }
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  useEffect(() => {
+    console.log(status);
+    
+  },[status])
+
+
+
   return (
     <>
       <Modal open={open} onClose={handleClose}>
@@ -131,7 +139,7 @@ const AddMenuItemModal = ({ open, setOpen, restaurant }) => {
             </div>
             <div className="flex justify-between items-start w-full mb-10">
               <h1 className="text-md font-medium">Type</h1>
-              <FormControl sx={{width: "70%"}}>
+              <FormControl sx={{ width: "70%" }}>
                 <InputLabel id="demo-simple-select-disabled-label"></InputLabel>
                 <Select
                   name="type"

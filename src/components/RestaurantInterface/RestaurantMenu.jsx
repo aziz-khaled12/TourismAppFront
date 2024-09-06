@@ -6,7 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { fetchMenuItems } from "../../redux/restaurantsInterface/menuSlice";
 import AddMenuItemModal from "./AddMenuItemModal";
 import { useAuth } from "../../context/AuthContext";
-import { Button, IconButton, Tooltip } from "@mui/material";
+import { Box, Button, IconButton, Tooltip } from "@mui/material";
 import { FaPlus } from "react-icons/fa";
 
 const RestaurantMenu = ({ restaurant }) => {
@@ -144,18 +144,36 @@ const RestaurantMenu = ({ restaurant }) => {
           Add new menu item
         </Button>
       </div>
-      <div style={{ height: 300, width: "100%" }}>
-        <div className="w-full h-full min-h-[400px]">
-          <DataGrid
-            rows={menuItems}
-            columns={columns}
-            pageSize={5}
-            autoHeight
-            disableColumnMenu
-            rowHeight={70}
-          />
-        </div>
-      </div>
+      <Box
+        sx={{
+          height: 500,
+          width: "100%",
+        }}
+      >
+        <DataGrid
+          sx={{
+            '& .MuiDataGrid-scrollbar::-webkit-scrollbar': {
+              width: '6px',
+            },
+            '& .MuiDataGrid-scrollbar::-webkit-scrollbar-track': {
+              background: 'transparent',
+            },
+            '& .MuiDataGrid-scrollbar::-webkit-scrollbar-thumb': {
+              backgroundColor: '#c4c4c4',
+              borderRadius: "10px",
+              border: "2px solid transparent"
+            },
+            '& .MuiDataGrid-scrollbar::-webkit-scrollbar-thumb:hover': {
+              background: '#a1a1a1',
+            },
+          }}
+          rows={menuItems}
+          columns={columns}
+          pageSize={5}
+          disableColumnMenu
+          rowHeight={70}
+        />
+      </Box>
       <AddMenuItemModal open={open} setOpen={setOpen} restaurant={restaurant} />
     </>
   );

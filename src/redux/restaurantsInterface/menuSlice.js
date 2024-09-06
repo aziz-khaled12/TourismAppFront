@@ -8,7 +8,6 @@ const url = import.meta.env.VITE_LOCAL_BACK_END_URL;
 export const fetchMenuItems = createAsyncThunk(
   "menu/fetchMenuItems",
   async ({ restoId, token }, thunkAPI) => {
-
     try {
       const res = await axios.get(
         `${url}/restaurants/menu/items?id=${restoId}`,
@@ -19,7 +18,7 @@ export const fetchMenuItems = createAsyncThunk(
         }
       );
 
-      console.log(res.data)
+      console.log(res.data);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
@@ -38,11 +37,12 @@ export const addMenuItem = createAsyncThunk(
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "multipart/form-data", // Necessary for handling file uploads
           },
         }
       );
-      if (!response.ok) throw new Error(response.statusText);
-      return await response.json();
+
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -75,6 +75,7 @@ export const menuSlice = createSlice({
       })
       .addCase(addMenuItem.fulfilled, (state, action) => {
         state.status = "succeeded";
+        console.log("action payload: ", action.payload);
         state.menuItems.push(action.payload);
       })
       .addCase(addMenuItem.rejected, (state, action) => {

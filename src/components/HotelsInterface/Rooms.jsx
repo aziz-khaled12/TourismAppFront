@@ -1,4 +1,4 @@
-import { Button, IconButton, Tooltip } from "@mui/material";
+import { Box, Button, IconButton, Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid } from "@mui/x-data-grid";
@@ -21,7 +21,6 @@ const Rooms = ({ hotel }) => {
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [selectedDeleteRoom, setSelectedDeleteRoom] = useState(null);
   const [open, setOpen] = useState(false);
-
 
   const columns = [
     {
@@ -126,7 +125,6 @@ const Rooms = ({ hotel }) => {
     setOpenDelete(true);
   };
 
-
   useEffect(() => {
     dispatch(fetchRooms({ hotelId: hotel.id, accessToken: accessToken }));
   }, [hotel]);
@@ -149,20 +147,38 @@ const Rooms = ({ hotel }) => {
           Add new Room
         </Button>
       </div>
-      <div style={{ height: 300, width: "100%" }}>
-        <div className="w-full h-full min-h-[400px]">
-          {rooms && (
-            <DataGrid
-              rows={rooms}
-              columns={columns}
-              pageSize={5}
-              autoHeight
-              disableColumnMenu
-              rowHeight={70}
-            />
-          )}
-        </div>
-      </div>
+      <Box
+        sx={{
+          height: 500,
+          width: "100%",
+        }}
+      >
+        {rooms && (
+          <DataGrid
+            sx={{
+              "& .MuiDataGrid-scrollbar::-webkit-scrollbar": {
+                width: "6px",
+              },
+              "& .MuiDataGrid-scrollbar::-webkit-scrollbar-track": {
+                background: "transparent",
+              },
+              "& .MuiDataGrid-scrollbar::-webkit-scrollbar-thumb": {
+                backgroundColor: "#c4c4c4",
+                borderRadius: "10px",
+                border: "2px solid transparent",
+              },
+              "& .MuiDataGrid-scrollbar::-webkit-scrollbar-thumb:hover": {
+                background: "#a1a1a1",
+              },
+            }}
+            rows={rooms}
+            columns={columns}
+            pageSize={5}
+            disableColumnMenu
+            rowHeight={70}
+          />
+        )}
+      </Box>
       <AddRoomModal open={open} setOpen={setOpen} hotel={hotel} />
 
       {selectedRoom && (
