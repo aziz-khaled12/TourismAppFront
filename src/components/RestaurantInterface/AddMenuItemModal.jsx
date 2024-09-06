@@ -40,7 +40,7 @@ const AddMenuItemModal = ({ open, setOpen, restaurant }) => {
     setFormData({ ...formData, image: event.target.files[0] });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const form = new FormData();
@@ -51,7 +51,7 @@ const AddMenuItemModal = ({ open, setOpen, restaurant }) => {
     form.append("type", formData.type);
 
     try {
-      const resultAction = dispatch(
+      const resultAction = await dispatch(
         addMenuItem({
           restoId: restaurant.id,
           itemData: form,
