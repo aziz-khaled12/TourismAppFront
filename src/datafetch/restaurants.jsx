@@ -59,3 +59,11 @@ export const GetNearby = async (setNearby, lat, lon, radius, token) => {
     console.log(error);
   }
 };
+
+export const GetMenu = async (id, accessToken, setData) => {
+  try {
+    
+  } catch (error) {
+    
+  }
+}

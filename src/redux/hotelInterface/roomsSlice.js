@@ -7,6 +7,7 @@ const url = import.meta.env.VITE_LOCAL_BACK_END_URL;
 export const fetchRooms = createAsyncThunk(
   'rooms/fetchRooms',
   async ({hotelId, accessToken}, { rejectWithValue }) => {
+
     try {
       const response = await axios.get(`${url}/hotels/rooms/${hotelId}`, {
         headers: { Authorization: `Bearer ${accessToken}` },

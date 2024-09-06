@@ -42,7 +42,14 @@ const DeleteRoomModal = ({ open, setOpen, room, hotelId }) => {
             <div className="w-full flex items-center justify-center gap-4">
               <Button
                 variant="contained"
-                className="!bg-primary"
+                sx={{
+                  textTransform: "none",
+                  backgroundColor: "transparent",
+                  color: "#212121",
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                  },
+                }}
                 onClick={() => {
                   setOpen(false);
                 }}

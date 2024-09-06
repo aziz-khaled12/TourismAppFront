@@ -15,6 +15,7 @@ import RestaurantResults from "./components/RestaurantResults";
 import RestaurantDetails from "./components/RestaurantDetails";
 import HotelDashboard from "./components/HotelsInterface/HotelDashboard";
 import HotelRooms from "./components/HotelRooms";
+import RestaurantDashboard from "./components/RestaurantInterface/RestaurantDashboard";
 
 function App() {
   const { verifyToken, isAuthenticated, accessToken } = useAuth();
@@ -40,6 +41,7 @@ function App() {
             <Route path="/hotels/:wilaya/:id/rooms" element={<HotelRooms />} />
             <Route path="/hotels/dashboard" element={<HotelDashboard />} />
             <Route path="/restaurants" element={<RestaurantSearch />} />
+            <Route path="/restaurants/admin" element={<RestaurantDashboard />} />
             <Route
               path="/restaurants/:wilaya"
               element={<RestaurantResults />}

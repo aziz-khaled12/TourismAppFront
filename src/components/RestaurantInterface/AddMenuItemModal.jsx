@@ -1,22 +1,30 @@
-import { Button, InputAdornment, Modal, TextField } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Modal,
+  Select,
+  TextField,
+} from "@mui/material";
 import React, { useState } from "react";
 import { MdCloudUpload } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { addRoom } from "../../redux/hotelInterface/roomsSlice.js";
 import { useAuth } from "../../context/AuthContext";
+import { addMenuItem } from "../../redux/restaurantsInterface/menuSlice";
 
-const AddRoomModal = ({ open, setOpen, hotel }) => {
-  console.log(hotel);
+const AddMenuItemModal = ({ open, setOpen, restaurant }) => {
   const { accessToken } = useAuth();
   const dispatch = useDispatch();
   const { status } = useSelector((state) => state.rooms);
 
   const [formData, setFormData] = useState({
-    capacity: 0,
-    number: 0,
+    name: "",
+    descr: "",
     price: 0,
-    hotel_id: "",
     image: "",
+    type: "",
   });
   const [preview, setPreview] = useState();
 
@@ -32,26 +40,30 @@ const AddRoomModal = ({ open, setOpen, hotel }) => {
     setFormData({ ...formData, image: event.target.files[0] });
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
     const form = new FormData();
-    form.append("capacity", formData.capacity);
-    form.append("number", formData.number);
+    form.append("name", formData.name);
+    form.append("descr", formData.descr);
     form.append("price", formData.price);
     form.append("image", formData.image);
-    form.append("hotel_id", hotel.id);
+    form.append("type", formData.type);
 
     try {
-      const resultAction = await dispatch(
-        addRoom({ roomData: form, accessToken: accessToken })
+      const resultAction = dispatch(
+        addMenuItem({
+          restoId: restaurant.id,
+          itemData: form,
+          accessToken: accessToken,
+        })
       );
 
-      if (addRoom.fulfilled.match(resultAction)) {
-        console.log("Room added successfully:", resultAction.payload);
+      if (addMenuItem.fulfilled.match(resultAction)) {
+        console.log("Item added successfully:", resultAction.payload);
         handleClose(); // Close modal after successful submission
       } else {
-        console.error("Failed to add room:", resultAction.payload);
+        console.error("Failed to add item:", resultAction.payload);
       }
     } catch (error) {
       console.log(error);
@@ -66,20 +78,19 @@ const AddRoomModal = ({ open, setOpen, hotel }) => {
       <Modal open={open} onClose={handleClose}>
         <div className="w-[570px] rounded-2xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl">
           <div className="text-2xl font-medium p-6 w-full border-b border-solid border-[#C4C4C4] mb-4">
-            Add new Room
+            Add new Item
           </div>
           <form
             className="p-6 overflow-y-auto max-h-[540px] custom-scrollbar flex items-center flex-col"
             onSubmit={handleSubmit}
           >
             <div className="flex justify-between items-start w-full mb-10">
-              <h1 className="text-md font-medium">Room capacity</h1>
+              <h1 className="text-md font-medium">Item name</h1>
               <TextField
                 className="w-[70%]"
-                name="capacity"
+                name="name"
                 onChange={handleChange}
-                label="Capacity"
-                type="number"
+                label="Name"
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -87,13 +98,14 @@ const AddRoomModal = ({ open, setOpen, hotel }) => {
             </div>
 
             <div className="flex justify-between items-start w-full mb-10">
-              <h1 className="text-md font-medium">Number of Rooms</h1>
+              <h1 className="text-md font-medium">Item description</h1>
               <TextField
                 className="w-[70%]"
-                name="number"
+                name="descr"
                 onChange={handleChange}
-                label="Number"
-                type="number"
+                label="Descreption"
+                multiline
+                rows={4}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -116,6 +128,23 @@ const AddRoomModal = ({ open, setOpen, hotel }) => {
                   shrink: true,
                 }}
               />
+            </div>
+            <div className="flex justify-between items-start w-full mb-10">
+              <h1 className="text-md font-medium">Type</h1>
+              <FormControl sx={{width: "70%"}}>
+                <InputLabel id="demo-simple-select-disabled-label"></InputLabel>
+                <Select
+                  name="type"
+                  value={formData.type}
+                  label="Type"
+                  onChange={handleChange}
+                >
+                  <MenuItem value={"Hot drink"}>Hot drink</MenuItem>
+                  <MenuItem value={"Cold drink"}>Cold drink</MenuItem>
+                  <MenuItem value={"Hot meal"}>Hot meal</MenuItem>
+                  <MenuItem value={"Cold meal"}>Cold meal</MenuItem>
+                </Select>
+              </FormControl>
             </div>
             <div className="flex justify-between items-start w-full mb-10">
               <h1 className="text-md font-medium">Image</h1>
@@ -176,4 +205,4 @@ const AddRoomModal = ({ open, setOpen, hotel }) => {
   );
 };
 
-export default AddRoomModal;
+export default AddMenuItemModal;

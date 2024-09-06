@@ -8,31 +8,38 @@ import {
   MenuItem,
   Avatar,
   ListItemIcon,
-  Menu,
   Divider,
+  Menu,
 } from "@mui/material";
-import { MdOutlineMiscellaneousServices, MdSpaceDashboard } from "react-icons/md";
+import {
+  MdOutlineMiscellaneousServices,
+  MdSpaceDashboard,
+} from "react-icons/md";
 import { IoBed } from "react-icons/io5";
 import { FaCalendarCheck } from "react-icons/fa";
 import { Logout, PersonAdd, Settings } from "@mui/icons-material";
-import Rooms from "./Rooms";
 import { useAuth } from "../../context/AuthContext";
-import Bookings from "./Bookings";
 import { GetData } from "../../datafetch/users";
-import Services from "./Services";
+import RestaurantMenu from "./RestaurantMenu";
 
-const HotelDashboard = () => {
-  const [activeSection, setActiveSection] = useState("rooms"); // State to track the active section
+
+const RestaurantDashboard = () => {
+  const [activeSection, setActiveSection] = useState("dashboard"); // State to track the active section
   const [anchorEl, setAnchorEl] = useState(null);
-  const [hotel, setHotel] = useState();
+  const [resto, setResto] = useState();
   const [loading, setLoading] = useState(true);
   const open = Boolean(anchorEl);
   const { logout, user, accessToken } = useAuth();
 
-  const fetchHotelData = useCallback(async () => {
+
+  useEffect(() => {
+    console.log(resto);
+  }, [resto])
+
+  const fetchRestaurantData = useCallback(async () => {
     setLoading(true);
     try {
-      await GetData(user, setHotel, accessToken, "hotel");
+      await GetData(user, setResto, accessToken, "restaurant");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -41,8 +48,8 @@ const HotelDashboard = () => {
   }, [user, accessToken]);
 
   useEffect(() => {
-    fetchHotelData();
-  }, [fetchHotelData]);
+    fetchRestaurantData();
+  }, [fetchRestaurantData]);
 
   const sideButtons = [
     {
@@ -53,22 +60,22 @@ const HotelDashboard = () => {
     },
     {
       id: 1,
-      name: "Rooms",
-      value: "rooms",
+      name: "Menu",
+      value: "menu",
       icon: <IoBed />,
     },
     {
       id: 2,
-      name: "Bookings",
-      value: "bookings",
+      name: "Orders",
+      value: "orders",
       icon: <FaCalendarCheck />,
     },
     {
       id: 3,
-      name: "Services",
-      value: "services",
+      name: "Archive",
+      value: "archive",
       icon: <MdOutlineMiscellaneousServices />,
-    }
+    },
   ];
 
   const handleClick = (event) => {
@@ -120,87 +127,8 @@ const HotelDashboard = () => {
             </div>
           </>
         );
-      case "rooms":
-        return (
-          <>
-            {loading ? (
-              <div className="w-full min-h-screen flex items-center justify-center flex-col m-auto">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <style>{`.spinner_z9k8{transform-origin:center;animation:spinner_StKS .75s infinite linear}@keyframes spinner_StKS{100%{transform:rotate(360deg)}}`}</style>
-                  <path
-                    d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
-                    opacity=".25"
-                  />
-                  <path
-                    d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
-                    className="spinner_z9k8"
-                  />
-                </svg>
-              </div>
-            ) : (
-              <Rooms hotel={hotel} />
-            )}
-          </>
-        );
-      case "bookings":
-        return (
-          <>
-            {loading ? (
-              <div className="w-full min-h-screen flex items-center justify-center flex-col m-auto">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <style>{`.spinner_z9k8{transform-origin:center;animation:spinner_StKS .75s infinite linear}@keyframes spinner_StKS{100%{transform:rotate(360deg)}}`}</style>
-                  <path
-                    d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
-                    opacity=".25"
-                  />
-                  <path
-                    d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
-                    className="spinner_z9k8"
-                  />
-                </svg>
-              </div>
-            ) : (
-              <Bookings hotel={hotel} />
-            )}
-          </>
-        );
-        case "services":
-          return (
-            <>
-              {loading ? (
-                <div className="w-full min-h-screen flex items-center justify-center flex-col m-auto">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <style>{`.spinner_z9k8{transform-origin:center;animation:spinner_StKS .75s infinite linear}@keyframes spinner_StKS{100%{transform:rotate(360deg)}}`}</style>
-                    <path
-                      d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
-                      opacity=".25"
-                    />
-                    <path
-                      d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
-                      className="spinner_z9k8"
-                    />
-                  </svg>
-                </div>
-              ) : (
-                <Services />
-              )}
-            </>
-          );
+      case "menu":
+        return <>{resto && <RestaurantMenu restaurant={resto} />}</>;
       default:
         return null;
     }
@@ -208,9 +136,7 @@ const HotelDashboard = () => {
 
   return (
     <div className="flex h-screen ">
-      {/* Main Content */}
       <div className="flex">
-        {/* Sidebar */}
         <aside className="w-64 text-primary p-8 shadow-lg">
           <ul>
             <li className="p-4 mb-5" key="header">
@@ -223,10 +149,10 @@ const HotelDashboard = () => {
                 className="!bg-lightBackground !text-primary !p-4"
               >
                 <Avatar className="mr-4" sx={{ width: 32, height: 32 }}>
-                  {hotel ? hotel.name[0] : "H"}
+                  {resto ? resto.name[0] : "H"}
                 </Avatar>
                 <div className="font-[600] text-md">
-                  {hotel ? hotel.name : "Hotel Name"}
+                  {resto ? resto.name : "Hotel Name"}
                 </div>
               </Button>
             </li>
@@ -256,7 +182,6 @@ const HotelDashboard = () => {
         </aside>
       </div>
       <div className="flex flex-col h-screen w-full">
-        {/* Navbar */}
         <nav className=" py-4 px-6 text-primary flex justify-end items-center">
           <IconButton
             onClick={handleClick}
@@ -304,11 +229,10 @@ const HotelDashboard = () => {
             </MenuItem>
           </Menu>
         </nav>
-        {/* Content Area */}
         <main className="flex-1 p-6">{renderContent()}</main>
       </div>
     </div>
   );
 };
 
-export default HotelDashboard;
+export default RestaurantDashboard;

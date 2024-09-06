@@ -11,13 +11,13 @@ export const GetRoles = async (setRoles) => {
   }
 };
 
-export const GetData = async (user, setHotel, token) => {
+export const GetData = async (user, setData, token, type) => {
   console.log(user)
   try {
-    const res = await axios.get(`${url}/users/data/hotel/${user.id}`, {headers: {Authorization: `Bearer ${token}`}})
+    const res = await axios.get(`${url}/users/data/${type}/${user.id}`, {headers: {Authorization: `Bearer ${token}`}})
 
     if ( res.status == 200 ) {
-      setHotel(res.data)
+      setData(res.data)
     }
   } catch (error) {
     console.log(error)

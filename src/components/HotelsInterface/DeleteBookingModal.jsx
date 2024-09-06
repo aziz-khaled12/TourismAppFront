@@ -41,7 +41,14 @@ const DeleteBookingModal = ({ open, setOpen, booking }) => {
              
               <Button
                 variant="contained"
-                className="!bg-primary"
+                sx={{
+                    textTransform: "none",
+                    backgroundColor: "transparent",
+                    color: "#212121",
+                    "&:hover": {
+                      backgroundColor: "transparent",
+                    },
+                  }}
                 onClick={() => {
                   setOpen(false);
                 }}

@@ -119,7 +119,7 @@ const Bookings = ({ hotel }) => {
     <>
       <div className="font-medium mb-6 text-xl w-fit">Bookings</div>
 
-      <div style={{ height: 300, width: "100%" }}>
+      <div className="h-[300px] w-full">
         <div className="w-full h-full min-h-[400px]">
           <DataGrid
             rows={bookings}
