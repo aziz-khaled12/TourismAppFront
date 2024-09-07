@@ -7,6 +7,8 @@ import { SlArrowLeft } from "react-icons/sl";
 import HotelRoomCard from "./HotelRoomCard";
 import "swiper/css";
 import FiltersSwiper from "./FiltersSwiper";
+import { Grid } from "@mui/material";
+
 
 const HotelRooms = () => {
   const url = import.meta.env.VITE_LOCAL_BACK_END_URL;
@@ -88,10 +90,9 @@ const HotelRooms = () => {
     closeDrawer();
   };
 
-
   useEffect(() => {
     console.log(date);
-  }, [date])
+  }, [date]);
 
   return loading ? (
     <>
@@ -143,19 +144,18 @@ const HotelRooms = () => {
         setSelectedOption={setSelectedOption}
       />
 
-      <div>
-        {rooms.map((room, index) => {
-          return (
+      <Grid container spacing={2}>
+        {rooms.map((room, index) => (
+          <Grid item key={index} xs={12} custom={6} lg={4}>
             <HotelRoomCard
-              key={index}
               room={room}
               date={date}
               people={people}
               roomsNum={roomsNum}
             />
-          );
-        })}
-      </div>
+          </Grid>
+        ))}
+      </Grid>
     </div>
   );
 };

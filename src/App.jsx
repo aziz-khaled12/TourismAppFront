@@ -16,6 +16,21 @@ import RestaurantDetails from "./components/RestaurantDetails";
 import HotelDashboard from "./components/HotelsInterface/HotelDashboard";
 import HotelRooms from "./components/HotelRooms";
 import RestaurantDashboard from "./components/RestaurantInterface/RestaurantDashboard";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+// Create a theme with custom breakpoints
+const theme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      custom: 800, 
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
+});
 
 function App() {
   const { verifyToken, isAuthenticated, accessToken } = useAuth();
@@ -38,7 +53,7 @@ function App() {
             <Route path="/hotels" element={<HotelSearch />} />
             <Route path="/hotels/:wilaya" element={<HotelResults />} />
             <Route path="/hotels/:wilaya/:id" element={<HotelDetails />} />
-            <Route path="/hotels/:wilaya/:id/rooms" element={<HotelRooms />} />
+            <Route path="/hotels/:wilaya/:id/rooms" element={<ThemeProvider theme={theme}><HotelRooms /></ThemeProvider>} />
             <Route path="/hotels/dashboard" element={<HotelDashboard />} />
             <Route path="/restaurants" element={<RestaurantSearch />} />
             <Route path="/restaurants/admin" element={<RestaurantDashboard />} />

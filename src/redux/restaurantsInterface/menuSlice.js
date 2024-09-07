@@ -49,6 +49,28 @@ export const addMenuItem = createAsyncThunk(
   }
 );
 
+export const modifyMenuItem = createAsyncThunk(
+  "menu/modifyMenuItem",
+  async ({ itemId, itemData, accessToken }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `${url}/restaurants//menu/items/${itemId}`,
+        itemData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "multipart/form-data", // Necessary for handling file uploads
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const menuSlice = createSlice({
   name: "menu",
   initialState: {
@@ -79,6 +101,20 @@ export const menuSlice = createSlice({
         state.menuItems.push(action.payload);
       })
       .addCase(addMenuItem.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(modifyMenuItem.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(modifyMenuItem.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const index = state.menuItems.findIndex(menuItem => menuItem.id === action.payload.id);
+        if (index !== -1) {
+          state.menuItems[index] = action.payload;
+        }
+      })
+      .addCase(modifyMenuItem.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });

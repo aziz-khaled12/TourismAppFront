@@ -90,7 +90,6 @@ const Login = () => {
                   error={Boolean(emailError)}
                   helperText={emailError}
                   className="w-full"
-                  id="outlined-basic"
                   label="Email"
                   variant="outlined"
                   name="email"
@@ -103,7 +102,6 @@ const Login = () => {
                   error={Boolean(passwordError)}
                   helperText={passwordError}
                   className="w-full"
-                  id="outlined-basic"
                   label="Password"
                   type="password"
                   variant="outlined"

@@ -7,7 +7,7 @@ import { useAuth } from "../context/AuthContext";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Button from "@mui/material/Button";
 import HotelResultCard from "./HotelResultCard";
-import { styled } from "@mui/material";
+import { Grid, styled } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { IoCalendarNumberOutline } from "react-icons/io5";
 import { MdArrowRightAlt } from "react-icons/md";
@@ -399,8 +399,9 @@ const HotelResults = () => {
       </SwipeableDrawer>
 
       {hotels.length > 0 ? (
-        <div className="w-full">
+        <Grid container spacing={2}>
           {hotels.map((hotel, index) => (
+            <Grid item key={index} xs={12} custom={6} lg={4}>
             <HotelResultCard
               key={index}
               data={hotel}
@@ -410,8 +411,9 @@ const HotelResults = () => {
               date={date}
               liked={likedItems.includes(hotel.id)}
             />
+            </Grid>
           ))}
-        </div>
+        </Grid>
       ) : (
         <div className="w-full h-[60vh] flex flex-col items-center justify-center">
           <p className="font-bold text-3xl text-center p-4 mb-8">

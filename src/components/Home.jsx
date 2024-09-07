@@ -21,7 +21,7 @@ import taxiImage2 from "../assets/taxi2.jpg";
 import backgroundThing from "../assets/backgroundThing.png";
 import { OneEightyRingWithBg } from "react-svg-spinners";
 import { Pagination } from "swiper/modules";
-import mountainImage from "../assets/landingMountain.jpg";
+import homeImage from "../assets/homeImage3.jpg";
 import "swiper/css/pagination";
 import Navbar from "./Navbar";
 const Home = () => {
@@ -97,6 +97,8 @@ const Home = () => {
     </>
   ) : (
     <>
+      <Navbar />
+
       <div className="w-full sm:px-10 md:px-15 lg:px-20 sm:pt-11 sm:pb-16">
         <div className="hidden sm:block absolute -top-[100px] -right-[450px]">
           <img src={backgroundThing} alt="thing" className="w-full h-full" />
@@ -104,7 +106,6 @@ const Home = () => {
         <div className="hidden sm:block absolute bottom-[50%] rotate-90 -left-[460px]">
           <img src={backgroundThing} alt="thing" className="w-full h-full" />
         </div>
-        <Navbar />
 
         <div className="relative mb-7 sm:hidden h-[50vh] w-full overflow-hidden ">
           <img src={discoverImage} alt="discover" className="w-full h-full" />
@@ -113,25 +114,31 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="hidden relarive w-full sm:flex items-center justify-evenly h-[95vh]">
-          <div className="md:w-full lg:w-[45%] text-center lg:text-start">
-            <h1 className="!leading-snug md:text-6xl sm:text-5xl text-primary font-bold mb-8 ">
+        <div className="h-screen w-full flex justify-center items-center">
+          <div className="w-[70%]  text-center relative z-20">
+            <h1 className="!leading-snug md:text-6xl sm:text-5xl text-white font-bold mb-8 ">
               Discover <span className="text-green-700"> Algeria </span> Like
               Never Before.
             </h1>
-            <p className="text-base sm:text-base md:text-lg text-primary opacity-90 font-medium">
+            <p className="text-base sm:text-base md:text-lg text-white opacity-90 font-medium">
               Unveil the hidden gems of Algeria, from the vast Sahara Desert to
               the stunning Mediterranean coastline. Our app guides you through
               breathtaking landscapes, ancient ruins, and vibrant cities.
             </p>
           </div>
-          <div className="w-[40%] hidden lg:block rounded-2xl ">
+
+          <div className="w-full hidden lg:block absolute top-0 left-0">
             <img
-              src={mountainImage}
+              src={homeImage}
               alt="mountain"
-              className="w-full h-auto max-h-[80vh] rounded-2xl"
+              className="w-full h-auto max-h-screen"
             />
           </div>
+
+          <div className="w-full h-screen bg-black opacity-40 absolute top-0 left-0">
+
+          </div>
+
         </div>
 
         <section className="w-full h-fit relative z-50">
