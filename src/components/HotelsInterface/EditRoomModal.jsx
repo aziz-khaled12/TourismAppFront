@@ -5,6 +5,7 @@ import { OneEightyRingWithBg } from "react-svg-spinners";
 import { useDispatch, useSelector } from 'react-redux';
 import { modifyRoom } from '../../redux/hotelInterface/roomsSlice';
 import { useAuth } from "../../context/AuthContext";
+import { showAlert } from "../../redux/alertSlice";
 
 
 
@@ -56,10 +57,26 @@ const EditRoomModal = ({ open, setOpen, oldRoom, hotel }) => {
     form.append("hotel_id", hotel.id);
 
     await dispatch(modifyRoom({ roomId: oldRoom.id, roomData: form, accessToken: accessToken }));
+
+    if (status === "succeded") {
+      handleClose()
+      handleSuccess()
+    }else if (status === "failed") {
+      handleClose()
+      handleError()
+    }
   };
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleSuccess = () => {
+    dispatch(showAlert({ message: 'Room Modified Successfuly', severity: 'success' }));
+  };
+
+  const handleError = () => {
+    dispatch(showAlert({ message: 'Error Modifying the Room', severity: 'error' }));
   };
   return (
     <>

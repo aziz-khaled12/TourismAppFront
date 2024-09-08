@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteBooking } from "../../redux/hotelInterface/bookingSlice";
+import { showAlert } from "../../redux/alertSlice";
 
 const DeleteBookingModal = ({ open, setOpen, booking }) => {
   const { accessToken } = useAuth();
@@ -15,10 +16,23 @@ const DeleteBookingModal = ({ open, setOpen, booking }) => {
     setOpen(false);
   };
 
+  const handleSuccess = () => {
+    dispatch(showAlert({ message: 'Booking Deleted Successfuly', severity: 'success' }));
+  };
+
+  const handleError = () => {
+    dispatch(showAlert({ message: 'Error Deleting the Booking', severity: 'error' }));
+  };
+
+
   const handleDelete = async () => {
     await dispatch(deleteBooking({ booking_id: booking.id, accessToken }));
-    if (status === "succeeded") {
-        setOpen(false)
+    if (status === "succeded") {
+      handleClose()
+      handleSuccess()
+    }else if (status === "failed") {
+      handleClose()
+      handleError()
     }
   };
 

@@ -7,17 +7,14 @@ import { MdOutlineFreeBreakfast } from "react-icons/md";
 
 const HotelRoomCard = ({ room, date, people, roomsNum }) => {
   const [open, setOpen] = useState(false);
-  const toggleBookingDrawer = (newOpen) => () => {
-    setOpen(newOpen);
-  };
 
   const handleOpen = () => {
     setOpen(true);
   };
 
-  useEffect(() => {
-    console.log("card: ", date);
-  }, [date]);
+  const handleClose = () => [
+    setOpen(false)
+  ]
 
   return (
     <div className="w-full mb-4">
@@ -76,7 +73,8 @@ const HotelRoomCard = ({ room, date, people, roomsNum }) => {
           </Button>
 
           <BookingDrawer
-            toggleDrawer={toggleBookingDrawer}
+            handleClose={handleClose}
+            handleOpen={handleOpen}
             open={open}
             date={date}
             people={people}

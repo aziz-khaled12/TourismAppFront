@@ -31,7 +31,6 @@ export const AuthProvider = ({ children }) => {
 
   const verifyToken = async () => {
     if (accessToken) {
-      console.log(url);
       try {
         const token = localStorage.getItem("token");
         const res = await axios.post(
@@ -43,9 +42,7 @@ export const AuthProvider = ({ children }) => {
             },
           }
         );
-        if (res.status === 200) {
-          console.log("everything is good");
-        } else {
+        if (res.status != 200) {
           // Token is invalid
           localStorage.removeItem("user");
           localStorage.removeItem("token");
@@ -90,7 +87,6 @@ export const AuthProvider = ({ children }) => {
         const user = decodedToken.user_data;
 
         console.log("user:", user);
-        
 
         localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("token", token);

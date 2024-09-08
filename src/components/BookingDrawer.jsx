@@ -10,15 +10,15 @@ import {
   Typography,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useDispatch, useSelector } from "react-redux";
 import { addBooking } from "../redux/hotelInterface/bookingSlice";
-const url = import.meta.env.VITE_LOCAL_BACK_END_URL;
+import { showAlert } from "../redux/alertSlice";
 
 const BookingDrawer = ({
-  toggleDrawer,
+  handleClose, 
+  handleOpen,
   open,
   date,
   people,
@@ -27,12 +27,9 @@ const BookingDrawer = ({
 }) => {
   const dispatch = useDispatch();
   const { status } = useSelector((state) => state.bookings);
-
   const [bookingData, setBookingData] = useState([]);
-
-  useEffect(() => {
-    console.log("drawer: ", date.startDate);
-  }, [date]);
+  const { id } = useParams();
+  const { user, accessToken } = useAuth();
 
   const Puller = styled("div")(({ theme }) => ({
     width: 30,
@@ -67,17 +64,7 @@ const BookingDrawer = ({
     setTotalPrice(differenceInDays * room.price);
   }, [differenceInTime, differenceInDays]);
 
-  console.log(differenceInDays);
-
-  const { id } = useParams();
-  const { user, accessToken } = useAuth();
-
   useEffect(() => {
-    console.log(total_price);
-  }, [total_price]);
-
-  useEffect(() => {
-    console.log(date);
 
     setBookingData([
       {
@@ -108,34 +95,64 @@ const BookingDrawer = ({
   }, [date, people, room, total_price]);
 
   const handleSubmit = async () => {
-    try {
-      const bookingData = new FormData();
-      bookingData.append("user_id", user.id);
-      bookingData.append("hotel_id", id);
-      bookingData.append("person_number", people);
-      bookingData.append("room_id", room.id);
-      bookingData.append("total_price", total_price);
-      bookingData.append("booking_start", date[0].startDate);
-      bookingData.append("booking_end", date[0].endDate);
+    const booking_start = new Date(date[0].startDate)
+      .toISOString()
+      .replace("Z", "+02:00");
+    const booking_end = new Date(date[0].endDate)
+      .toISOString()
+      .replace("Z", "+02:00");
 
+    const bookingData = new FormData();
+    bookingData.append("user_id", user.id);
+    bookingData.append("hotel_id", id);
+    bookingData.append("person_number", people);
+    bookingData.append("room_id", room.id);
+    bookingData.append("total_price", total_price);
+    bookingData.append("booking_start", booking_start);
+    bookingData.append("booking_end", booking_end);
+
+    try {
       dispatch(
         addBooking({ bookingData: bookingData, accessToken: accessToken })
       );
 
-      if (status === "succeeded") {
-        toggleDrawer(false);
-      }
+     
     } catch (error) {
+      handleClose();
+      handleError();
       console.log(error);
     }
+  };
+
+  useEffect(() => {
+    if (status === "succeeded") {
+      handleClose(false)
+      handleSuccess();
+    } else if (status === "failed") {
+      console.log("Booking failed");
+      handleClose(false)
+      handleError();
+    }
+  }, [status]);
+
+  const handleSuccess = () => {
+    dispatch(
+      showAlert({ message: "Room Added Successfuly", severity: "success" })
+    );
+  };
+
+  const handleError = () => {
+    dispatch(
+      showAlert({ message: "Error Adding the Room", severity: "error" })
+    );
   };
 
   return (
     <SwipeableDrawer
       anchor="bottom"
       open={open}
-      onClose={toggleDrawer(false)}
-      onOpen={toggleDrawer(true)}
+      onClose={handleClose}
+      onOpen={handleOpen}
     >
       <div className="w-[full] h-[90vh] relative flex flex-col items-center justify-start">
         <div className="w-full mt-10 border-[#6e6e6e] border-b border-solid">

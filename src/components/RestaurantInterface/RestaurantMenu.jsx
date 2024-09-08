@@ -8,10 +8,14 @@ import AddMenuItemModal from "./AddMenuItemModal";
 import { useAuth } from "../../context/AuthContext";
 import { Box, Button, IconButton, Tooltip } from "@mui/material";
 import { FaPlus } from "react-icons/fa";
+import ModifyMenuItemModal from "./ModifyMenuItemModal";
+import DeleteMenuItemModal from "./DeleteMenuItemModal";
 
 const RestaurantMenu = ({ restaurant }) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const [selectedItem, setSelectedItem] = useState();
+  const [selectedItemDelete, setSelectedItemDelete] = useState();
   const { menuItems } = useSelector((state) => state.menu);
   const { accessToken } = useAuth();
   const [open, setOpen] = useState(false);
@@ -31,13 +35,13 @@ const RestaurantMenu = ({ restaurant }) => {
     setOpen(true);
   };
 
-  const handleEditOpen = (room) => {
-    setSelectedRoom(room); // Set the selected room data
+  const handleEditOpen = (item) => {
+    setSelectedItem(item); // Set the selected room data
     setOpenEdit(true);
   };
 
-  const handleDeleteOpen = (room) => {
-    setSelectedDeleteRoom(room); // Set the selected room data
+  const handleDeleteOpen = (item) => {
+    setSelectedItemDelete(item); // Set the selected room data
     setOpenDelete(true);
   };
 
@@ -45,6 +49,9 @@ const RestaurantMenu = ({ restaurant }) => {
     {
       field: "ID",
       headerName: "#",
+      resizable: false,
+      sortable: false,
+      filterable: false,
       width: 70,
       renderCell: (params) => (
         <div className="h-full w-full flex items-center justify-center">
@@ -54,10 +61,10 @@ const RestaurantMenu = ({ restaurant }) => {
       align: "center",
       headerAlign: "center",
     },
-
     {
       field: "id",
       headerName: "item ID",
+      resizable: false,
       flex: 1,
       align: "center",
       headerAlign: "center",
@@ -65,6 +72,8 @@ const RestaurantMenu = ({ restaurant }) => {
     {
       field: "type",
       headerName: "Type",
+      resizable: false,
+      sortable: false,
       flex: 1,
       align: "center",
       headerAlign: "center",
@@ -72,6 +81,7 @@ const RestaurantMenu = ({ restaurant }) => {
     {
       field: "name",
       headerName: "Name",
+      resizable: false,
       flex: 1,
       align: "center",
       headerAlign: "center",
@@ -79,6 +89,7 @@ const RestaurantMenu = ({ restaurant }) => {
     {
       field: "price",
       headerName: "Price (DZD)",
+      resizable: false,
       flex: 1,
       align: "center",
       headerAlign: "center",
@@ -86,6 +97,8 @@ const RestaurantMenu = ({ restaurant }) => {
     {
       field: "image_url",
       headerName: "Image",
+      resizable: false,
+      sortable: false,
       flex: 1,
       align: "center",
       headerAlign: "center",
@@ -104,6 +117,7 @@ const RestaurantMenu = ({ restaurant }) => {
     {
       field: "actions",
       headerName: "Actions",
+      sortable: false,
       flex: 1,
       renderCell: (params) => (
         <div className="flex items-center justify-center gap-2 w-full h-full">
@@ -152,19 +166,19 @@ const RestaurantMenu = ({ restaurant }) => {
       >
         <DataGrid
           sx={{
-            '& .MuiDataGrid-scrollbar::-webkit-scrollbar': {
-              width: '6px',
+            "& .MuiDataGrid-scrollbar::-webkit-scrollbar": {
+              width: "6px",
             },
-            '& .MuiDataGrid-scrollbar::-webkit-scrollbar-track': {
-              background: 'transparent',
+            "& .MuiDataGrid-scrollbar::-webkit-scrollbar-track": {
+              background: "transparent",
             },
-            '& .MuiDataGrid-scrollbar::-webkit-scrollbar-thumb': {
-              backgroundColor: '#c4c4c4',
+            "& .MuiDataGrid-scrollbar::-webkit-scrollbar-thumb": {
+              backgroundColor: "#c4c4c4",
               borderRadius: "10px",
-              border: "2px solid transparent"
+              border: "2px solid transparent",
             },
-            '& .MuiDataGrid-scrollbar::-webkit-scrollbar-thumb:hover': {
-              background: '#a1a1a1',
+            "& .MuiDataGrid-scrollbar::-webkit-scrollbar-thumb:hover": {
+              background: "#a1a1a1",
             },
           }}
           rows={menuItems}
@@ -175,6 +189,23 @@ const RestaurantMenu = ({ restaurant }) => {
         />
       </Box>
       <AddMenuItemModal open={open} setOpen={setOpen} restaurant={restaurant} />
+      {selectedItem && (
+        <ModifyMenuItemModal
+          open={openEdit}
+          setOpen={setOpenEdit}
+          item={selectedItem}
+          restaurantName={restaurant.name}
+        />
+      )}
+
+      {selectedItemDelete && (
+        <DeleteMenuItemModal
+          open={openDelete}
+          setOpen={setOpenDelete}
+          item={selectedItemDelete}
+          restaurantId={restaurant.id}
+        />
+      )}
     </>
   );
 };

@@ -16,6 +16,7 @@ import RestaurantDetails from "./components/RestaurantDetails";
 import HotelDashboard from "./components/HotelsInterface/HotelDashboard";
 import HotelRooms from "./components/HotelRooms";
 import RestaurantDashboard from "./components/RestaurantInterface/RestaurantDashboard";
+import AlertMessage from './components/AlertMessage';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 // Create a theme with custom breakpoints
@@ -44,7 +45,9 @@ function App() {
 
   return (
     <>
+    
       <div className="w-full bg-[#f9f9f9] relative overflow-hidden">
+      <AlertMessage />
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />

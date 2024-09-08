@@ -54,12 +54,31 @@ export const modifyMenuItem = createAsyncThunk(
   async ({ itemId, itemData, accessToken }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `${url}/restaurants//menu/items/${itemId}`,
+        `${url}/restaurants/menu/items?id=${itemId}`,
         itemData,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "multipart/form-data", // Necessary for handling file uploads
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const deleteMenuItem = createAsyncThunk(
+  "menu/deleteMenuItem",
+  async ({ queryParams, accessToken }, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(
+        `${url}/restaurants/menu/items?${queryParams}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
           },
         }
       );
@@ -117,7 +136,19 @@ export const menuSlice = createSlice({
       .addCase(modifyMenuItem.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
-      });
+      })
+      .addCase(deleteMenuItem.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(deleteMenuItem.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.menuItems = state.menuItems.filter(item => item.id !== action.payload.id);
+      })
+      .addCase(deleteMenuItem.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      })
   },
 });
 

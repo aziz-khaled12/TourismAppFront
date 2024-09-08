@@ -13,6 +13,7 @@ import { MdCloudUpload } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "../../context/AuthContext";
 import { addMenuItem } from "../../redux/restaurantsInterface/menuSlice";
+import { showAlert } from "../../redux/alertSlice";
 
 const AddMenuItemModal = ({ open, setOpen, restaurant }) => {
   const { accessToken } = useAuth();
@@ -65,21 +66,33 @@ const AddMenuItemModal = ({ open, setOpen, restaurant }) => {
 
       if (status === "succeeded") {
         handleClose(); // Close modal after successful submission
-        console.log("Item added successfully:", resultAction.payload);
+        handleSuccess();
       } else if (status === "failed") {
-        console.error("Failed to add item:", resultAction.payload);
+        handleClose();
+        handleError();
       }
     } catch (error) {
+      handleClose();
+      handleError();
       console.log(error);
     }
   };
 
   useEffect(() => {
     console.log(status);
-    
-  },[status])
+  }, [status]);
 
+  const handleSuccess = () => {
+    dispatch(
+      showAlert({ message: "Item Added Succefuly", severity: "success" })
+    );
+  };
 
+  const handleError = () => {
+    dispatch(
+      showAlert({ message: "Error Adding the Item", severity: "error" })
+    );
+  };
 
   return (
     <>
@@ -88,124 +101,129 @@ const AddMenuItemModal = ({ open, setOpen, restaurant }) => {
           <div className="text-2xl font-medium p-6 w-full border-b border-solid border-[#C4C4C4] mb-4">
             Add new Item
           </div>
-          <form
-            className="p-6 overflow-y-auto max-h-[540px] custom-scrollbar flex items-center flex-col"
-            onSubmit={handleSubmit}
-          >
-            <div className="flex justify-between items-start w-full mb-10">
-              <h1 className="text-md font-medium">Item name</h1>
-              <TextField
-                className="w-[70%]"
-                name="name"
-                onChange={handleChange}
-                label="Name"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </div>
-
-            <div className="flex justify-between items-start w-full mb-10">
-              <h1 className="text-md font-medium">Item description</h1>
-              <TextField
-                className="w-[70%]"
-                name="descr"
-                onChange={handleChange}
-                label="Descreption"
-                multiline
-                rows={4}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </div>
-            <div className="flex justify-between items-start w-full mb-10">
-              <h1 className="text-md font-medium">Price</h1>
-              <TextField
-                className="w-[70%]"
-                name="price"
-                onChange={handleChange}
-                label="Price"
-                type="number"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">DZD</InputAdornment>
-                  ),
-                }}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </div>
-            <div className="flex justify-between items-start w-full mb-10">
-              <h1 className="text-md font-medium">Type</h1>
-              <FormControl sx={{ width: "70%" }}>
-                <InputLabel id="demo-simple-select-disabled-label"></InputLabel>
-                <Select
-                  name="type"
-                  value={formData.type}
-                  label="Type"
-                  onChange={handleChange}
-                >
-                  <MenuItem value={"Hot drink"}>Hot drink</MenuItem>
-                  <MenuItem value={"Cold drink"}>Cold drink</MenuItem>
-                  <MenuItem value={"Hot meal"}>Hot meal</MenuItem>
-                  <MenuItem value={"Cold meal"}>Cold meal</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
-            <div className="flex justify-between items-start w-full mb-10">
-              <h1 className="text-md font-medium">Image</h1>
-              <div
-                className={`${
-                  preview ? "w-[70%] h-fit" : "w-[70%] h-[200px]"
-                }  p-1 duration-200 flex items-center justify-center cursor-pointer border-dashed border-2 border-[#cacaca]`}
-                onClick={() => {
-                  document.querySelector("#image-input").click();
-                }}
-              >
-                <input
-                  id="image-input"
-                  accept="image/*"
-                  type="file"
-                  name="image"
-                  onChange={handleFileChange}
-                  className="hidden"
-                />
-
-                {preview ? (
-                  <img className="w-full h-auto" src={preview} alt="" />
-                ) : (
-                  <MdCloudUpload className="text-3xl" />
-                )}
+          <form className="flex items-center flex-col" onSubmit={handleSubmit}>
+            <div className="w-full p-10 overflow-y-auto max-h-[540px] custom-scrollbar flex items-center gap-5 flex-col gap-5">
+              <div className="flex items-center gap-5">
+                <div className=" w-full">
+                  <h1 className="text-md mb-3 font-medium">Name</h1>
+                  <TextField
+                    className="w-full"
+                    name="name"
+                    onChange={handleChange}
+                    label="Name"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </div>
+                <div className="w-full">
+                  <h1 className="text-md mb-3 font-medium">Price</h1>
+                  <TextField
+                    className="w-full"
+                    name="price"
+                    onChange={handleChange}
+                    label="Price"
+                    type="number"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">DZD</InputAdornment>
+                      ),
+                    }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-            <Button
-              type="submit"
-              variant="contained"
-              className="!bg-primary !rounded-lg !p-3 w-full !text-base"
-            >
-              {status === "loading" ? (
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
+
+              <div className="w-full">
+                <h1 className="text-md mb-3 font-medium">Description</h1>
+                <TextField
+                  className="w-full"
+                  name="descr"
+                  onChange={handleChange}
+                  label="Descreption"
+                  multiline
+                  rows={4}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </div>
+
+              <div className="w-full">
+                <h1 className="text-md mb-3 font-medium">Type</h1>
+                <FormControl className="w-full">
+                  <InputLabel>Type</InputLabel>
+                  <Select
+                    className="w-full"
+                    name="type"
+                    placeholder="Type"
+                    value={formData.type}
+                    label="Type"
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={"Hot drink"}>Hot drink</MenuItem>
+                    <MenuItem value={"Cold drink"}>Cold drink</MenuItem>
+                    <MenuItem value={"Hot meal"}>Hot meal</MenuItem>
+                    <MenuItem value={"Cold meal"}>Cold meal</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+
+              <div className="flex flex-col justify-between shadowlg items-start w-full mb-5">
+                <h1 className="text-md font-medium mb-3">Image</h1>
+                <div
+                  className={`${
+                    preview ? "w-full h-fit" : "w-full h-[300px]"
+                  }  p-1 duration-200 flex items-center justify-center cursor-pointer border-dashed border-2 border-[#cacaca]`}
+                  onClick={() => {
+                    document.querySelector("#image-input").click();
+                  }}
                 >
-                  <style>{`.spinner_z9k8{color: white;transform-origin:center;animation:spinner_StKS .75s infinite linear}@keyframes spinner_StKS{100%{transform:rotate(360deg)}}`}</style>
-                  <path
-                    d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
-                    opacity=".25"
+                  <input
+                    id="image-input"
+                    accept="image/*"
+                    type="file"
+                    name="image"
+                    onChange={handleFileChange}
+                    className="hidden"
                   />
-                  <path
-                    d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
-                    className="spinner_z9k8"
-                  />
-                </svg>
-              ) : (
-                "Add Room"
-              )}
-            </Button>
+
+                  {preview ? (
+                    <img className="w-full h-auto" src={preview} alt="" />
+                  ) : (
+                    <MdCloudUpload className="text-3xl" />
+                  )}
+                </div>
+              </div>
+              <Button
+                type="submit"
+                variant="contained"
+                className="!bg-primary !rounded-lg !p-3 w-full !text-base"
+              >
+                {status === "loading" ? (
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <style>{`.spinner_z9k8{color: white;transform-origin:center;animation:spinner_StKS .75s infinite linear}@keyframes spinner_StKS{100%{transform:rotate(360deg)}}`}</style>
+                    <path
+                      d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+                      opacity=".25"
+                    />
+                    <path
+                      d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
+                      className="spinner_z9k8"
+                    />
+                  </svg>
+                ) : (
+                  "Add Room"
+                )}
+              </Button>
+            </div>
           </form>
         </div>
       </Modal>

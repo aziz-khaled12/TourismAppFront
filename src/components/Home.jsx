@@ -21,7 +21,7 @@ import taxiImage2 from "../assets/taxi2.jpg";
 import backgroundThing from "../assets/backgroundThing.png";
 import { OneEightyRingWithBg } from "react-svg-spinners";
 import { Pagination } from "swiper/modules";
-import homeImage from "../assets/homeImage3.jpg";
+import homeImage from "../assets/attractionAlgeria.jpg";
 import "swiper/css/pagination";
 import Navbar from "./Navbar";
 const Home = () => {
@@ -114,20 +114,20 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="h-screen w-full flex justify-center items-center">
+        <div className="h-screen w-full sm:flex sm:justify-center sm:items-center hidden ">
           <div className="w-[70%]  text-center relative z-20">
-            <h1 className="!leading-snug md:text-6xl sm:text-5xl text-white font-bold mb-8 ">
+            <h1 className="!leading-snug md:text-6xl sm:text-5xl text-black font-bold mb-8 ">
               Discover <span className="text-green-700"> Algeria </span> Like
               Never Before.
             </h1>
-            <p className="text-base sm:text-base md:text-lg text-white opacity-90 font-medium">
+            <p className="text-base sm:text-base md:text-lg text-black opacity-90 font-medium">
               Unveil the hidden gems of Algeria, from the vast Sahara Desert to
               the stunning Mediterranean coastline. Our app guides you through
               breathtaking landscapes, ancient ruins, and vibrant cities.
             </p>
           </div>
 
-          <div className="w-full hidden lg:block absolute top-0 left-0">
+          {/* <div className="w-full hidden lg:block absolute top-0 left-0">
             <img
               src={homeImage}
               alt="mountain"
@@ -135,9 +135,7 @@ const Home = () => {
             />
           </div>
 
-          <div className="w-full h-screen bg-black opacity-40 absolute top-0 left-0">
-
-          </div>
+          <div className="w-full h-screen bg-black opacity-40 absolute top-0 left-0"></div> */}
 
         </div>
 

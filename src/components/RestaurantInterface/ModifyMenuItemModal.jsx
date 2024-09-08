@@ -1,27 +1,44 @@
-import { Button, InputAdornment, Modal, TextField } from "@mui/material";
-import React, { useState } from "react";
+import {
+  Button,
+  FormControl,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Modal,
+  Select,
+  TextField,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { MdCloudUpload } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { addRoom } from "../../redux/hotelInterface/roomsSlice.js";
 import { useAuth } from "../../context/AuthContext";
+import { modifyMenuItem } from "../../redux/restaurantsInterface/menuSlice";
 import { showAlert } from "../../redux/alertSlice";
 
-
-const AddRoomModal = ({ open, setOpen, hotel }) => {
+const ModifyMenuItemModal = ({ open, setOpen, item, restaurantName }) => {
   const { accessToken } = useAuth();
   const dispatch = useDispatch();
-  const { status } = useSelector((state) => state.rooms);
+  const { status } = useSelector((state) => state.menu);
 
   const [formData, setFormData] = useState({
-    single_beds: 0,
-    double_beds: 0,
-    number: 0,
-    price: 0,
-    hotel_id: "",
+    name: item.name,
+    descr: item.descr,
+    price: item.price,
     image: "",
-    name: "",
+    type: item.type,
   });
-  const [preview, setPreview] = useState();
+
+  useEffect(() => {
+    setFormData({
+      name: item.name,
+      descr: item.descr,
+      price: item.price,
+      image: "",
+      type: item.type,
+    });
+    setPreview(item.image_url[0]);
+  }, [item]);
+  const [preview, setPreview] = useState(item.image_url[0]);
 
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -35,112 +52,81 @@ const AddRoomModal = ({ open, setOpen, hotel }) => {
     setFormData({ ...formData, image: event.target.files[0] });
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    const form = new FormData();
-
-    const capacity =
-      Number(formData.double_beds) * 2 + Number(formData.single_beds);
-
-    form.append("capacity", capacity);
-    form.append("number", formData.number);
-    form.append("single_beds", formData.single_beds);
-    form.append("double_beds", formData.double_beds);
-    form.append("price", formData.price);
-    form.append("image", formData.image);
-    form.append("hotel_id", hotel.id);
-    form.append("name", formData.name);
-
-    try {
-      dispatch(
-        addRoom({ roomData: form, accessToken: accessToken })
-      );
-
-      if (status === "succeded") {
-        handleClose()
-        handleSuccess()
-      }else if (status === "failed") {
-        handleClose()
-        handleError()
-      }
-    } catch (error) {
-      handleClose()
-      handleError()
-      console.log(error);
-    }
-  };
-
   const handleClose = () => {
     setOpen(false);
   };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const form = new FormData();
+    form.append("name", formData.name);
+    form.append("descr", formData.descr);
+    form.append("price", formData.price);
+    form.append("image", formData.image);
+    form.append("oldImageUrl", item.image_url[0]);
+    form.append("restaurantName", restaurantName);
+    form.append("type", formData.type);
+
+    try {
+      const resultAction = await dispatch(
+        modifyMenuItem({
+          itemId: item.id,
+          itemData: form,
+          accessToken: accessToken,
+        })
+      );
+
+      if (status === "succeeded") {
+        handleClose();
+        handleSuccess()
+        console.log("Item modified successfully:", resultAction.payload);
+      } else if (status === "failed") {
+        handleError()
+        console.error("Failed to add item:", resultAction.payload);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleSuccess = () => {
-    dispatch(showAlert({ message: 'Room Added Successfuly', severity: 'success' }));
+    dispatch(showAlert({ message: 'Item Modified', severity: 'success' }));
   };
 
   const handleError = () => {
-    dispatch(showAlert({ message: 'Error Adding the Room', severity: 'error' }));
+    dispatch(showAlert({ message: 'Error Modifying the Item', severity: 'error' }));
   };
-
 
   return (
     <>
       <Modal open={open} onClose={handleClose}>
-        <div className="w-[570px] rounded-2xl absolute top-1/2 left-1/2 transform py-6 -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl">
-          <div className="text-2xl pl-8 pb-4 font-semibold  w-full ">
-            Add new Room
+        <div className="w-[570px] rounded-2xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl">
+          <div className="text-2xl font-medium p-6 w-full border-b border-solid border-[#C4C4C4] mb-4">
+            Add new Item
           </div>
-          <form
-            className="  flex items-center flex-col"
-            onSubmit={handleSubmit}
-          >
-            <div className="w-full p-10 overflow-y-auto max-h-[540px] custom-scrollbar flex items-center gap-5 flex-col mb-5">
-              <div className="flex flex-col items-start w-full">
-                <h1 className="text-md font-medium mb-3">Name</h1>
-                <TextField
-                  className="w-full"
-                  name="name"
-                  onChange={handleChange}
-                  label="Room Name"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              </div>
-              <div className="w-full flex justify-between gap-[20px]">
-                <div className="flex flex-col justify-between items-start w-full">
-                  <h1 className="text-md font-medium mb-3">Single Beds</h1>
+          <form className="flex items-center flex-col" onSubmit={handleSubmit}>
+            <div className="w-full p-10 overflow-y-auto max-h-[540px] custom-scrollbar flex items-center gap-5 flex-col gap-5">
+              <div className="flex items-center gap-5">
+                <div className=" w-full">
+                  <h1 className="text-md mb-3 font-medium">Name</h1>
                   <TextField
-                    name="single_beds"
+                    className="w-full"
+                    name="name"
+                    placeholder={item.name}
                     onChange={handleChange}
-                    label="Single Beds"
-                    type="number"
+                    label="Name"
                     InputLabelProps={{
                       shrink: true,
                     }}
                   />
                 </div>
-
-                <div className="flex flex-col justify-between items-start w-full">
-                  <h1 className="text-md font-medium mb-3">Double Beds</h1>
-                  <TextField
-                    name="double_beds"
-                    onChange={handleChange}
-                    label="Double Beds"
-                    type="number"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="w-full flex justify-between gap-[20px]">
-                <div className="flex flex-col justify-between items-start w-full">
-                  <h1 className="text-md font-medium mb-3">Price</h1>
+                <div className="w-full">
+                  <h1 className="text-md mb-3 font-medium">Price</h1>
                   <TextField
                     className="w-full"
                     name="price"
+                    placeholder={item.price}
                     onChange={handleChange}
                     label="Price"
                     type="number"
@@ -154,20 +140,44 @@ const AddRoomModal = ({ open, setOpen, hotel }) => {
                     }}
                   />
                 </div>
-
-                <div className="flex flex-col justify-between items-start w-full">
-                  <h1 className="text-md font-medium mb-3">Available Rooms</h1>
-                  <TextField
-                    name="available"
-                    onChange={handleChange}
-                    label="Available Rooms"
-                    type="number"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </div>
               </div>
+
+              <div className="w-full">
+                <h1 className="text-md mb-3 font-medium">Description</h1>
+                <TextField
+                  className="w-full"
+                  name="descr"
+                  placeholder={item.descr}
+                  onChange={handleChange}
+                  label="Descreption"
+                  multiline
+                  rows={4}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </div>
+
+              <div className="w-full">
+                <h1 className="text-md mb-3 font-medium">Type</h1>
+                <FormControl className="w-full">
+                  <InputLabel>Type</InputLabel>
+                  <Select
+                    className="w-full"
+                    name="type"
+                    placeholder={item.type}
+                    value={formData.type}
+                    label="Type"
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={"Hot drink"}>Hot drink</MenuItem>
+                    <MenuItem value={"Cold drink"}>Cold drink</MenuItem>
+                    <MenuItem value={"Hot meal"}>Hot meal</MenuItem>
+                    <MenuItem value={"Cold meal"}>Cold meal</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+
               <div className="flex flex-col justify-between shadowlg items-start w-full mb-5">
                 <h1 className="text-md font-medium mb-3">Image</h1>
                 <div
@@ -193,11 +203,11 @@ const AddRoomModal = ({ open, setOpen, hotel }) => {
                     <MdCloudUpload className="text-3xl" />
                   )}
                 </div>
-              </div>{" "}
+              </div>
               <Button
                 type="submit"
                 variant="contained"
-                className="!bg-primary !rounded-lg !p-3 !text-base w-[90%]"
+                className="!bg-primary !rounded-lg !p-3 w-full !text-base"
               >
                 {status === "loading" ? (
                   <svg
@@ -217,7 +227,7 @@ const AddRoomModal = ({ open, setOpen, hotel }) => {
                     />
                   </svg>
                 ) : (
-                  "Add Room"
+                  "Modify Item"
                 )}
               </Button>
             </div>
@@ -228,4 +238,4 @@ const AddRoomModal = ({ open, setOpen, hotel }) => {
   );
 };
 
-export default AddRoomModal;
+export default ModifyMenuItemModal;

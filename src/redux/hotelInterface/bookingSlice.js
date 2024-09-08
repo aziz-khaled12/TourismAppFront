@@ -21,24 +21,26 @@ export const fetchBookings = createAsyncThunk(
 );
 
 export const addBooking = createAsyncThunk(
-    'rooms/addBooking',
-    async ({ bookingData, accessToken }, { rejectWithValue }) => {
-  
-      try {
-        const response = await fetch(`${url}/interactions/booking`, {
-          method: 'POST',
-          body: bookingData,
+  "rooms/addBooking",
+  async ({ bookingData, accessToken }, { rejectWithValue }) => {
+    console.log("booking data: ", bookingData);
+    try {
+      const response = await axios.post(
+        `${url}/interactions/booking`,
+        bookingData,
+        {
           headers: {
+            'Content-Type': 'application/json', // Important: JSON content type
             Authorization: `Bearer ${accessToken}`,
           },
-        });
-        if (!response.ok) throw new Error(response.statusText);
-        return await response.json();
-      } catch (error) {
-        return rejectWithValue(error.message);
-      }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
     }
-  );
+  }
+);
 
 export const deleteBooking = createAsyncThunk(
   "rooms/deleteBooking",
@@ -109,9 +111,8 @@ const bookingSlice = createSlice({
       .addCase(deleteBooking.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
-      })
+      });
   },
 });
 
 export default bookingSlice.reducer;
-

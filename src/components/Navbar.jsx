@@ -67,7 +67,7 @@ const Navbar = () => {
       } sm:block hidden z-[60]`}
     >
       <div className="w-full flex justify-between items-center ">
-        <div className={`font-semibold sm:text-xl lg:text-2xl transition-all duration-300 ${isScrolled ? "text-primary" : "text-white"}`}>
+        <div className={`font-semibold sm:text-xl lg:text-2xl transition-all duration-300 ${isScrolled ? "text-primary" : "text-black"}`}>
           <span className="text-green-700">Tourism </span>App
         </div>
         <div className="w-[50%] ">
@@ -76,7 +76,7 @@ const Navbar = () => {
               return (
                 <li
                   key={index}
-                  className={`hover:cursor-pointer hover:text-green-700 duration-200 font-medium transition-all duration-300 text-sm md:text-base ${isScrolled ? "text-primary" : "text-white"}`}
+                  className={`hover:cursor-pointer hover:text-green-700 font-medium transition-all duration-300 text-sm md:text-base ${isScrolled ? "text-primary" : "text-black"}`}
                   onClick={() => {handleNavigate(item.link)}}
                 >
                   {item.name}
