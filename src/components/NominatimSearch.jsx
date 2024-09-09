@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
+  InputAdornment,
   List,
   ListItem,
   ListItemButton,
@@ -7,9 +8,10 @@ import {
   ListItemText,
   TextField,
 } from "@mui/material";
-import { FixedSizeList } from "react-window";
 import axios from "axios";
+import TruncateMarkup from "react-truncate-markup";
 import { useMap } from "react-leaflet";
+import { CiSearch } from "react-icons/ci";
 
 const NominatimSearch = () => {
   const [query, setQuery] = useState("");
@@ -32,11 +34,12 @@ const NominatimSearch = () => {
             countrycodes: "dz",
             format: "json",
             addressdetails: 1,
-            limit: 10,
+            limit: 5,
           },
         }
       );
       setResults(response.data);
+      console.log(response.data);
     };
 
     if (debounceTimeoutRef.current) {
@@ -51,15 +54,12 @@ const NominatimSearch = () => {
       }
     };
   }, [query]);
+
   const handleResultClick = (lat, lon) => {
     setResults([]);
     map.flyTo([lat, lon], 17);
     L.marker([lat, lon]).addTo(map);
   };
-
-  useEffect(() => {
-    console.log(results);
-  }, [results]);
 
   const containerRef = useRef(null);
 
@@ -77,40 +77,70 @@ const NominatimSearch = () => {
   }, []);
 
   return (
-    <div ref={containerRef} className="absolute top-0 right-0 mt-4 mr-4 z-500 ">
-      <TextField
-        id="outlined-search"
-        type="search"
-        size="small"
-        value={query}
-        className="!bg-gray-50 !rounded-lg !w-[246px]"
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search for a place"
-      />
-
-      {results.length > 0 && (
-        <List
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-          className="!mt-2 rounded-lg !w-[246px]"
-        >
-          {results.map((result, index) => {
-            return (
-              <ListItemButton
-                key={index}
-                onClick={() => {
-                  handleResultClick(result.lat, result.lon);
-                }}
-              >
-                <ListItemText
-                  primary={
-                    <span className=" !text-xs">{result.display_name}</span>
-                  }
-                />
-              </ListItemButton>
-            );
-          })}
-        </List>
-      )}
+    <div className="z-500 top-0 px-4 py-6  w-full absolute flex items-center justify-center">
+      <div ref={containerRef} className="w-[70%] max-w-[600px]">
+        <TextField
+          id="outlined-search"
+          type="search"
+          size="small"
+          autoComplete="off"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <CiSearch className="text-2xl"/>
+              </InputAdornment>
+            ),
+          }}
+          value={query}
+          sx={{
+            backgroundColor: "white",
+            borderRadius: "99px",
+            width: "100%",
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "#dfdfdf", // Border color
+                borderRadius: "99px",
+              },
+              "&:hover fieldset": {
+                borderColor: "#dfdfdf", // Border color on hover
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "#dfdfdf", // Border color on focus
+              },
+              "& .MuiInputBase-input": {
+                padding: "16px 16px 16px 0px",
+              },
+            },
+          }}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search for a place"
+        />
+        {results.length > 0 && (
+          <List
+            sx={{ width: "100%", bgcolor: "white", marginTop: "8px" }}
+            className="rounded-lg"
+          >
+            {results.map((result, index) => {
+              return (
+                <ListItemButton
+                  key={index}
+                  onClick={() => {
+                    handleResultClick(result.lat, result.lon);
+                  }}
+                >
+                  <ListItemText
+                    primary={
+                      <TruncateMarkup lines={2}>
+                        <span className=" !text-md ">{result.display_name}</span>
+                      </TruncateMarkup>
+                    }
+                  />
+                </ListItemButton>
+              );
+            })}
+          </List>
+        )}
+      </div>
     </div>
   );
 };

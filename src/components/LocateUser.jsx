@@ -5,12 +5,13 @@ import { useMap } from "react-leaflet";
 //Get and display user location on map load
 const LocateUser = () => {
   const map = useMap();
+
   
   useEffect(() => {
     map.locate({ setView: true });
 
     const onLocationFound = (e) => {
-      map.setView(e.latlng, 12);
+      map.setView(e.latlng, 15);
     };
 
     const onLocationError = (e) => {
