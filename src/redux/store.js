@@ -5,13 +5,16 @@ import roomsReducer from "./hotelInterface/roomsSlice"
 import bookingReducer from './hotelInterface/bookingSlice';
 import menuReducer from './restaurantsInterface/menuSlice';
 import alertReducer from './alertSlice'
+import selectedTabReducer from './selectedTabSlice';
 
 export const store = configureStore({
   reducer: {
     likes: likesReducer,
     rooms: roomsReducer,
     bookings: bookingReducer,
-    menu: menuReducer, 
+    menu: menuReducer,
+    selectedTab: selectedTabReducer, 
     alert: alertReducer
+
   },
 });

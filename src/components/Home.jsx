@@ -215,27 +215,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="w-full flex gap-2 items-start justify-around sm:hidden">
-            {services.map((service) => {
-              return (
-                <Link
-                  key={service.id}
-                  className="flex flex-col items-center justify-center"
-                  to={service.link}
-                >
-                  <IconButton
-                    focusRipple
-                    className="!rounded-full !bg-secondary !p-4 !text-black !w-[56px] !h-[56px] !mb-1"
-                  >
-                    {service.icon}
-                  </IconButton>
-                  <div className="text-xs text-center font-[500]">
-                    {service.name}
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
+        
         </section>
         <section className="w-full flex justify-center p-2 my-10">
           <div className="w-full flex  flex-col justify-center">

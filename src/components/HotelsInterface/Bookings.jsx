@@ -118,16 +118,21 @@ const Bookings = ({ hotel }) => {
   return (
     <>
       <div className="font-medium mb-6 text-xl w-fit">Bookings</div>
-
-      <div className="h-[300px] w-full">
-        <div className="w-full h-full min-h-[400px]">
+      <div className="h-[539px] w-full">
           <DataGrid
             rows={bookings}
             columns={columns}
-            pageSize={5}
-            autoHeight
             disableColumnMenu
+            autoPageSize
             rowHeight={70}
+            sx={{
+              width: "100%",
+              "@media (max-width: 600px)": {
+                "& .MuiDataGrid-root": {
+                  fontSize: "0.8rem",
+                },
+              },
+            }}
           />
           {selectedDeleteBooking && (
             <DeleteBookingModal
@@ -136,7 +141,6 @@ const Bookings = ({ hotel }) => {
               booking={selectedDeleteBooking}
             />
           )}
-        </div>
       </div>
     </>
   );

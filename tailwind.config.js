@@ -1,5 +1,7 @@
 /* eslint-env node */
 
+const { default: zIndex } = require("@mui/material/styles/zIndex");
+
 module.exports = {
   content: [
     "./index.html",
@@ -20,6 +22,9 @@ module.exports = {
         lightBackground: "#eaeaea",
         lightBackgroundHover: "#eaeaea",
       },
+      zIndex: {
+        1000 : "1000"
+      }
     },
   },
   plugins: [],

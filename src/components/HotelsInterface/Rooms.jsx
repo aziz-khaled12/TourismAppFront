@@ -149,32 +149,23 @@ const Rooms = ({ hotel }) => {
       </div>
       <Box
         sx={{
-          height: 500,
+          height: 539,
           width: "100%",
         }}
       >
         {rooms && (
           <DataGrid
             sx={{
-              "& .MuiDataGrid-scrollbar::-webkit-scrollbar": {
-                width: "6px",
-              },
-              "& .MuiDataGrid-scrollbar::-webkit-scrollbar-track": {
-                background: "transparent",
-              },
-              "& .MuiDataGrid-scrollbar::-webkit-scrollbar-thumb": {
-                backgroundColor: "#c4c4c4",
-                borderRadius: "10px",
-                border: "2px solid transparent",
-              },
-              "& .MuiDataGrid-scrollbar::-webkit-scrollbar-thumb:hover": {
-                background: "#a1a1a1",
+              width: "100%",
+              "@media (max-width: 600px)": {
+                "& .MuiDataGrid-root": {
+                  fontSize: "0.8rem",
+                },
               },
             }}
             rows={rooms}
             columns={columns}
-            pageSize={5}
-            disableColumnMenu
+            autoPageSize
             rowHeight={70}
           />
         )}

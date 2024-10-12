@@ -41,6 +41,8 @@ const MapComponent = () => {
   useEffect(() => {
     fetchHotels();
   }, []);
+
+  
   return (
     position && (
       <MapContainer

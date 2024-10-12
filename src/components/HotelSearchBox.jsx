@@ -93,9 +93,6 @@ const HotelSearchBox = () => {
     }
   };
 
-  const handleBack = () => {
-    navigate("/"); // Go back one page in the browser history
-  };
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -114,8 +111,10 @@ const HotelSearchBox = () => {
         <TextField
           id="outlined-search"
           type="search"
+          fullWidth
           value={query}
-          className="!bg-gray-50 !w-[80%] !relative"
+          autoComplete="off" 
+          className="!relative !bg-gray-50"
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -142,12 +141,6 @@ const HotelSearchBox = () => {
           }}
         />
 
-        <span
-          className="text-[#616161] underline cursor-pointer"
-          onClick={handleBack}
-        >
-          CANCEL
-        </span>
       </div>
 
       {results.length > 0 && (
@@ -174,8 +167,8 @@ const HotelSearchBox = () => {
 
       {notFound && (
         <List
-          sx={{ width: "90%" }}
-          className="!mt-2 rounded-lg !bg-secondary !absolute z-10 !top-32 !border-green-700 !border !border-solid"
+        sx={{ width: "100%", backgroundColor: "#e0e0e0", border: "solid 1px #15803d", top: "120%", position: "absolute", zIndex: "10", borderRadius: "10px"}}
+
         >
           <ListItem>
             <ListItemText

@@ -91,7 +91,7 @@ const RestaurantDetails = () => {
       </div>
     </>
   ) : (
-    <div className="w-full min-h-screen flex flex-col items-center justify-start mb-28">
+    <div className="w-full min-h-screen flex flex-col items-center justify-start">
       <section className="h-[47vh] w-full relative">
         <img
           src={RestoImage}
@@ -195,21 +195,9 @@ const RestaurantDetails = () => {
             <Marker position={[restaurant.lat, restaurant.lon]}></Marker>
           </MapContainer>
         </div>
+        
       </section>
-      <AppBar
-        position="fixed"
-        className="!bg-white !border-t !border-solid !border-lightText"
-        sx={{ top: "auto", bottom: 0 }}
-      >
-        <div className="w-full px-4 py-6 !text-black flex items-center justify-center">
-          <Button
-            variant="contained"
-            className="!text-xl !font-bold !p-4 !w-[200px]  !bg-green-700 !rounded-full !max-w-80"
-          >
-            Make an order
-          </Button>
-        </div>
-      </AppBar>
+
     </div>
   );
 };

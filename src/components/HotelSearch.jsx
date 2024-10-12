@@ -10,6 +10,8 @@ import {
   ListItemText,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { SlArrowLeft } from "react-icons/sl";
+import { CiMap } from "react-icons/ci";
 
 const popularLocations = [
   { name: "Tipaza" },
@@ -20,64 +22,95 @@ const popularLocations = [
 ];
 const HotelSearch = () => {
   const navigate = useNavigate();
- 
 
   const handleSelect = (wilaya) => {
     navigate(`/hotels/${wilaya}`);
   };
 
-  return (
-    <div className="w-full min-h-screen flex items-center flex-col m-auto justify-between p-5">
-      <div className="w-full">
-        <div className="w-full flex items-center mt-8  justify-start">
-          <HotelSearchBox/>
-        </div>
+  const handleBack = () => {
+    navigate("/");
+  };
 
-        <div className="w-full mt-8">
-          <div className="text-base mb-5 font-medium">Popular destinations</div>
-          <List
-            sx={{ width: "100%" }}
-            className="!mt-2 rounded-lg !w-full !bg-[#eaeaea]"
-          >
-            {popularLocations.map((location, index) => {
-              return (
-                <ListItemButton
-                  key={index}
-                  className={`!border-white !border-solid p-4 ${
-                    index !== popularLocations.length - 1 ? "!border-b-2" : ""
-                  }`}
-                  onClick={() => {
-                    handleSelect(location.name);
-                  }}
-                >
-                  <ListItemIcon className="!text-black !opacity-60">
-                    <HiOutlineLocationMarker className="text-3xl" />
-                  </ListItemIcon>
-                  <ListItemText
-                    className="!py-2 "
-                    primary={
-                      <span className="text-lg font-medium">
-                        {location.name}
-                      </span>
-                    }
-                  />
-                </ListItemButton>
-              );
-            })}
-          </List>
+  return (
+    <div className="w-full min-h-[90vh] flex items-center flex-col m-auto justify-between ">
+      <div className="w-full">
+        <div className="w-full mt-10 border-[#6e6e6e] border-b border-solid">
+          <div className="w-full flex justify-between p-4 mb-3">
+            <div className="flex items-center font-[600] text-xl ">
+              <SlArrowLeft
+                className="mr-3 cursor-pointer"
+                onClick={handleBack}
+              />
+              Hotels Search
+            </div>
+            <div className="flex items-center text-3xl ">
+              <CiMap
+                className="cursor-pointer"
+                onClick={() => {
+                  navigate("/map");
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="w-full p-5">
+          <div className="w-full flex items-center justify-start">
+            <HotelSearchBox />
+          </div>
+
+          <div className="w-full mt-8">
+            <div className="text-base mb-5 font-medium">
+              Popular destinations
+            </div>
+            <List
+              sx={{ width: "100%" }}
+              className="!mt-2 rounded-lg !w-full !bg-lightBackground"
+            >
+              {popularLocations.map((location, index) => {
+                return (
+                  <ListItemButton
+                    key={index}
+                    className={`!border-white !border-solid p-4 ${
+                      index !== popularLocations.length - 1 ? "!border-b-2" : ""
+                    }`}
+                    onClick={() => {
+                      handleSelect(location.name);
+                    }}
+                  >
+                    <ListItemIcon className="!text-black !opacity-60">
+                      <HiOutlineLocationMarker className="text-3xl" />
+                    </ListItemIcon>
+                    <ListItemText
+                      className="!py-2 "
+                      primary={
+                        <span className="text-lg font-medium">
+                          {location.name}
+                        </span>
+                      }
+                    />
+                  </ListItemButton>
+                );
+              })}
+            </List>
+          </div>
         </div>
       </div>
       <div className="w-full p-4 flex items-center justify-center ">
         <Button
-          sx={{backgroundColor: "#15803d", borderRadius: "99px", padding: "16px", fontSize: "18px", fontWeight: "500", textTransform: "none"}}
+          sx={{
+            backgroundColor: "#15803d",
+            borderRadius: "99px",
+            padding: "16px",
+            fontSize: "18px",
+            fontWeight: "500",
+            textTransform: "none",
+          }}
           variant="contained"
-          startIcon={<MdNearMe className="text-lg" />}
+          startIcon={<MdNearMe className="!text-2xl" />}
         >
           Near me
         </Button>
       </div>
-
-   
     </div>
   );
 };

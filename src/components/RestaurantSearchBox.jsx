@@ -84,9 +84,6 @@ const RestaurantSearchBox = () => {
     }
   };
 
-  const handleBack = () => {
-    navigate("/"); // Go back one page in the browser history
-  };
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -100,13 +97,16 @@ const RestaurantSearchBox = () => {
   }, [results]);
 
   return (
-    <div ref={containerRef} className="w-full h-full flex justify-center">
-      <div className="w-full flex justify-around items-center relative">
+    <>
+    <div className="h-[56px]"></div>
+    <div ref={containerRef} className="w-full h-full flex flex-col absolute justify-start">
+      <div className="w-full flex justify-between items-center relative">
         <TextField
           id="outlined-search"
           type="search"
+          fullWidth
           value={query}
-          className="!bg-gray-50 !w-[80%] !relative"
+          className="!bg-gray-50 !relative"
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -132,15 +132,13 @@ const RestaurantSearchBox = () => {
           }}
         />
 
-        <span className="text-[#616161] underline cursor-pointer" onClick={handleBack}>
-          Cancel
-        </span>
+      
       </div>
 
       {results.length > 0 && (
         <List
           sx={{ width: "340px" }}
-          className="!mt-2 rounded-lg !bg-secondary !absolute z-10 !top-24 !border-green-800 !border !border-solid"
+          className="!mt-2 rounded-lg !bg-secondary !z-10  !border-green-800 !border !border-solid"
         >
           {results.map((result, index) => (
             <ListItemButton
@@ -163,7 +161,7 @@ const RestaurantSearchBox = () => {
       {notFound && (
         <List
         sx={{ width: "340px" }}
-        className="!mt-2 rounded-lg !bg-secondary !absolute z-10 !top-32 !border-green-800 !border !border-solid"
+        className="!mt-2 rounded-lg !bg-secondary !z-10  !border-green-800 !border !border-solid"
         >
           <ListItem>
             <ListItemText
@@ -173,6 +171,7 @@ const RestaurantSearchBox = () => {
         </List>
       )}
     </div>
+    </>
   );
 };
 
