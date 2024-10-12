@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { GetHotel } from "../datafetch/hotels";
 import { useAuth } from "../context/AuthContext";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { useParams, useNavigate } from "react-router-dom";
@@ -24,11 +23,15 @@ import { LuClock } from "react-icons/lu";
 import { GetRestaurant } from "../datafetch/restaurants";
 import MenuItemCard from "./MenuItemCard";
 import axios from "axios";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
+import { RiMapPin2Fill, RiRestaurantFill } from "react-icons/ri";
+import { OneEightyRingWithBg } from "react-svg-spinners";
 
 const url = import.meta.env.VITE_LOCAL_BACK_END_URL;
 
 const RestaurantDetails = () => {
-  const { id } = useParams();
+  const { wilaya, id } = useParams();
   const { accessToken } = useAuth();
   const [loading, setLoading] = useState(true);
   const [restaurant, setRestaurant] = useState();
@@ -84,7 +87,7 @@ const RestaurantDetails = () => {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const res = await axios.get(`${url}/restaurants/menu/items?id=${id}`, {
+        const res = await axios.get(`${url}/restaurants/menu/bestItems?id=${id}`, {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
         setMenuItems(res.data);
@@ -96,26 +99,9 @@ const RestaurantDetails = () => {
   }, []);
 
   return loading ? (
-    <>
-      <div className="w-full min-h-screen flex items-center justify-center flex-col m-auto">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <style>{`.spinner_z9k8{transform-origin:center;animation:spinner_StKS .75s infinite linear}@keyframes spinner_StKS{100%{transform:rotate(360deg)}}`}</style>
-          <path
-            d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
-            opacity=".25"
-          />
-          <path
-            d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
-            className="spinner_z9k8"
-          />
-        </svg>
-      </div>
-    </>
+    <div className="w-full min-h-screen flex items-center justify-center flex-col m-auto">
+      <OneEightyRingWithBg className="!text-primary" />
+    </div>
   ) : (
     <div className="w-full min-h-screen flex flex-col items-center justify-start">
       <section className="h-[47vh] w-full relative">
@@ -200,6 +186,45 @@ const RestaurantDetails = () => {
         </div>
       </section>
 
+      <section className="w-full p-4">
+        <div className="w-full p-4 mt-2">
+          <h1 className="font-bold text-xl">Top Sellers</h1>
+        </div>
+        {menuItems.length > 0 && (
+          <div className="w-full p-4">
+            <Swiper
+              pagination={{
+                dynamicBullets: true,
+              }}
+              modules={[Pagination]}
+              breakpoints={{
+                640: {
+                  slidesPerView: 2,
+                },
+                1024: {
+                  slidesPerView: 2,
+                },
+                1200: {
+                  slidesPerView: 3,
+                },
+              }}
+              spaceBetween={20}
+              slidesPerView={1.2}
+            >
+              {menuItems.map((menuItem, index) => {
+                return (
+                  <SwiperSlide key={index}>
+                    <MenuItemCard menuItem={menuItem} />;
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+          </div>
+        )}
+      </section>
+
+      <section></section>
+
       <section className="min-h-[25vh] flex items-center justify-center flex-col w-full p-4 rounded-xl">
         <div className="w-full p-4 mt-2">
           <h1 className="font-bold text-xl">Location</h1>
@@ -223,27 +248,22 @@ const RestaurantDetails = () => {
         </div>
       </section>
 
-      <section className="w-full p-4">
-        <div className="w-full p-4 mt-2">
-          <h1 className="font-bold text-xl">Menu</h1>
-        </div>
-        {menuItems.length > 0 && (
-          <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                {menuItems.map((menuItem, index) => {
-                  return <MenuItemCard key={index} menuItem={menuItem} />;
-                })}
-              </Grid>
-              <Grid item xs={6}>
-                {menuItems.map((menuItem, index) => {
-                  return <MenuItemCard key={index} menuItem={menuItem} />;
-                })}
-              </Grid>
-            </Grid>
-          </Box>
-        )}
-      </section>
+      <div className="fixed bottom-0 left-0 w-full bg-white p-4 gap-2 z-1000 shadow-lg flex justify-around">
+        <Button variant="contained" className="flex-1 mx-2 !bg-green-700">
+          <RiMapPin2Fill className="mr-2" />
+          Directions
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            navigate(`/restaurants/${wilaya}/${id}/menu`);
+          }}
+          className="flex-1 mx-2 !bg-green-700"
+        >
+          <RiRestaurantFill className="mr-2" />
+          See Menu
+        </Button>
+      </div>
     </div>
   );
 };

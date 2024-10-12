@@ -104,6 +104,7 @@ const RestaurantSearchBox = () => {
         <TextField
           id="outlined-search"
           type="search"
+          autoComplete="off"
           fullWidth
           value={query}
           className="!bg-gray-50 !relative"
@@ -118,7 +119,7 @@ const RestaurantSearchBox = () => {
           placeholder={`Search for a Place`}
           sx={{
             "& .MuiOutlinedInput-root": {
-              borderRadius: "99px",
+              borderRadius: "8px",
               "& fieldset": {
                 borderColor: "gray", // default border color
               },
@@ -137,8 +138,8 @@ const RestaurantSearchBox = () => {
 
       {results.length > 0 && (
         <List
-          sx={{ width: "340px" }}
-          className="!mt-2 rounded-lg !bg-secondary !z-10  !border-green-800 !border !border-solid"
+          sx={{ width: "100%" }}
+          className="!mt-2 rounded-lg !bg-secondary !z-10 !border-green-800 !border !border-solid"
         >
           {results.map((result, index) => (
             <ListItemButton
@@ -160,7 +161,7 @@ const RestaurantSearchBox = () => {
 
       {notFound && (
         <List
-        sx={{ width: "340px" }}
+        sx={{ width: "100%" }}
         className="!mt-2 rounded-lg !bg-secondary !z-10  !border-green-800 !border !border-solid"
         >
           <ListItem>

@@ -1,25 +1,60 @@
-import React, { useEffect } from "react";
-import { Box, Stack, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import { FaMinus, FaPlus } from "react-icons/fa";
 
 const MenuItemCard = ({ menuItem }) => {
+  const [count, setCount] = useState(0);
+
+  const increamentCount = () => {
+    setCount(count + 1);
+  };
+
+  const decrementCount = () => {
+    if (count > 0) {
+      setCount(count - 1);
+    }
+  };
   useEffect(() => {
     console.log(menuItem);
   }, [menuItem]);
   return (
-    <Box sx={{padding: 1, borderRadius: 2, boxShadow: "0px 0px 10px -4px black"}}>
-      <Stack spacing={.5}>
-
+    <Box sx={{ borderRadius: 2 }} className={"!bg-lightBackground"}>
+      <Stack spacing={0.5}>
         <Box>
-          <img className="rounded-lg w-full h-auto" src={menuItem.image_url} alt="this is an image" />
+          <img
+            className="rounded-t-lg w-full h-[180px]"
+            src={menuItem.image_url}
+            alt="this is an image"
+          />
         </Box>
 
-        <Stack>
+        <Stack sx={{ padding: 2 }} spacing={1}>
           <div className="font-semibold text-xl">{menuItem.name}</div>
-          <div className="font-medium text-base">{menuItem.type}</div>
+          <Stack
+            direction={"row"}
+            justifyContent={"space-between"}
+            alignItems={"center"}
+          >
+            <div className="font-bold text-xl flex gap-2">{`${menuItem.price} DZD`}</div>
+
+            <div className="flex items-center justify-around w-[100px]">
+              <Button onClick={decrementCount} className="!p-0 !rounded-full !bg-white !h-[30px] !w-[30px] !min-w-0 custom-box-shadow">
+                <FaMinus className="!text-black !text-sm" />
+              </Button>
+              <div className="text-xl font-bold">{count}</div>
+              <Button onClick={increamentCount} className="!p-0 !rounded-full !bg-white !h-[30px] !w-[30px] !min-w-0 custom-box-shadow">
+                <FaPlus className="!text-black !text-sm" />
+              </Button>
+            </div>
+
+            {/* <Button
+              startIcon={<FaPlus className="!text-lg" />}
+              variant="contained"
+            >
+              Add
+            </Button> */}
+          </Stack>
         </Stack>
-
-        <div className="font-bold text-base flex gap-2">{`${menuItem.price} DZD`} <span className="text-red-600 font-medium">40% off</span></div>
-
       </Stack>
     </Box>
   );

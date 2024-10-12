@@ -102,6 +102,8 @@ const AppBar = () => {
   }, [selected]);
 
   return (
+    <>
+    <div className="w-full h-[100px] mt-2 bg-background"></div>
     <div className="fixed bottom-0 w-full p-4 shadow-lg bg-background z-1000 sm:hidden ">
       <div
         className="w-full flex gap-2 items-start justify-around sm:hidden relative"
@@ -134,6 +136,7 @@ const AppBar = () => {
         />
       </div>
     </div>
+    </>
   );
 };
 

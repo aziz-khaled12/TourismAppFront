@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteMenuItem } from "../../redux/restaurantsInterface/menuSlice";
 import { showAlert } from "../../redux/alertSlice";
+import { OneEightyRingWithBg } from "react-svg-spinners";
 
 const DeleteMenuItemModal = ({ open, setOpen, item, restaurantId }) => {
   const dispatch = useDispatch();
@@ -28,20 +29,21 @@ const DeleteMenuItemModal = ({ open, setOpen, item, restaurantId }) => {
 
     if (status === "succeeded") {
       handleClose();
-      handleSuccess()
-    }else if(status === "failed") {
+      handleSuccess();
+    } else if (status === "failed") {
       handleClose();
-      handleError()
+      handleError();
     }
   };
 
-
   const handleSuccess = () => {
-    dispatch(showAlert({ message: 'Item Deleted', severity: 'success' }));
+    dispatch(showAlert({ message: "Item Deleted", severity: "success" }));
   };
 
   const handleError = () => {
-    dispatch(showAlert({ message: 'Error Deleting the Item', severity: 'error' }));
+    dispatch(
+      showAlert({ message: "Error Deleting the Item", severity: "error" })
+    );
   };
 
   return (
@@ -80,22 +82,7 @@ const DeleteMenuItemModal = ({ open, setOpen, item, restaurantId }) => {
                 className="!normal-case"
               >
                 {status === "loading" ? (
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <style>{`.spinner_z9k8{color: white;transform-origin:center;animation:spinner_StKS .75s infinite linear}@keyframes spinner_StKS{100%{transform:rotate(360deg)}}`}</style>
-                    <path
-                      d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
-                      opacity=".25"
-                    />
-                    <path
-                      d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
-                      className="spinner_z9k8"
-                    />
-                  </svg>
+                  <OneEightyRingWithBg className="!text-primary" />
                 ) : (
                   "Confirm"
                 )}

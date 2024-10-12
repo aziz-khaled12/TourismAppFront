@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import MapComponent from "./components/MapComponent";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, matchPath } from "react-router-dom";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import Home from "./components/Home";
@@ -20,6 +20,7 @@ import AlertMessage from "./components/AlertMessage";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import RestaurantDashboard2 from "./components/RestaurantDashboard2";
 import AppBar from "./components/AppBar";
+import RestaurantMenu from "./components/RestaurantMenu";
 
 // Create a theme with custom breakpoints
 const theme = createTheme({
@@ -36,8 +37,14 @@ const theme = createTheme({
 });
 
 function App() {
+  const pathsWithoutBar = [
+    "/map",
+    "/restaurants/:wilaya/:id",
+    "/hotels/:wilaya/:id",
+    "/restaurants/:wilaya/:id/menu",
+    "/hotels/:wilaya/:id/rooms",
+  ];
   const { verifyToken, isAuthenticated, accessToken } = useAuth();
-
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -51,9 +58,14 @@ function App() {
     return () => clearInterval(intervalId);
   }, []);
 
+  // Function to check if the current path matches any of the excluded paths
+  const isPathWithoutBar = pathsWithoutBar.some((pattern) =>
+    matchPath(pattern, pathname)
+  );
+
   return (
     <>
-      <div className="w-full bg-[#f9f9f9] relative overflow-hidden pb-[100px] sm:pb-0">
+      <div className="w-full bg-[#f9f9f9] relative overflow-hidden">
         <AlertMessage />
         <Routes>
           <Route path="/signup" element={<Signup />} />
@@ -86,11 +98,15 @@ function App() {
               path="/restaurants/:wilaya/:id"
               element={<RestaurantDetails />}
             />
+            <Route
+              path="/restaurants/:wilaya/:id/menu"
+              element={<RestaurantMenu />}
+            />
             <Route path="/map" element={<MapComponent />} />
             <Route path="/test" element={<SwipeableTemporaryDrawer />} />
           </Route>
         </Routes>
-        {isAuthenticated && pathname != "/map" && <AppBar />}
+        {isAuthenticated && !isPathWithoutBar && <AppBar />}
       </div>
     </>
   );

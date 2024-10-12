@@ -12,6 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { SlArrowLeft } from "react-icons/sl";
 import { CiMap } from "react-icons/ci";
+import Header from "./Header";
 
 const popularLocations = [
   { name: "Tipaza" },
@@ -34,25 +35,10 @@ const HotelSearch = () => {
   return (
     <div className="w-full min-h-[90vh] flex items-center flex-col m-auto justify-between ">
       <div className="w-full">
-        <div className="w-full mt-10 border-[#6e6e6e] border-b border-solid">
-          <div className="w-full flex justify-between p-4 mb-3">
-            <div className="flex items-center font-[600] text-xl ">
-              <SlArrowLeft
-                className="mr-3 cursor-pointer"
-                onClick={handleBack}
-              />
-              Hotels Search
-            </div>
-            <div className="flex items-center text-3xl ">
-              <CiMap
-                className="cursor-pointer"
-                onClick={() => {
-                  navigate("/map");
-                }}
-              />
-            </div>
-          </div>
-        </div>
+    
+
+        <Header title={"Hotel Search"} map={true} handleBack={handleBack} />
+
         <div className="w-full p-5">
           <div className="w-full flex items-center justify-start">
             <HotelSearchBox />
@@ -99,12 +85,12 @@ const HotelSearch = () => {
         <Button
           sx={{
             backgroundColor: "#15803d",
-            borderRadius: "99px",
+            borderRadius: "8px",
             paddingY: "12px",
             fontSize: "16px",
             fontWeight: "500",
             textTransform: "none",
-            paddingX: "16px"
+            paddingX: "16px",
           }}
           variant="contained"
           startIcon={<MdNearMe />}

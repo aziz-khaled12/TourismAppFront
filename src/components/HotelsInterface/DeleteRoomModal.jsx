@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteRoom } from "../../redux/hotelInterface/roomsSlice";
 import { showAlert } from "../../redux/alertSlice";
+import { OneEightyRingWithBg } from "react-svg-spinners";
 
 const DeleteRoomModal = ({ open, setOpen, room, hotelId }) => {
   const dispatch = useDispatch();
@@ -15,11 +16,15 @@ const DeleteRoomModal = ({ open, setOpen, room, hotelId }) => {
   };
 
   const handleSuccess = () => {
-    dispatch(showAlert({ message: 'Room Deleted Successfuly', severity: 'success' }));
+    dispatch(
+      showAlert({ message: "Room Deleted Successfuly", severity: "success" })
+    );
   };
 
   const handleError = () => {
-    dispatch(showAlert({ message: 'Error Deleting the Room', severity: 'error' }));
+    dispatch(
+      showAlert({ message: "Error Deleting the Room", severity: "error" })
+    );
   };
 
   const handleDelete = () => {
@@ -34,11 +39,11 @@ const DeleteRoomModal = ({ open, setOpen, room, hotelId }) => {
     dispatch(deleteRoom({ roomId: room.id, queryParams, accessToken }));
 
     if (status === "succeded") {
-      handleClose()
-      handleSuccess()
-    }else if (status === "failed") {
-      handleClose()
-      handleError()
+      handleClose();
+      handleSuccess();
+    } else if (status === "failed") {
+      handleClose();
+      handleError();
     }
   };
 
@@ -78,22 +83,7 @@ const DeleteRoomModal = ({ open, setOpen, room, hotelId }) => {
                 className="!normal-case"
               >
                 {status === "loading" ? (
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <style>{`.spinner_z9k8{color: white;transform-origin:center;animation:spinner_StKS .75s infinite linear}@keyframes spinner_StKS{100%{transform:rotate(360deg)}}`}</style>
-                    <path
-                      d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
-                      opacity=".25"
-                    />
-                    <path
-                      d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
-                      className="spinner_z9k8"
-                    />
-                  </svg>
+                  <OneEightyRingWithBg className="!text-background" />
                 ) : (
                   "Confirm"
                 )}

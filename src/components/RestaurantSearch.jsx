@@ -102,7 +102,7 @@ const RestaurantSearch = () => {
       <Button
           sx={{
             backgroundColor: "#15803d",
-            borderRadius: "99px",
+            borderRadius: "8px",
             paddingY: "12px",
             fontSize: "16px",
             fontWeight: "500",

@@ -125,9 +125,8 @@ const HotelSearchBox = () => {
           onChange={(e) => setQuery(e.target.value)}
           placeholder={`Search for a Place`}
           sx={{
-            borderRadius: "99px",
             "& .MuiOutlinedInput-root": {
-              borderRadius: "99px",
+              borderRadius: "8px",
               "& fieldset": {
                 borderColor: "gray", // default border color
               },

@@ -22,6 +22,8 @@ import "swiper/css";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
+import { OneEightyRingWithBg } from "react-svg-spinners";
+import Header from "./Header";
 
 const HotelResults = () => {
   const { accessToken, user } = useAuth();
@@ -32,7 +34,7 @@ const HotelResults = () => {
   const [selectedOption, setSelectedOption] = useState(2);
   const [rooms, setRooms] = useState(1);
   const [preRooms, setPreRooms] = useState(rooms);
-  
+
   const [people, setPeople] = useState(1);
   const [prePeople, setPrePeople] = useState(people);
   const [open, setOpen] = useState(false); // Set to true initially for testing
@@ -66,18 +68,15 @@ const HotelResults = () => {
     "Dec",
   ];
 
-
-
   const dispatch = useDispatch();
   const likedItems = useSelector((state) => state.likes.likedItems);
   const status = useSelector((state) => state.likes.status);
 
   useEffect(() => {
     if (status === "idle" && accessToken && user) {
-      dispatch(fetchLikedItems({ user, token: accessToken, type: "hotel"}));
+      dispatch(fetchLikedItems({ user, token: accessToken, type: "hotel" }));
     }
   }, [dispatch, status, user, accessToken]);
-
 
   useEffect(() => {
     console.log(date);
@@ -87,7 +86,6 @@ const HotelResults = () => {
   useEffect(() => {
     GetWilayaHotels(setHotels, wilaya, accessToken);
   }, [accessToken, wilaya]);
-
 
   const handleBack = () => {
     navigate("/hotels");
@@ -156,42 +154,16 @@ const HotelResults = () => {
   return loading ? (
     <>
       <div className="w-full min-h-screen flex items-center justify-center flex-col m-auto">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <style>{`.spinner_z9k8{transform-origin:center;animation:spinner_StKS .75s infinite linear}@keyframes spinner_StKS{100%{transform:rotate(360deg)}}`}</style>
-          <path
-            d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
-            opacity=".25"
-          />
-          <path
-            d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
-            className="spinner_z9k8"
-          />
-        </svg>
+        <OneEightyRingWithBg className="!text-primary" />
       </div>
     </>
   ) : (
     <div className="w-full flex flex-col justify-start items-center min-h-screen overflow-hidden">
-      <div className="w-full mt-10 border-[#6e6e6e] border-b border-solid">
-        <div className="w-full flex justify-between p-4 mb-3">
-          <div className="flex items-center font-[600] text-xl ">
-            <SlArrowLeft className="mr-3 cursor-pointer" onClick={handleBack} />
-            Hotels in {wilaya}
-          </div>
-          <div className="flex items-center text-3xl ">
-            <CiMap
-              className="cursor-pointer"
-              onClick={() => {
-                navigate("/map");
-              }}
-            />
-          </div>
-        </div>
-      </div>
+      <Header
+        title={`Hotels in ${wilaya}`}
+        handleBack={handleBack}
+        map={true}
+      />
 
       <div className="flex items-center justify-around m-4 w-full">
         <div className="flex w-full ml-4 h-[60px]">
@@ -255,6 +227,7 @@ const HotelResults = () => {
         onOpen={toggleDrawer(true)}
       >
         <div className="w-[full] h-[90vh] relative flex flex-col items-center justify-start">
+
           <div className="w-full mt-10 border-[#6e6e6e] border-b border-solid">
             <div className="w-full flex justify-between p-4 mb-3">
               <div className="flex items-center font-[600] text-2xl ">
@@ -402,15 +375,15 @@ const HotelResults = () => {
         <Grid container spacing={2}>
           {hotels.map((hotel, index) => (
             <Grid item key={index} xs={12} custom={6} lg={4}>
-            <HotelResultCard
-              key={index}
-              data={hotel}
-              wilaya={wilaya}
-              rooms={rooms}
-              people={people}
-              date={date}
-              liked={likedItems.includes(hotel.id)}
-            />
+              <HotelResultCard
+                key={index}
+                data={hotel}
+                wilaya={wilaya}
+                rooms={rooms}
+                people={people}
+                date={date}
+                liked={likedItems.includes(hotel.id)}
+              />
             </Grid>
           ))}
         </Grid>
