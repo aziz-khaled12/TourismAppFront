@@ -4,7 +4,16 @@ import { useAuth } from "../context/AuthContext";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { useParams, useNavigate } from "react-router-dom";
 import TruncateMarkup from "react-truncate-markup";
-import { AppBar, Avatar, AvatarGroup, Button, Rating } from "@mui/material";
+import {
+  AppBar,
+  Avatar,
+  AvatarGroup,
+  Box,
+  Button,
+  Grid,
+  Rating,
+  Stack,
+} from "@mui/material";
 import { GrFormPrevious } from "react-icons/gr";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
@@ -13,14 +22,19 @@ import "./HotelDetails.css";
 import RestoImage from "../assets/resto.jpg";
 import { LuClock } from "react-icons/lu";
 import { GetRestaurant } from "../datafetch/restaurants";
+import MenuItemCard from "./MenuItemCard";
+import axios from "axios";
+
+const url = import.meta.env.VITE_LOCAL_BACK_END_URL;
 
 const RestaurantDetails = () => {
-  const { wilaya, id } = useParams();
+  const { id } = useParams();
   const { accessToken } = useAuth();
   const [loading, setLoading] = useState(true);
   const [restaurant, setRestaurant] = useState();
-  const [workStart, setWorkStart] = useState()
-  const [workend, setWorkend] = useState()
+  const [workStart, setWorkStart] = useState();
+  const [menuItems, setMenuItems] = useState([]);
+  const [workend, setWorkend] = useState();
   const navigate = useNavigate();
 
   const [turncate, setTurncate] = useState(true);
@@ -54,20 +68,32 @@ const RestaurantDetails = () => {
   );
 
   const formatTime = (time) => {
-    return time.slice(0, 5); 
+    return time.slice(0, 5);
   };
-
-
 
   useEffect(() => {
     if (restaurant) {
-      const formattedWorkStart = formatTime(restaurant.work_start); 
-      const formattedWorkEnd = formatTime(restaurant.work_end); 
-      setWorkStart(formattedWorkStart)
-      setWorkend(formattedWorkEnd)
+      const formattedWorkStart = formatTime(restaurant.work_start);
+      const formattedWorkEnd = formatTime(restaurant.work_end);
+      setWorkStart(formattedWorkStart);
+      setWorkend(formattedWorkEnd);
       setLoading(false);
     }
   }, [restaurant]);
+
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const res = await axios.get(`${url}/restaurants/menu/items?id=${id}`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+        setMenuItems(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchMenu();
+  }, []);
 
   return loading ? (
     <>
@@ -195,9 +221,29 @@ const RestaurantDetails = () => {
             <Marker position={[restaurant.lat, restaurant.lon]}></Marker>
           </MapContainer>
         </div>
-        
       </section>
 
+      <section className="w-full p-4">
+        <div className="w-full p-4 mt-2">
+          <h1 className="font-bold text-xl">Menu</h1>
+        </div>
+        {menuItems.length > 0 && (
+          <Box sx={{ flexGrow: 1 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                {menuItems.map((menuItem, index) => {
+                  return <MenuItemCard key={index} menuItem={menuItem} />;
+                })}
+              </Grid>
+              <Grid item xs={6}>
+                {menuItems.map((menuItem, index) => {
+                  return <MenuItemCard key={index} menuItem={menuItem} />;
+                })}
+              </Grid>
+            </Grid>
+          </Box>
+        )}
+      </section>
     </div>
   );
 };

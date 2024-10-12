@@ -306,7 +306,15 @@ const HotelDetails = () => {
               navigate(`/hotels/${wilaya}/${hotel.id}/rooms`);
             }}
             variant="contained"
-            className="!text-xl !font-bold !p-4 !w-[200px]  !bg-green-700 !rounded-full !max-w-80"
+            sx={{
+              backgroundColor: "#15803d",
+              borderRadius: "99px",
+              paddingY: "12px",
+              fontSize: "16px",
+              fontWeight: "500",
+              textTransform: "none",
+              paddingX: "20px"
+            }}
           >
             Book now
           </Button>
