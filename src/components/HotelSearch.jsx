@@ -100,13 +100,14 @@ const HotelSearch = () => {
           sx={{
             backgroundColor: "#15803d",
             borderRadius: "99px",
-            padding: "16px",
-            fontSize: "18px",
+            paddingY: "12px",
+            fontSize: "16px",
             fontWeight: "500",
             textTransform: "none",
+            paddingX: "16px"
           }}
           variant="contained"
-          startIcon={<MdNearMe className="!text-2xl" />}
+          startIcon={<MdNearMe />}
         >
           Near me
         </Button>

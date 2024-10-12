@@ -1,6 +1,7 @@
 import { IconButton } from "@mui/material";
 import React, { useRef, useEffect } from "react";
 import {
+  RiBuildingLine,
   RiCarFill,
   RiCarLine,
   RiHome5Fill,
@@ -29,32 +30,40 @@ const AppBar = () => {
   const services = [
     {
       id: 0,
-      icon: <RiHome5Line className="text-4xl" />,
-      selectedIcon: <RiHome5Fill className="text-4xl" />,
+      icon: <RiHome5Line className="text-2xl" />,
+      selectedIcon: <RiHome5Fill className="text-2xl" />,
       name: "Home",
       link: "/",
     },
     {
       id: 1,
-      icon: <RiHotelLine className="text-4xl" />,
-      selectedIcon: <RiHotelFill className="text-4xl" />,
+      icon: <RiHotelLine className="text-2xl" />,
+      selectedIcon: <RiHotelFill className="text-2xl" />,
       name: "Hotels",
       link: "/hotels",
     },
     {
       id: 2,
-      icon: <RiRestaurantLine className="text-4xl" />,
-      selectedIcon: <RiRestaurantFill className="text-4xl" />,
+      icon: <RiRestaurantLine className="text-2xl" />,
+      selectedIcon: <RiRestaurantFill className="text-2xl" />,
       name: "Restaurants",
       link: "/restaurants",
     },
     {
       id: 3,
-      icon: <RiCarLine className="text-4xl" />,
-      selectedIcon: <RiCarFill className="text-4xl" />,
+      icon: <RiCarLine className="text-2xl" />,
+      selectedIcon: <RiCarFill className="text-2xl" />,
       name: "Cars",
       link: "/cars", // Add link for the Cars page if needed
-    },
+    },  
+    {
+        id: 4,
+        icon: <RiBuildingLine className="text-2xl" />,
+        selectedIcon: <RiBuildingLine className="text-2xl" />,
+        name: "Places",
+        link: "/places", 
+        desc: "Find and explore local attractions easily with our interactive map and search feature, helping you discover popular spots and points of interest.",
+      },
   ];
 
   // Update the selected tab based on the current route
@@ -93,7 +102,7 @@ const AppBar = () => {
   }, [selected]);
 
   return (
-    <div className="fixed bottom-0 w-full p-6 shadow-lg bg-background z-1000 sm:hidden ">
+    <div className="fixed bottom-0 w-full p-4 shadow-lg bg-background z-1000 sm:hidden ">
       <div
         className="w-full flex gap-2 items-start justify-around sm:hidden relative"
         ref={containerRef}

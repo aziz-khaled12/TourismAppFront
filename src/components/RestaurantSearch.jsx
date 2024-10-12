@@ -99,17 +99,18 @@ const RestaurantSearch = () => {
       </div>
 
       <div className="w-full p-4 flex items-center justify-center">
-        <Button
+      <Button
           sx={{
             backgroundColor: "#15803d",
             borderRadius: "99px",
-            padding: "16px",
-            fontSize: "18px",
+            paddingY: "12px",
+            fontSize: "16px",
             fontWeight: "500",
             textTransform: "none",
+            paddingX: "16px"
           }}
           variant="contained"
-          startIcon={<MdNearMe className="!text-2xl" />}
+          startIcon={<MdNearMe />}
         >
           Near me
         </Button>
