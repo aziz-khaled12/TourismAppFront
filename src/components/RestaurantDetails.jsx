@@ -87,9 +87,12 @@ const RestaurantDetails = () => {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const res = await axios.get(`${url}/restaurants/menu/bestItems?id=${id}`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        const res = await axios.get(
+          `${url}/restaurants/menu/bestItems?id=${id}`,
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
+        );
         setMenuItems(res.data);
       } catch (error) {
         console.log(error);
@@ -248,6 +251,7 @@ const RestaurantDetails = () => {
         </div>
       </section>
 
+      <div className="h-[50px] w-full bg-background"></div>
       <div className="fixed bottom-0 left-0 w-full bg-white p-4 gap-2 z-1000 shadow-lg flex justify-around">
         <Button variant="contained" className="flex-1 mx-2 !bg-green-700">
           <RiMapPin2Fill className="mr-2" />

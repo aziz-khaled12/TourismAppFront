@@ -36,6 +36,8 @@ const theme = createTheme({
   },
 });
 
+
+
 function App() {
   const pathsWithoutBar = [
     "/map",

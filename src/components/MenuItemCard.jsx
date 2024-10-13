@@ -3,6 +3,8 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import { FaMinus, FaPlus } from "react-icons/fa";
 
 const MenuItemCard = ({ menuItem }) => {
+
+  console.log(menuItem)
   const [count, setCount] = useState(0);
 
   const increamentCount = () => {
@@ -22,7 +24,7 @@ const MenuItemCard = ({ menuItem }) => {
       <Stack spacing={0.5}>
         <Box>
           <img
-            className="rounded-t-lg w-full h-[180px]"
+            className="rounded-t-lg w-full min-h-[180px] h-auto"
             src={menuItem.image_url}
             alt="this is an image"
           />

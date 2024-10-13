@@ -1,21 +1,35 @@
-import { Autocomplete, InputAdornment, Popper, TextField } from "@mui/material";
+import { InputAdornment, Popper, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 
-const MenuSearcphBox = ({ menuItems }) => {
+const MenuSearcphBox = ({ menuItems, filteredItems, setFilteredItems }) => {
   const [query, setQuery] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-  const [filteredItems, setFilteredItems] = useState([]);
 
   useEffect(() => {
-    if (query.length >= 2) {
-      const filtered = menuItems.filter((item) =>
-        item.name.toLowerCase().includes(query.toLowerCase())
-      );
-      setFilteredItems(filtered);
-    } else {
-      setFilteredItems([]); // Clear the filtered list if input is less than 2 characters
-    }
+    const filtered = menuItems
+      .filter((item) => item.name.toLowerCase().includes(query.toLowerCase()))
+      .sort((a, b) => {
+        const queryLower = query.toLowerCase();
+        const aName = a.name.toLowerCase();
+        const bName = b.name.toLowerCase();
+
+        // Exact match comes first
+        if (aName === queryLower) return -1;
+        if (bName === queryLower) return 1;
+
+        // Starts with the query comes second
+        if (aName.startsWith(queryLower) && !bName.startsWith(queryLower))
+          return -1;
+        if (bName.startsWith(queryLower) && !aName.startsWith(queryLower))
+          return 1;
+
+        // Otherwise, sort alphabetically
+        return aName.localeCompare(bName);
+      });
+
+    setFilteredItems(filtered);
+
+    console.log(filteredItems);
   }, [query]);
 
   const CustomPopper = (props) => {
@@ -23,43 +37,30 @@ const MenuSearcphBox = ({ menuItems }) => {
   };
 
   return (
-    <Autocomplete
-      freeSolo
-      disableClearable
-      options={filteredItems.map((item) => item.name)}
-      noOptionsText={"work nigga"}
-      onInputChange={(event, newInputValue) => {
-        setQuery(newInputValue);
+    <TextField
+      id="outlined-search"
+      type="search"
+      autoComplete="off"
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+      fullWidth
+      className="!bg-gray-50 !relative"
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <CiSearch className="text-4xl" />
+          </InputAdornment>
+        ),
       }}
-     
-      PopperComponent={CustomPopper}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          id="outlined-search"
-          type="search"
-          autoComplete="off"
-          fullWidth
-          className="!bg-gray-50 !relative"
-          InputProps={{
-            ...params.InputProps,
-            startAdornment: (
-              <InputAdornment position="start">
-                <CiSearch className="text-4xl" />
-              </InputAdornment>
-            ),
-          }}
-          placeholder="Search for Something to Eat"
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "8px",
-              "&.Mui-focused fieldset": {
-                borderColor: "green",
-              },
-            },
-          }}
-        />
-      )}
+      placeholder="Search for Something to Eat"
+      sx={{
+        "& .MuiOutlinedInput-root": {
+          borderRadius: "8px",
+          "&.Mui-focused fieldset": {
+            borderColor: "green",
+          },
+        },
+      }}
     />
   );
 };
