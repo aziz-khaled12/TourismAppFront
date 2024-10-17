@@ -32,9 +32,6 @@ const MenuSearcphBox = ({ menuItems, filteredItems, setFilteredItems }) => {
     console.log(filteredItems);
   }, [query]);
 
-  const CustomPopper = (props) => {
-    return <Popper {...props} className="!top-[10px]" />;
-  };
 
   return (
     <TextField

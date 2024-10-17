@@ -15,6 +15,5 @@ export const store = configureStore({
     menu: menuReducer,
     selectedTab: selectedTabReducer, 
     alert: alertReducer
-
   },
 });

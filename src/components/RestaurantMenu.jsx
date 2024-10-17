@@ -24,6 +24,8 @@ import {
 import { GiHotMeal } from "react-icons/gi";
 import { TbSalad } from "react-icons/tb";
 import MenuItemCard from "./MenuItemCard";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
 
 const url = import.meta.env.VITE_LOCAL_BACK_END_URL;
 
@@ -105,23 +107,29 @@ const RestaurantMenu = () => {
             filteredItems={filteredItems}
             setFilteredItems={setFilteredItems}
           />
-          <div className="w-full flex items-center gap-1 p-4">
-            {categories.map((category, index) => {
-              return (
-                <Chip
-                  key={index}
-                  label={category.name}
-                  onClick={() => {
-                    handleSelect(category.name);
-                  }}
-                  className={
-                    selectedCat.includes(category.name)
-                      ? `!bg-green-700 !text-background transition-colors duration-100`
-                      : "!text-primary transition-colors duration-100"
-                  }
-                />
-              );
-            })}
+          <div className="w-full flex items-center py-4">
+            <Swiper
+              spaceBetween={4}
+              slidesPerView="auto"
+            >
+              {categories.map((category, index) => {
+                return (
+                  <SwiperSlide key={index} style={{width: "fit-content"}}>
+                    <Chip
+                      label={category.name}
+                      onClick={() => {
+                        handleSelect(category.name);
+                      }}
+                      className={
+                        selectedCat.includes(category.name)
+                          ? `!bg-green-700 !text-background transition-colors duration-100`
+                          : "!text-primary transition-colors duration-100"
+                      }
+                    />
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
           </div>
           <section>
             <div className="w-full">

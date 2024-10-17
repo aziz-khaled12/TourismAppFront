@@ -107,7 +107,7 @@ const Home = () => {
           <img src={backgroundThing} alt="thing" className="w-full h-full" />
         </div>
 
-        <div className="relative mb-7 sm:hidden h-[50vh] w-full overflow-hidden ">
+        <div className="relative mb-7 sm:hidden h-[43vh] w-full overflow-hidden ">
           <img src={discoverImage} alt="discover" className="w-full h-full" />
           <div className="text-3xl absolute left-6 z-10 font-[600] top-20 text-white">
             Discover
@@ -153,9 +153,7 @@ const Home = () => {
               <Swiper
                 spaceBetween={30}
                 slidesPerView={2}
-                pagination={{
-                  dynamicBullets: true,
-                }}
+              
                 modules={[Pagination]}
                 breakpoints={{
                   640: {
@@ -232,9 +230,7 @@ const Home = () => {
             </div>
             <div className="flex w-full">
               <Swiper
-                pagination={{
-                  dynamicBullets: true,
-                }}
+                
                 modules={[Pagination]}
                 breakpoints={{
                   640: {
@@ -248,7 +244,7 @@ const Home = () => {
                   },
                 }}
                 spaceBetween={20}
-                slidesPerView={1.5}
+                slidesPerView={1.2}
               >
                 {images.map((image, index) => (
                   <SwiperSlide key={index}>

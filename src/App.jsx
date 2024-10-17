@@ -21,6 +21,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import RestaurantDashboard2 from "./components/RestaurantDashboard2";
 import AppBar from "./components/AppBar";
 import RestaurantMenu from "./components/RestaurantMenu";
+import Places from "./components/Places";
 
 // Create a theme with custom breakpoints
 const theme = createTheme({
@@ -35,8 +36,6 @@ const theme = createTheme({
     },
   },
 });
-
-
 
 function App() {
   const pathsWithoutBar = [
@@ -87,6 +86,7 @@ function App() {
               }
             />
             <Route path="/hotels/dashboard" element={<HotelDashboard />} />
+            
             <Route path="/restaurants" element={<RestaurantSearch />} />
             <Route
               path="/restaurants/admin"
@@ -104,6 +104,7 @@ function App() {
               path="/restaurants/:wilaya/:id/menu"
               element={<RestaurantMenu />}
             />
+            <Route path="/places" element={<Places />}></Route>
             <Route path="/map" element={<MapComponent />} />
             <Route path="/test" element={<SwipeableTemporaryDrawer />} />
           </Route>

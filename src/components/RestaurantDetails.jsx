@@ -217,9 +217,9 @@ const RestaurantDetails = () => {
               {menuItems.map((menuItem, index) => {
                 return (
                   <SwiperSlide key={index}>
-                    <MenuItemCard menuItem={menuItem} />;
+                    <MenuItemCard menuItem={menuItem} />
                   </SwiperSlide>
-                );
+                )
               })}
             </Swiper>
           </div>

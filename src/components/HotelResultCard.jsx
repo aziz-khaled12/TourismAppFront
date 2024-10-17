@@ -126,7 +126,6 @@ const HotelResultCard = ({ data, wilaya, rooms, people, date, liked }) => {
               <h4 className="my-1 font-[600] text-xl">{name}</h4>
 
               <h1 className="my-1 font-[500] opacity-50 text-base">
-                {" "}
                 {address}
               </h1>
               <div className="flex justify-between items-center">
