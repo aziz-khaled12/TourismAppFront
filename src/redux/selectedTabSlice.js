@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  selected: "Home",
+  tab: "Home",       // Default tab
+  wilaya: "Guelma",        // Default wilaya (could be set to a specific wilaya or empty string)
 };
 
 const selectedTabSlice = createSlice({
@@ -9,10 +10,13 @@ const selectedTabSlice = createSlice({
   initialState,
   reducers: {
     setSelectedTab: (state, action) => {
-      state.selected = action.payload;
+      state.tab = action.payload;
+    },
+    setWilaya: (state, action) => {
+      state.wilaya = action.payload;
     },
   },
 });
 
-export const { setSelectedTab } = selectedTabSlice.actions;
+export const { setSelectedTab, setWilaya } = selectedTabSlice.actions;
 export default selectedTabSlice.reducer;

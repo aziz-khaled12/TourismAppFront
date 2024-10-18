@@ -1,29 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  InputAdornment,
-  TextField,
-} from "@mui/material";
-import { HiOutlineLocationMarker } from "react-icons/hi";
-import { useNavigate } from "react-router-dom";
-import { GetWilayas } from "../datafetch/hotels";
 import { useAuth } from "../context/AuthContext";
-import { styled } from "@mui/material/styles";
+import { GetWilayas } from "../datafetch/hotels";
+import { InputAdornment, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField } from "@mui/material";
 import { CiSearch } from "react-icons/ci";
+import { HiOutlineLocationMarker } from "react-icons/hi";
 
-const HotelSearchBox = () => {
+const WilayaSearchBox = ({ handleResultClick }) => {
   const [query, setQuery] = useState("");
   const [wilayas, setWilayas] = useState();
   const [results, setResults] = useState([]);
   const debounceTimeoutRef = useRef(null);
   const { accessToken } = useAuth();
   const [notFound, setNotFound] = useState(false);
-  const navigate = useNavigate();
-
 
   useEffect(() => {
     const fetchWilayas = async () => {
@@ -67,12 +55,6 @@ const HotelSearchBox = () => {
     }
   }, [query, wilayas]);
 
-  const handleResultClick = (wilaya) => {
-    console.log("selected wilaya: ", wilaya);
-    navigate(`/hotels/${wilaya}`);
-    setResults([]);
-  };
-
   useEffect(() => {
     if (results.length > 0 || query.length === 0) {
       setNotFound(false);
@@ -88,7 +70,6 @@ const HotelSearchBox = () => {
     }
   };
 
-
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -96,19 +77,18 @@ const HotelSearchBox = () => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log(results);
-  }, [results]);
-
   return (
-    <div ref={containerRef} className="w-full h-full flex justify-center relative">
+    <div
+      ref={containerRef}
+      className="w-full h-full flex justify-center relative"
+    >
       <div className="w-full flex justify-between items-center relative">
         <TextField
           id="outlined-search"
           type="search"
           fullWidth
           value={query}
-          autoComplete="off" 
+          autoComplete="off"
           className="!relative !bg-gray-50"
           InputProps={{
             startAdornment: (
@@ -134,12 +114,19 @@ const HotelSearchBox = () => {
             },
           }}
         />
-
       </div>
 
       {results.length > 0 && (
         <List
-          sx={{ width: "100%", backgroundColor: "#e0e0e0", border: "solid 1px #15803d", top: "120%", position: "absolute", zIndex: "10", borderRadius: "10px"}}
+          sx={{
+            width: "100%",
+            backgroundColor: "#e0e0e0",
+            border: "solid 1px #15803d",
+            top: "120%",
+            position: "absolute",
+            zIndex: "10",
+            borderRadius: "10px",
+          }}
         >
           {results.map((result, index) => (
             <ListItemButton
@@ -161,8 +148,15 @@ const HotelSearchBox = () => {
 
       {notFound && (
         <List
-        sx={{ width: "100%", backgroundColor: "#e0e0e0", border: "solid 1px #15803d", top: "120%", position: "absolute", zIndex: "10", borderRadius: "10px"}}
-
+          sx={{
+            width: "100%",
+            backgroundColor: "#e0e0e0",
+            border: "solid 1px #15803d",
+            top: "120%",
+            position: "absolute",
+            zIndex: "10",
+            borderRadius: "10px",
+          }}
         >
           <ListItem>
             <ListItemText
@@ -175,4 +169,4 @@ const HotelSearchBox = () => {
   );
 };
 
-export default HotelSearchBox;
+export default WilayaSearchBox;

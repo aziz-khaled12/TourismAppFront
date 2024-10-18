@@ -24,9 +24,11 @@ import { Pagination } from "swiper/modules";
 import homeImage from "../assets/attractionAlgeria.jpg";
 import "swiper/css/pagination";
 import Navbar from "./Navbar";
+import { GetWilayaBestPlaces } from "../datafetch/locations";
+import { useSelector } from "react-redux";
 const Home = () => {
   const navigate = useNavigate();
-  const images = [1, 2, 4, 5, 6, 7, 8, 9, 0, 0];
+  const [places, setPlaces] = useState([]);
   const services = [
     {
       id: 0,
@@ -67,9 +69,22 @@ const Home = () => {
       image: attractionImage,
     },
   ];
+
   const [selected, setSelected] = useState();
   const [loading, setLoading] = useState(true);
   const { accessToken, user } = useAuth();
+  const wilaya = useSelector((state) => state.selectedTab.wilaya);
+
+  useEffect(() => {
+    const fetchBestPlaces = () => {
+      GetWilayaBestPlaces(setPlaces, wilaya, accessToken, 5);
+    };
+    fetchBestPlaces();
+  }, [wilaya]);
+
+  useEffect(() => {
+    console.log(places);
+  }, [places]);
 
   const handleHover = (name) => {
     setSelected(name);
@@ -84,7 +99,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (accessToken && user) {
+    if (accessToken && user && places.length > 0) {
       setLoading(false);
     }
   });
@@ -136,7 +151,6 @@ const Home = () => {
           </div>
 
           <div className="w-full h-screen bg-black opacity-40 absolute top-0 left-0"></div> */}
-
         </div>
 
         <section className="w-full h-fit relative z-50">
@@ -153,7 +167,6 @@ const Home = () => {
               <Swiper
                 spaceBetween={30}
                 slidesPerView={2}
-              
                 modules={[Pagination]}
                 breakpoints={{
                   640: {
@@ -212,8 +225,6 @@ const Home = () => {
               </Swiper>
             </div>
           </div>
-
-        
         </section>
         <section className="w-full flex justify-center p-2 my-10">
           <div className="w-full flex  flex-col justify-center">
@@ -225,12 +236,16 @@ const Home = () => {
                 Explore Nearby Locations
               </h1>
             </div>
-            <div className="sm:hidden block text-start text-xl mb-5 font-medium text-primary">
-              Trending Location
+            <div className="flex items-center justify-between mb-5 ">
+              <div className="sm:hidden block text-start text-xl font-medium text-primary">
+                Trending Location
+              </div>
+              <div className="font-normal text-xs text-lightText underline" onClick={() => {navigate(`/places`)}}>
+                See More
+              </div>
             </div>
             <div className="flex w-full">
               <Swiper
-                
                 modules={[Pagination]}
                 breakpoints={{
                   640: {
@@ -246,11 +261,14 @@ const Home = () => {
                 spaceBetween={20}
                 slidesPerView={1.2}
               >
-                {images.map((image, index) => (
-                  <SwiperSlide key={index}>
-                    <LocationCard></LocationCard>
-                  </SwiperSlide>
-                ))}
+                {places.length > 0 &&
+                  places.map((place, index) => {
+                    return (
+                      <SwiperSlide key={index}>
+                        <LocationCard data={place} />
+                      </SwiperSlide>
+                    );
+                  })}
               </Swiper>
             </div>
           </div>

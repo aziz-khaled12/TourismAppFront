@@ -1,19 +1,68 @@
-import React from 'react'
-import Header from './Header'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import Header from "./Header";
+import { useNavigate } from "react-router-dom";
+import LocationCard from "./LocationCard";
+import { useSelector } from "react-redux";
+import { Grid } from "@mui/material";
+import { GetWilayaPlaces } from "../datafetch/locations";
+import { useAuth } from "../context/AuthContext";
+import { OneEightyRingWithBg } from "react-svg-spinners";
 
 const Places = () => {
-    const navigate = useNavigate()
+  const [places, setPlaces] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const wilaya = useSelector((state) => state.selectedTab.wilaya);
+  const { accessToken } = useAuth();
 
-    const handleBack = () => {
-        navigate(-1)
-    } 
-  return (
-    <div className='w-full min-h-screen'>
-        <Header title={"Places"} handleBack={handleBack} map={true}></Header>
+  const handleBack = () => {
+    navigate(-1);
+  };
 
+  useEffect(() => {
+    const fetchWilayaPlaces = async () => {
+      GetWilayaPlaces(setPlaces, wilaya, accessToken);
+    };
+    fetchWilayaPlaces();
+  }, [wilaya]);
+
+  useEffect(() => {
+    if (places.length > 0) {
+      setLoading(false);
+    }
+  });
+
+  return loading ? (
+    <>
+      <div className="w-full min-h-screen flex items-center justify-center flex-col m-auto">
+        <OneEightyRingWithBg className="!text-primary" />
+      </div>
+    </>
+  ) : (
+    <div className="w-full min-h-screen">
+      <Header title={`Places in ${wilaya}`} handleBack={handleBack} map={true}></Header>
+      <section className="w-full p-4">
+        {places.length > 0 ? (
+          <Grid container spacing={2}>
+            {places.map((place, index) => (
+              <Grid item key={index} xs={12} custom={6} lg={4}>
+                <LocationCard data={place} />
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <div className="w-full h-[60vh] flex flex-col items-center justify-center">
+            <p className="font-bold text-3xl text-center p-4 mb-8">
+              we could not find any places in {wilaya}
+            </p>
+            <p className="text-xl font-[400]">
+              try searching for something else
+            </p>
+          </div>
+        )}
+      </section>
     </div>
-  )
-}
+  );
+};
 
-export default Places
+export default Places;

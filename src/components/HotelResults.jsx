@@ -27,7 +27,7 @@ import Header from "./Header";
 
 const HotelResults = () => {
   const { accessToken, user } = useAuth();
-  const { wilaya } = useParams();
+  const wilaya = useSelector((state) => state.selectedTab.wilaya);
   const navigate = useNavigate();
   const [hotels, setHotels] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -88,7 +88,7 @@ const HotelResults = () => {
   }, [accessToken, wilaya]);
 
   const handleBack = () => {
-    navigate("/hotels");
+    navigate(-1);
   };
 
   const toggleDrawer = (newOpen, option) => () => {

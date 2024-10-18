@@ -5,26 +5,19 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { Button, IconButton, Rating } from "@mui/material";
 import { OneEightyRingWithBg } from "react-svg-spinners";
 import TruncateMarkup from "react-truncate-markup";
+import { useNavigate } from "react-router-dom";
 
-const LocationCard = () => {
-  const data = {
-    name: "Hammam Dabbagh (Masakhit)",
-    id: 1,
-    lat: 36.4599,
-    lon: 7.4437,
-    rating: 4,
-    address: {
-      tourism: "Hammam Dabbagh",
-      city: "Guelma",
-      state: "Guelma",
-      country: "Algeria",
-      country_code: "dz",
-    },
-  };
-
+const LocationCard = ({ data }) => {
+  
+  const navigate = useNavigate();
+  console.log(data)
   const [loading, setLoading] = useState(true);
   const liked = false;
-  const { rating, name, address, id } = data;
+  const { rating, name, state, id } = data;
+
+  const handleDetails = () => {
+    navigate(`/places/${id}`);
+  };
 
   const handleImageLoad = () => {
     setLoading(false);
@@ -61,7 +54,7 @@ const LocationCard = () => {
                   <h4 className="my-1 font-semibold text-lg">{name}</h4>
                 </TruncateMarkup>
                 <h1 className="my-1 font-medium opacity-50 text-base">
-                  {address.city}
+                  {state}
                 </h1>
                 <div className="flex justify-between items-center">
                   <div className="my-2 text-base flex items-center gap-1">
@@ -72,7 +65,12 @@ const LocationCard = () => {
                       readOnly
                     />
                   </div>
-                  <Button variant="contained" className={"!bg-green-700"} sx={{textTransform: "none"}}>
+                  <Button
+                    variant="contained"
+                    onClick={handleDetails}
+                    className={"!bg-green-700"}
+                    sx={{ textTransform: "none" }}
+                  >
                     See Details
                   </Button>
                 </div>

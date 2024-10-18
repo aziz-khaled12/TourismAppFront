@@ -1,5 +1,5 @@
 import { IconButton } from "@mui/material";
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import {
   RiBuildingLine,
   RiCarFill,
@@ -14,18 +14,23 @@ import {
 import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedTab } from "../redux/selectedTabSlice"; // Adjust the path accordingly
+import WilayaDrawer from "./WilayaDrawer";
 
 const AppBar = () => {
   const dispatch = useDispatch();
-  const selected = useSelector((state) => state.selectedTab.selected);
+  const [open, setOpen] = useState(false);
+  const selected = useSelector((state) => state.selectedTab.tab);
   const location = useLocation(); // Get the current location (route)
-  const [linePosition, setLinePosition] = React.useState(0);
-  const containerRef = useRef(null);
   const navigate = useNavigate();
+  const wilaya = useSelector((state) => state.selectedTab.wilaya);
 
-  useEffect(() => {
-    console.log(selected);
-  }, [selected]);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const services = [
     {
@@ -40,30 +45,30 @@ const AppBar = () => {
       icon: <RiHotelLine className="text-2xl" />,
       selectedIcon: <RiHotelFill className="text-2xl" />,
       name: "Hotels",
-      link: "/hotels",
+      link: `/hotels/${wilaya}`,
     },
     {
       id: 2,
       icon: <RiRestaurantLine className="text-2xl" />,
       selectedIcon: <RiRestaurantFill className="text-2xl" />,
       name: "Restaurants",
-      link: "/restaurants",
+      link: `/restaurants/${wilaya}`,
     },
+    // {
+    //   id: 3,
+    //   icon: <RiCarLine className="text-2xl" />,
+    //   selectedIcon: <RiCarFill className="text-2xl" />,
+    //   name: "Cars",
+    //   link: "/cars", // Add link for the Cars page if needed
+    // },
     {
-      id: 3,
-      icon: <RiCarLine className="text-2xl" />,
-      selectedIcon: <RiCarFill className="text-2xl" />,
-      name: "Cars",
-      link: "/cars", // Add link for the Cars page if needed
-    },  
-    {
-        id: 4,
-        icon: <RiBuildingLine className="text-2xl" />,
-        selectedIcon: <RiBuildingLine className="text-2xl" />,
-        name: "Places",
-        link: "/places", 
-        desc: "Find and explore local attractions easily with our interactive map and search feature, helping you discover popular spots and points of interest.",
-      },
+      id: 4,
+      icon: <RiBuildingLine className="text-2xl" />,
+      selectedIcon: <RiBuildingLine className="text-2xl" />,
+      name: "Places",
+      link: "/places",
+      desc: "Find and explore local attractions easily with our interactive map and search feature, helping you discover popular spots and points of interest.",
+    },
   ];
 
   // Update the selected tab based on the current route
@@ -83,59 +88,74 @@ const AppBar = () => {
     }
   }, [location.pathname, dispatch, selected, services]);
 
-  const handleSelect = (selected, link) => {
+  const handleSelect = (link) => {
     navigate(link); // Navigate to the link
   };
 
-  // Calculate the position of the selected button
-  useEffect(() => {
-    const selectedButton = containerRef.current?.querySelector(
-      `[data-name="${selected}"]`
-    );
-    if (selectedButton) {
-      const buttonRect = selectedButton.getBoundingClientRect();
-      const containerRect = containerRef.current.getBoundingClientRect();
-      setLinePosition(
-        buttonRect.left - containerRect.left + buttonRect.width / 2
-      );
-    }
-  }, [selected]);
+  const firstTwoServices = services.slice(0, 2); // First two services
+  const lastTwoServices = services.slice(2); // Last two services
 
   return (
     <>
-    <div className="w-full h-[100px] mt-2 bg-background"></div>
-    <div className="fixed bottom-0 w-full p-4 shadow-lg bg-background z-1000 sm:hidden ">
-      <div
-        className="w-full flex gap-2 items-start justify-around sm:hidden relative"
-        ref={containerRef}
-      >
-        {services.map((service) => (
-          <div
-            key={service.id}
-            className="flex flex-col items-center justify-center relative "
-            onClick={() => handleSelect(service.name, service.link)}
-            data-name={service.name}
-          >
-            <IconButton
-              className={`!p-2 !font-semibold ${
-                selected === service.name
-                  ? `!text-green-700`
-                  : `!text-[#c3c3c3]`
-              }`}
+      <div className="w-full h-[100px] mt-2 bg-background"></div>
+      <div className="fixed bottom-0 w-full shadow-lg bg-background z-1000 sm:hidden ">
+        <div className="w-full flex gap-2 items-center justify-around sm:hidden relative">
+          {firstTwoServices.map((service) => (
+            <div
+              key={service.id}
+              className="flex items-center justify-center relative "
+              onClick={() => handleSelect(service.link)}
             >
-              {selected === service.name ? service.selectedIcon : service.icon}
-            </IconButton>
+              <IconButton
+                className={`!p-2 !font-semibold ${
+                  selected === service.name
+                    ? `!text-green-700`
+                    : `!text-[#c3c3c3]`
+                }`}
+              >
+                {selected === service.name
+                  ? service.selectedIcon
+                  : service.icon}
+              </IconButton>
+            </div>
+          ))}
+
+          <div className="flex justify-center my-4">
+            <button
+              className="bg-green-700 text-white w-[165px] px-4 py-2 rounded"
+              onClick={handleOpen}
+            >
+              {wilaya}
+            </button>
           </div>
-        ))}
-        <div
-          className="absolute left-0 bottom-0 h-1 bg-green-700 transition-all duration-300"
-          style={{
-            width: "15px", // Width of the line
-            transform: `translateX(${linePosition - 7}px)`, // Centering the line under the selected button
-          }}
-        />
+
+          {lastTwoServices.map((service) => (
+            <div
+              key={service.id}
+              className="flex items-center justify-center relative "
+              onClick={() => handleSelect(service.link)}
+            >
+              <IconButton
+                className={`!p-2 !font-semibold ${
+                  selected === service.name
+                    ? `!text-green-700`
+                    : `!text-[#c3c3c3]`
+                }`}
+              >
+                {selected === service.name
+                  ? service.selectedIcon
+                  : service.icon}
+              </IconButton>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+
+      <WilayaDrawer
+        open={open}
+        handleClose={handleClose}
+        handleOpen={handleOpen}
+      />
     </>
   );
 };

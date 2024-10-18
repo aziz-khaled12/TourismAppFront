@@ -10,10 +10,11 @@ import { GetWilayaRestaurants } from "../datafetch/restaurants";
 import RestaurantCard from "./RestaurantCard";
 import { OneEightyRingWithBg } from "react-svg-spinners";
 import Header from "./Header";
+import { useSelector } from "react-redux";
 
 const RestaurantResults = () => {
   const { accessToken } = useAuth();
-  const { wilaya } = useParams();
+  const wilaya = useSelector((state) => state.selectedTab.wilaya);
   const navigate = useNavigate();
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +23,7 @@ const RestaurantResults = () => {
   }, [accessToken, wilaya]);
 
   const handleBack = () => {
-    navigate("/restaurants");
+    navigate(-1);
   };
 
   useEffect(() => {

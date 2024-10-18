@@ -137,13 +137,13 @@ const BookingDrawer = ({
 
   const handleSuccess = () => {
     dispatch(
-      showAlert({ message: "Room Added Successfuly", severity: "success" })
+      showAlert({ message: "Room Booked Successfuly", severity: "success" })
     );
   };
 
   const handleError = () => {
     dispatch(
-      showAlert({ message: "Error Adding the Room", severity: "error" })
+      showAlert({ message: "Error Booking the Room", severity: "error" })
     );
   };
 

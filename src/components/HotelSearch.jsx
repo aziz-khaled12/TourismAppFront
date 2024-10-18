@@ -10,8 +10,6 @@ import {
   ListItemText,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { SlArrowLeft } from "react-icons/sl";
-import { CiMap } from "react-icons/ci";
 import Header from "./Header";
 
 const popularLocations = [
