@@ -6,9 +6,11 @@ import { FaApple, FaFacebook, FaGoogle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { OneEightyRingWithBg } from "react-svg-spinners";
 
 const Login = () => {
   const { login, accessToken, user } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -48,7 +50,14 @@ const Login = () => {
     }
 
     if (isValid) {
-      await login(formData.email, formData.password, setError, setIsLogged);
+      setLoading(true);
+      await login(
+        formData.email,
+        formData.password,
+        setError,
+        setIsLogged,
+        setLoading
+      );
     }
   };
 
@@ -56,12 +65,11 @@ const Login = () => {
     if (isLogged) {
       navigate("/");
     }
-  });
+  }, [isLogged]);
 
   useEffect(() => {
-    console.log('import.meta.env:', import.meta.env);
+    console.log("import.meta.env:", import.meta.env);
   }, []);
-  
 
   return (
     <>
@@ -123,7 +131,11 @@ const Login = () => {
                 variant="contained"
                 className="!bg-primary !rounded-lg !p-4 w-full"
               >
-                Continue
+                {loading ? (
+                  <OneEightyRingWithBg color="white" />
+                ) : (
+                  "Continue"
+                )}
               </Button>
 
               <div className="flex w-full justify-between items-center my-4">

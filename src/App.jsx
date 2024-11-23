@@ -23,6 +23,9 @@ import AppBar from "./components/AppBar";
 import RestaurantMenu from "./components/RestaurantMenu";
 import Places from "./components/Places";
 import PlaceDetails from "./components/PlaceDetails";
+import CarBooking from "./components/CarBooking";
+import SignupRole from "./components/SignupRole";
+import RoleForm from "./components/RoleForm";
 
 // Create a theme with custom breakpoints
 const theme = createTheme({
@@ -41,11 +44,13 @@ const theme = createTheme({
 function App() {
   const pathsWithoutBar = [
     "/map",
+    "/map/cars",
     "/restaurants/:wilaya/:id",
     "/hotels/:wilaya/:id",
     "/restaurants/:wilaya/:id/menu",
     "/hotels/:wilaya/:id/rooms",
     "/places/:id",
+    "/signup/:role",
   ];
   const { verifyToken, isAuthenticated, accessToken } = useAuth();
   const { pathname } = useLocation();
@@ -72,10 +77,10 @@ function App() {
         <AlertMessage />
         <Routes>
           <Route path="/signup" element={<Signup />} />
+          <Route path="/signup/:role" element={<SignupRole />} />
           <Route path="/login" element={<Login />} />
           <Route element={<PortectedRoutes />}>
             <Route path="/" element={<Home />} />
-            <Route path="/test" element={<RestaurantDashboard2 />} />
             <Route path="/hotels" element={<HotelSearch />} />
             <Route path="/hotels/:wilaya" element={<HotelResults />} />
             <Route path="/hotels/:wilaya/:id" element={<HotelDetails />} />
@@ -109,8 +114,11 @@ function App() {
             <Route path="/places" element={<Places />}></Route>
             <Route path="/places/:id" element={<PlaceDetails />}></Route>
             <Route path="/map" element={<MapComponent />} />
-            <Route path="/test" element={<SwipeableTemporaryDrawer />} />
-          </Route>
+            <Route path="/map/cars" element={<CarBooking />} />
+          </Route>            
+          <Route path="/test" element={<SwipeableTemporaryDrawer />} />
+          <Route path="/test2" element={<RoleForm />} />
+
         </Routes>
         {isAuthenticated && !isPathWithoutBar && <AppBar />}
       </div>

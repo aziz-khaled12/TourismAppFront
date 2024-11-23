@@ -122,7 +122,7 @@ const Home = () => {
           <img src={backgroundThing} alt="thing" className="w-full h-full" />
         </div>
 
-        <div className="relative mb-7 sm:hidden h-[43vh] w-full overflow-hidden ">
+        <div className="relative mb-7 sm:hidden h-[40vh] w-full overflow-hidden ">
           <img src={discoverImage} alt="discover" className="w-full h-full" />
           <div className="text-3xl absolute left-6 z-10 font-[600] top-20 text-white">
             Discover
@@ -226,7 +226,7 @@ const Home = () => {
             </div>
           </div>
         </section>
-        <section className="w-full flex justify-center p-2 my-10">
+        <section className="w-full flex justify-center p-2 sm:my-10">
           <div className="w-full flex  flex-col justify-center">
             <div className="text-start hidden sm:block">
               <p className="font-medium text-base tracking-widest text-green-700 mb-2">
@@ -236,11 +236,16 @@ const Home = () => {
                 Explore Nearby Locations
               </h1>
             </div>
-            <div className="flex items-center justify-between mb-5 ">
-              <div className="sm:hidden block text-start text-xl font-medium text-primary">
+            <div className="flex sm:hidden items-center justify-between mb-5 ">
+              <div className="text-start text-xl font-medium text-primary">
                 Trending Location
               </div>
-              <div className="font-normal text-xs text-lightText underline" onClick={() => {navigate(`/places`)}}>
+              <div
+                className="font-normal text-xs text-lightText underline"
+                onClick={() => {
+                  navigate(`/places`);
+                }}
+              >
                 See More
               </div>
             </div>

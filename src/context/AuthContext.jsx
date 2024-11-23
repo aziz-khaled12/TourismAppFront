@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (email, password, setError, setIsLogged) => {
+  const login = async (email, password, setError, setIsLogged, setLoading) => {
     try {
       const res = await axios.post(`${url}/auth/login`, {
         email,
@@ -92,6 +92,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem("token", token);
         localStorage.setItem("isLogged", true);
 
+
         setIsAuthenticated(true);
         setAccessToken(token);
         setIsLogged(true);
@@ -107,6 +108,7 @@ export const AuthProvider = ({ children }) => {
         setError("Something went wrong");
       }
     }
+    setLoading(false);
   };
 
   const signup = async (
@@ -127,11 +129,13 @@ export const AuthProvider = ({ children }) => {
 
       if (response.status && response.status == 200) {
         console.log(response);
-        const token = response.data;
+        const token = response.data.token;
         const decodedToken = jwtDecode(token);
         const user = decodedToken.user_data;
 
-        localStorage.setItem("user", user);
+        localStorage.setItem("user", JSON.stringify(user));
+
+
         localStorage.setItem("token", token);
         localStorage.setItem("isLogged", true);
 
@@ -148,12 +152,18 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    setUser(null);
+
+    try {
+     setUser(null);
     setIsAuthenticated(false);
     localStorage.removeItem("token");
+    localStorage.removeItem("isLogged");
     localStorage.removeItem("user");
-    localStorage.removeItem("employer");
     localStorage.removeItem("isAuthenticated");
+    } catch (error) {
+      console.log(error)
+    }
+  
   };
 
   return (

@@ -34,8 +34,7 @@ const MapComponent = () => {
   const [route, setRoute] = useState([]); // Route state for directions
 
   const fetchDirections = async (start, end) => {
-    const accessToken = mapBoxToken;
-    const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start[1]},${start[0]};${end[1]},${end[0]}?geometries=geojson&overview=full&access_token=${accessToken}`;
+    const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start[1]},${start[0]};${end[1]},${end[0]}?geometries=geojson&overview=full&access_token=${mapBoxToken}`;
 
     try {
       const response = await axios.get(url);
@@ -136,7 +135,7 @@ const MapComponent = () => {
             <Polyline
               positions={route}
               color="blue"
-              weight={8}
+              weight={6}
               opacity={0.7}
             />{" "}
             <Marker position={[destinationLat, destinationLon]}/>

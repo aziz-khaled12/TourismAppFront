@@ -84,7 +84,7 @@ const WilayaDrawer = ({ open, handleOpen, handleClose }) => {
         <Stack spacing={4} sx={{ width: "100%", padding: "16px" }}>
           <WilayaSearchBox handleResultClick={handleResultClick} />
           <div className="w-full mt-8">
-            <div className="text-base mb-5 font-medium">
+            <div className="text-sm mb-5 font-medium">
               Popular destinations
             </div>
             <List
@@ -108,7 +108,7 @@ const WilayaDrawer = ({ open, handleOpen, handleClose }) => {
                     <ListItemText
                       className="!py-2 "
                       primary={
-                        <span className="text-lg font-medium">
+                        <span className="text-base font-medium">
                           {location.name}
                         </span>
                       }
@@ -125,7 +125,7 @@ const WilayaDrawer = ({ open, handleOpen, handleClose }) => {
               sx={{
                 borderRadius: "6px",
                 padding: "10px",
-                fontSize: "18px",
+                fontSize: "16px",
                 fontWeight: "500",
                 textTransform: "none",
                 backgroundColor: "#15803d",

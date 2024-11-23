@@ -20,7 +20,7 @@ import { OneEightyRingWithBg } from "react-svg-spinners";
 const Signup = () => {
 
   const navigate = useNavigate()
-  const { signup } = useAuth();
+  const { signup,isAuthenticated } = useAuth();
   const [formData, setFormData] = useState({
     userName: "",
     email: "",
@@ -102,13 +102,19 @@ const Signup = () => {
       console.log(roles);
       setLoading(false);
     }
-  });
+  }, [roles]);
 
   useEffect(() => {
     if (isLogged) {
-      navigate("/");
+      navigate(`/signup/${roles[formData.role - 1].role_name}`);
     }
   }, [isLogged]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, []);
 
   return loading ? (
     <>
@@ -226,7 +232,7 @@ const Signup = () => {
               variant="contained"
               className="!bg-primary !rounded-lg !p-4 w-full !normal-case"
             >
-              GET STARTED
+              CONTINUE
             </Button>
 
             <div className="flex w-full justify-between items-center my-4">
@@ -257,7 +263,7 @@ const Signup = () => {
                 variant="contained"
                 className="!bg-white !text-primary !rounded-lg !p-3 !mb-4 w-full !normal-case"
               >
-                <FaApple className="absolute left-5 text-xl" />
+                <FaApple className="absolute left-5 text-xl"/>
                 Sign up with Apple
               </Button>
             </div>

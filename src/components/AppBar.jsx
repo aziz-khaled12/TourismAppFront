@@ -35,36 +35,36 @@ const AppBar = () => {
   const services = [
     {
       id: 0,
-      icon: <RiHome5Line className="text-2xl" />,
-      selectedIcon: <RiHome5Fill className="text-2xl" />,
+      icon: <RiHome5Line className="text-xl" />,
+      selectedIcon: <RiHome5Fill className="text-xl" />,
       name: "Home",
       link: "/",
     },
     {
       id: 1,
-      icon: <RiHotelLine className="text-2xl" />,
-      selectedIcon: <RiHotelFill className="text-2xl" />,
+      icon: <RiHotelLine className="text-xl" />,
+      selectedIcon: <RiHotelFill className="text-xl" />,
       name: "Hotels",
       link: `/hotels/${wilaya}`,
     },
     {
       id: 2,
-      icon: <RiRestaurantLine className="text-2xl" />,
-      selectedIcon: <RiRestaurantFill className="text-2xl" />,
-      name: "Restaurants",
+      icon: <RiRestaurantLine className="text-xl" />,
+      selectedIcon: <RiRestaurantFill className="text-xl" />,
+      name: "Resto",
       link: `/restaurants/${wilaya}`,
     },
     // {
     //   id: 3,
-    //   icon: <RiCarLine className="text-2xl" />,
-    //   selectedIcon: <RiCarFill className="text-2xl" />,
+    //   icon: <RiCarLine className="text-xl" />,
+    //   selectedIcon: <RiCarFill className="text-xl" />,
     //   name: "Cars",
     //   link: "/cars", // Add link for the Cars page if needed
     // },
     {
       id: 4,
-      icon: <RiBuildingLine className="text-2xl" />,
-      selectedIcon: <RiBuildingLine className="text-2xl" />,
+      icon: <RiBuildingLine className="text-xl" />,
+      selectedIcon: <RiBuildingLine className="text-xl" />,
       name: "Places",
       link: "/places",
       desc: "Find and explore local attractions easily with our interactive map and search feature, helping you discover popular spots and points of interest.",
@@ -86,7 +86,7 @@ const AppBar = () => {
     if (matchedService && matchedService.name !== selected) {
       dispatch(setSelectedTab(matchedService.name));
     }
-  }, [location.pathname, dispatch, selected, services]);
+  }, [dispatch, selected, services]);
 
   const handleSelect = (link) => {
     navigate(link); // Navigate to the link
@@ -103,11 +103,11 @@ const AppBar = () => {
           {firstTwoServices.map((service) => (
             <div
               key={service.id}
-              className="flex items-center justify-center relative "
+              className="flex flex-col items-center justify-center relative "
               onClick={() => handleSelect(service.link)}
             >
               <IconButton
-                className={`!p-2 !font-semibold ${
+                className={`!p-1 !font-semibold ${
                   selected === service.name
                     ? `!text-green-700`
                     : `!text-[#c3c3c3]`
@@ -117,12 +117,24 @@ const AppBar = () => {
                   ? service.selectedIcon
                   : service.icon}
               </IconButton>
+              <div
+                className={`
+                  text-xs
+                  font-semibold
+                  ${
+                  selected === service.name
+                    ? `!text-green-700`
+                    : `!text-[#c3c3c3]`
+                }`}
+              >
+                {service.name}
+              </div>
             </div>
           ))}
 
           <div className="flex justify-center my-4">
             <button
-              className="bg-green-700 text-white w-[165px] px-4 py-2 rounded"
+              className="bg-green-700 text-sm text-white w-[120px] px-2 py-2 rounded"
               onClick={handleOpen}
             >
               {wilaya}
@@ -132,11 +144,11 @@ const AppBar = () => {
           {lastTwoServices.map((service) => (
             <div
               key={service.id}
-              className="flex items-center justify-center relative "
+              className="flex flex-col items-center justify-center relative "
               onClick={() => handleSelect(service.link)}
             >
               <IconButton
-                className={`!p-2 !font-semibold ${
+                className={`!p-1 !font-semibold ${
                   selected === service.name
                     ? `!text-green-700`
                     : `!text-[#c3c3c3]`
@@ -146,6 +158,18 @@ const AppBar = () => {
                   ? service.selectedIcon
                   : service.icon}
               </IconButton>
+              <div
+                className={`
+                  text-xs
+                  font-semibold
+                  ${
+                  selected === service.name
+                    ? `!text-green-700`
+                    : `!text-[#c3c3c3]`
+                }`}
+              >
+                {service.name}
+              </div>
             </div>
           ))}
         </div>

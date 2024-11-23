@@ -169,6 +169,7 @@ const AddRoomModal = ({ open, setOpen, hotel }) => {
                   />
                 </div>
               </div>
+
               <div className="flex flex-col justify-between shadowlg items-start w-full mb-5">
                 <h1 className="text-md font-medium mb-3">Image</h1>
                 <div
@@ -194,7 +195,9 @@ const AddRoomModal = ({ open, setOpen, hotel }) => {
                     <MdCloudUpload className="text-3xl" />
                   )}
                 </div>
-              </div>{" "}
+              </div>
+              {" "}
+
               <Button
                 type="submit"
                 variant="contained"
