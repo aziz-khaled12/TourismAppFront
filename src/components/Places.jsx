@@ -38,7 +38,7 @@ const Places = () => {
     <div className="w-full min-h-screen">
       <section className="w-full p-4">
         {places.length > 0 ? (
-          <Grid container spacing={2}>
+          <Grid container spacing={2} p={2}>
             {places.map((place, index) => (
               <Grid item key={index} xs={12} custom={6} lg={4}>
                 <LocationCard data={place} />

@@ -372,7 +372,7 @@ const HotelResults = () => {
       </SwipeableDrawer>
 
       {hotels.length > 0 ? (
-        <Grid container spacing={2}>
+        <Grid container spacing={2} p={2}>
           {hotels.map((hotel, index) => (
             <Grid item key={index} xs={12} custom={6} lg={4}>
               <HotelResultCard
