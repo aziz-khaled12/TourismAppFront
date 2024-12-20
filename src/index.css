@@ -1,30 +1,31 @@
-@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@300;400;500;700;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Zen+Kaku+Gothic+Antique:wght@300;400;500;700;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@300;400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Zen+Kaku+Gothic+Antique:wght@300;400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-*{
-    /* font-family: "Lato", sans-serif !important; */
-    font-family: "Poppins", sans-serif !important;
-
+* {
+  /* font-family: "Lato", sans-serif !important; */
+  font-family: "Poppins", sans-serif !important;
 }
 
-.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom{
+.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {
   border-radius: 0;
 }
 
-
-
-
 /* Customize the Layer Control container */
 .leaflet-control-layers {
-  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.8
+  ); /* Semi-transparent white background */
   border-radius: 5px; /* Rounded corners */
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Shadow for a 3D effect */
-  font-family: 'Arial', sans-serif; /* Custom font */
+  font-family: "Arial", sans-serif; /* Custom font */
 }
 
 /* Customize the Layer Control toggle button */
@@ -80,73 +81,82 @@
   border-radius: 8px !important;
 } */
 
-.css-sghohy-MuiButtonBase-root-MuiButton-root{
+.css-sghohy-MuiButtonBase-root-MuiButton-root {
   text-transform: none !important;
 }
 
-.z-500{
+.z-500 {
   z-index: 500;
 }
 
 /* MUI Button */
-.css-1fu7jd5-MuiButtonBase-root-MuiButton-root, .css-jt6ki8-MuiButtonBase-root-MuiButton-root{
+.css-1fu7jd5-MuiButtonBase-root-MuiButton-root,
+.css-jt6ki8-MuiButtonBase-root-MuiButton-root {
   text-transform: none !important;
 }
 
-.css-1e6y48t-MuiButtonBase-root-MuiButton-root{
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root {
   text-transform: none !important;
-
 }
-
 
 /* calander in the searchResults component */
-.rdrDateDisplayWrapper{
+.rdrDateDisplayWrapper {
   padding: 16px 16px 0px 16px;
 }
-.rdrDateDisplayWrapper, .rdrCalendarWrapper{
+.rdrDateDisplayWrapper,
+.rdrCalendarWrapper {
   border-radius: 20px;
 }
 
-.rdrDateDisplayWrapper, .rdrCalendarWrapper{
+.rdrDateDisplayWrapper,
+.rdrCalendarWrapper {
   width: 400px;
   height: 450px;
   font-size: 16px;
 }
 
-.rdrDateDisplayItem + .rdrDateDisplayItem, .rdrDateDisplayItemActive{
+.rdrDateDisplayItem + .rdrDateDisplayItem,
+.rdrDateDisplayItemActive {
   border-radius: 14px;
 }
 
-.rdrDateDisplayItem{
+.rdrDateDisplayItem {
   border-radius: 14px;
 }
-.rdrMonths{
+.rdrMonths {
   height: 300px;
 }
 
-.rdrInRange, .rdrStartEdge, .rdrDayEndOfMonth .rdrDayInPreview, .rdrDayEndOfMonth .rdrDayStartPreview, .rdrDayEndOfWeek .rdrDayInPreview, .rdrDayEndOfWeek .rdrDayStartPreview, .rdrDayEndPreview, .rdrEndEdge{
-  color:   #15803D !important;
+.rdrInRange,
+.rdrStartEdge,
+.rdrDayEndOfMonth .rdrDayInPreview,
+.rdrDayEndOfMonth .rdrDayStartPreview,
+.rdrDayEndOfWeek .rdrDayInPreview,
+.rdrDayEndOfWeek .rdrDayStartPreview,
+.rdrDayEndPreview,
+.rdrEndEdge {
+  color: #15803d !important;
 }
 
-.rdrDayToday .rdrDayNumber span:after{
-  color:   #15803D !important;
-  background:   #15803D;
+.rdrDayToday .rdrDayNumber span:after {
+  color: #15803d !important;
+  background: #15803d;
 }
 
-.rdrMonth{
+.rdrMonth {
   width: 100%;
   font-weight: bold;
 }
 
-.rdrDays{
+.rdrDays {
   width: 100%;
 }
 
-.rdrDayNumber span{
+.rdrDayNumber span {
   font-weight: bold;
 }
 
-.rdrWeekDay{
+.rdrWeekDay {
   font-weight: bold;
 }
 
@@ -157,7 +167,7 @@
 /* Custom scrollbar */
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px ;
+  width: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
@@ -203,3 +213,28 @@
 .swiper-wrapper{
   padding-bottom: 40px;
 } */
+
+.fade-container {
+  position: relative;
+}
+
+.fade-container::before,
+.fade-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 60px; /* Adjust fade width */
+  pointer-events: none;
+  z-index: 5;
+}
+
+.fade-container::before {
+  left: 0;
+  background: linear-gradient(to right, #f9f9f9, rgba(255, 255, 255, 0));
+}
+
+.fade-container::after {
+  right: 0;
+  background: linear-gradient(to left, #f9f9f9, rgba(255, 255, 255, 0));
+}

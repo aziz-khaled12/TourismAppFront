@@ -153,17 +153,17 @@ const HotelResults = () => {
 
   return loading ? (
     <>
-      <div className="w-full min-h-screen flex items-center justify-center flex-col m-auto">
+      <div className="w-full h-[80vh] flex items-center justify-center flex-col m-auto">
         <OneEightyRingWithBg className="!text-primary" />
       </div>
     </>
   ) : (
     <div className="w-full flex flex-col justify-start items-center min-h-screen overflow-hidden">
-      <Header
+      {/* <Header
         title={`Hotels in ${wilaya}`}
         handleBack={handleBack}
         map={true}
-      />
+      /> */}
 
       <div className="flex items-center justify-around m-4 w-full">
         <div className="flex w-full ml-4 h-[60px]">

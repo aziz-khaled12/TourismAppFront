@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { SlArrowLeft } from "react-icons/sl";
-import { CiMap } from "react-icons/ci";
-import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "swiper/css";
 import "react-date-range/dist/styles.css"; // main css file
@@ -9,22 +6,18 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import { GetWilayaRestaurants } from "../datafetch/restaurants";
 import RestaurantCard from "./RestaurantCard";
 import { OneEightyRingWithBg } from "react-svg-spinners";
-import Header from "./Header";
 import { useSelector } from "react-redux";
 
 const RestaurantResults = () => {
   const { accessToken } = useAuth();
   const wilaya = useSelector((state) => state.selectedTab.wilaya);
-  const navigate = useNavigate();
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     GetWilayaRestaurants(setRestaurants, wilaya, accessToken);
   }, [accessToken, wilaya]);
 
-  const handleBack = () => {
-    navigate(-1);
-  };
+
 
   useEffect(() => {
     if (restaurants.length > 0) {
@@ -34,17 +27,13 @@ const RestaurantResults = () => {
 
   return loading ? (
     <>
-      <div className="w-full min-h-screen flex items-center justify-center flex-col m-auto">
+      <div className="w-full h-[80vh] flex items-center justify-center flex-col m-auto">
         <OneEightyRingWithBg className="!text-primary" />
       </div>
     </>
   ) : (
     <div className="w-full flex flex-col justify-start items-center min-h-screen overflow-hidden">
-      <Header
-        handleBack={handleBack}
-        title={`Restaurants in ${wilaya}`}
-        map={true}
-      />
+      
 
       {restaurants.length > 0 ? (
         <div className="p-2 mt-4">

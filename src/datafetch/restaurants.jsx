@@ -67,3 +67,15 @@ export const GetMenu = async (id, accessToken, setData) => {
     
   }
 }
+
+export const GetWilayaBestRestaurants = async (setRestaurants, wilaya, token, limit) => {
+  try {
+    const res = await axios.get(`${url}/restaurants/${wilaya}/best?limit=${limit}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setRestaurants(res.data);
+    console.log(res.data);
+  } catch (error) {
+    console.log(error);
+  }
+};

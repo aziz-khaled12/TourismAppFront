@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Header from "./Header";
 import { useNavigate } from "react-router-dom";
 import LocationCard from "./LocationCard";
 import { useSelector } from "react-redux";
@@ -11,13 +10,10 @@ import { OneEightyRingWithBg } from "react-svg-spinners";
 const Places = () => {
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
   const wilaya = useSelector((state) => state.selectedTab.wilaya);
   const { accessToken } = useAuth();
 
-  const handleBack = () => {
-    navigate(-1);
-  };
+
 
   useEffect(() => {
     const fetchWilayaPlaces = async () => {
@@ -34,13 +30,12 @@ const Places = () => {
 
   return loading ? (
     <>
-      <div className="w-full min-h-screen flex items-center justify-center flex-col m-auto">
+      <div className="w-full h-[80vh] flex items-center justify-center flex-col m-auto">
         <OneEightyRingWithBg className="!text-primary" />
       </div>
     </>
   ) : (
     <div className="w-full min-h-screen">
-      <Header title={`Places in ${wilaya}`} handleBack={handleBack} map={true}></Header>
       <section className="w-full p-4">
         {places.length > 0 ? (
           <Grid container spacing={2}>

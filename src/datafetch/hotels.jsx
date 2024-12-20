@@ -67,3 +67,15 @@ export const GetBookings = async (token, hotel_id, setBookings) => {
     console.log(error)
   }
 }
+
+export const GetWilayaBestHotels = async (setHotels, wilaya, token, limit) => {
+  try {
+    const res = await axios.get(`${url}/hotels/${wilaya}/best?limit=${limit}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setHotels(res.data);
+    console.log(res.data);
+  } catch (error) {
+    console.log(error);
+  }
+};

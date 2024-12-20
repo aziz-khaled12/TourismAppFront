@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 const LocationCard = ({ data }) => {
   
   const navigate = useNavigate();
-  console.log(data)
   const [loading, setLoading] = useState(true);
   const liked = false;
   const { rating, name, state, id } = data;
@@ -36,7 +35,7 @@ const LocationCard = ({ data }) => {
               <div className="relative">
                 {loading && (
                   <>
-                    <div className="w-full h-[300px] flex items-center justify-center flex-col m-auto">
+                    <div className="w-full h-[194px] sm:h-[300px] flex items-center justify-center flex-col m-auto">
                       <OneEightyRingWithBg className="!text-primary" />
                     </div>
                   </>

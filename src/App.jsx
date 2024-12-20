@@ -26,6 +26,8 @@ import PlaceDetails from "./components/PlaceDetails";
 import CarBooking from "./components/CarBooking";
 import SignupRole from "./components/SignupRole";
 import RoleForm from "./components/RoleForm";
+import ServicesSwiper from "./components/ServicesSwiper";
+import Navbar from "./components/Navbar";
 
 // Create a theme with custom breakpoints
 const theme = createTheme({
@@ -74,6 +76,8 @@ function App() {
   return (
     <>
       <div className="w-full bg-[#f9f9f9] relative overflow-hidden">
+      {isAuthenticated && !isPathWithoutBar && <Navbar />}
+
         <AlertMessage />
         <Routes>
           <Route path="/signup" element={<Signup />} />
@@ -115,12 +119,10 @@ function App() {
             <Route path="/places/:id" element={<PlaceDetails />}></Route>
             <Route path="/map" element={<MapComponent />} />
             <Route path="/map/cars" element={<CarBooking />} />
-          </Route>            
+          </Route>
           <Route path="/test" element={<SwipeableTemporaryDrawer />} />
           <Route path="/test2" element={<RoleForm />} />
-
         </Routes>
-        {isAuthenticated && !isPathWithoutBar && <AppBar />}
       </div>
     </>
   );
