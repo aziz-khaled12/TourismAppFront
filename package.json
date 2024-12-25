@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "tauri": "tauri",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
@@ -19,6 +20,8 @@
     "@mui/x-data-grid": "^7.12.1",
     "@mui/x-date-pickers": "^7.22.2",
     "@reduxjs/toolkit": "^2.2.7",
+    "@tauri-apps/api": "^2.1.1",
+    "@tauri-apps/cli": "^2.1.0",
     "axios": "^1.7.2",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",

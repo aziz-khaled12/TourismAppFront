@@ -68,11 +68,22 @@
 }
 
 /* Popup  */
+
+.leaflet-popup-content {
+  margin: 0;
+}
+
+.leaflet-popup-content-wrapper{
+  border-radius: 8px;
+}
 .popup-content {
   display: block; /* Ensure the content is displayed */
-  padding: 10px;
   background-color: #fff;
   border: 1px solid #ccc;
+}
+
+.leaflet-popup-close-button{
+  display: none;
 }
 
 /*MUI*/
