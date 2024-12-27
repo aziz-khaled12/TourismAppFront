@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -7,25 +7,27 @@ import {
   Polyline,
 } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
-import "leaflet/dist/leaflet.css";
-import "leaflet-control-geocoder/dist/Control.Geocoder.css";
-import LocateControl from "./LocateControl ";
-import "react-leaflet-markercluster/dist/styles.min.css";
-import HotelCard from "./HotelCard";
-import NominatimSearch from "./NominatimSearch";
-import { GetHotels } from "../../datafetch/hotels";
 import { useAuth } from "../../context/AuthContext";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
 import { useSelector } from "react-redux";
-import Navbar from "../Navigation/Navbar";
 import { GetPlaces } from "../../datafetch/locations";
+import { GetHotels } from "../../datafetch/hotels";
 import { GetRestaurants } from "../../datafetch/restaurants";
+import axios from "axios";
+import NominatimSearch from "./NominatimSearch";
+import LocationCard from "./LocationCard";
+
+import "leaflet/dist/leaflet.css";
+import "leaflet-control-geocoder/dist/Control.Geocoder.css";
+import "react-leaflet-markercluster/dist/styles.min.css";
+import LocateControl from "./LocateControl ";
 
 const mapBoxToken = import.meta.env.VITE_AccessToken;
+const MAPBOX_TILE_URL = `https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=sk.eyJ1Ijoia2hhbGVkYXppejExIiwiYSI6ImNseWhnM3FvNDA0MWgya3F5ZzVsMzRwYWEifQ.rA8VFAxykZnsT2AG1HwpsQ`;
 
 const useQuery = () => {
-  return new URLSearchParams(useLocation().search);
+  const { search } = useLocation();
+  return useMemo(() => new URLSearchParams(search), [search]);
 };
 
 const MapComponent = () => {
@@ -38,161 +40,110 @@ const MapComponent = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [places, setPlaces] = useState([]);
   const { accessToken } = useAuth();
-  const [position, setPosition] = useState(); // Default position
-  const [route, setRoute] = useState([]); // Route state for directions
+  const [position, setPosition] = useState();
+  const [route, setRoute] = useState([]);
 
-  const fetchDirections = async (start, end) => {
-    const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start[1]},${start[0]};${end[1]},${end[0]}?geometries=geojson&overview=full&access_token=${mapBoxToken}`;
-
+  const fetchDirections = useCallback(async (start, end) => {
     try {
+      const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start[1]},${start[0]};${end[1]},${end[0]}?geometries=geojson&overview=full&access_token=${mapBoxToken}`;
       const response = await axios.get(url);
       const routeCoordinates = response.data.routes[0].geometry.coordinates;
-      const latLngs = routeCoordinates.map((coord) => [coord[1], coord[0]]);
-      setRoute(latLngs); // Update route with the polyline coordinates
+      setRoute(routeCoordinates.map((coord) => [coord[1], coord[0]]));
     } catch (error) {
       console.error("Error fetching directions:", error);
     }
-  };
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setPosition([position.coords.latitude, position.coords.longitude]);
-        if (destinationLat && destinationLon) {
-          const destination = [
-            parseFloat(destinationLat),
-            parseFloat(destinationLon),
-          ];
-          fetchDirections(
-            [position.coords.latitude, position.coords.longitude],
-            destination
-          );
-        }
-      },
-      (error) => {
-        console.error("Error getting location:", error);
-      }
-    );
-  }, [destinationLat, destinationLon]);
-
-  const fetchHotels = async () => {
-    await GetHotels(setHotels, accessToken);
-  };
-
-  const fetchPlaces = async () => {
-    await GetPlaces(setPlaces, accessToken);
-  };
-
-  const fetchRestaurants = async () => {
-    await GetRestaurants(setRestaurants, accessToken);
-  };
-
-  useEffect(() => {
-    fetchHotels();
-    fetchPlaces();
-    fetchRestaurants();
   }, []);
 
+  useEffect(() => {
+    const getCurrentPosition = () => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const currentPosition = [
+            position.coords.latitude,
+            position.coords.longitude,
+          ];
+          setPosition(currentPosition);
+
+          if (destinationLat && destinationLon) {
+            const destination = [
+              parseFloat(destinationLat),
+              parseFloat(destinationLon),
+            ];
+            fetchDirections(currentPosition, destination);
+          }
+        },
+        (error) => console.error("Error getting location:", error)
+      );
+    };
+
+    getCurrentPosition();
+  }, [destinationLat, destinationLon, fetchDirections]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await Promise.all([
+        GetHotels(setHotels, accessToken),
+        GetPlaces(setPlaces, accessToken),
+        GetRestaurants(setRestaurants, accessToken),
+      ]);
+    };
+
+    fetchData();
+  }, [accessToken]);
+
+  const renderMarkers = useCallback((locations, type) => {
+    if (!selectedFilters.includes(type)) return null;
+
+    return (
+      <MarkerClusterGroup>
+        {locations.map((location, index) => (
+          <Marker position={[location.lat, location.lon]} key={`${type}-${index}`}>
+            <Popup>
+              <LocationCard location={location} num={234} />
+            </Popup>
+          </Marker>
+        ))}
+      </MarkerClusterGroup>
+    );
+  }, [selectedFilters]);
+
+  const routeLayer = useMemo(() => {
+    if (route.length === 0) return null;
+    return (
+      <>
+        <Polyline positions={route} color="blue" weight={3} opacity={0.7} />
+        <Marker position={[destinationLat, destinationLon]} />
+      </>
+    );
+  }, [route, destinationLat, destinationLon]);
+
+  if (!position) return null;
+
   return (
-    position && (
-      <MapContainer
-        zoomControl={false}
-        center={position}
-        zoom={17}
-        className="h-screen w-full"
-        minZoom={5}
-      >
-        <TileLayer
-          url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=sk.eyJ1Ijoia2hhbGVkYXppejExIiwiYSI6ImNseWhnM3FvNDA0MWgya3F5ZzVsMzRwYWEifQ.rA8VFAxykZnsT2AG1HwpsQ"
-          attribution='&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> contributors'
-        />
+    <MapContainer
+      zoomControl={false}
+      center={position}
+      zoom={17}
+      className="h-screen w-full"
+      minZoom={5}
+    >
+      <TileLayer
+        url={MAPBOX_TILE_URL}
+        attribution='&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> contributors'
+      />
 
-        {/* <LayersControl position="topleft">
-          <LayersControl.BaseLayer checked name="Mapbox Streets">
-            <TileLayer
-              url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=sk.eyJ1Ijoia2hhbGVkYXppejExIiwiYSI6ImNseWhnM3FvNDA0MWgya3F5ZzVsMzRwYWEifQ.rA8VFAxykZnsT2AG1HwpsQ"
-              attribution='&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> contributors'
-            />
-          </LayersControl.BaseLayer>
-          <LayersControl.BaseLayer name="Mapbox Satellite">
-            <TileLayer
-              url="https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token=sk.eyJ1Ijoia2hhbGVkYXppejExIiwiYSI6ImNseWhnM3FvNDA0MWgya3F5ZzVsMzRwYWEifQ.rA8VFAxykZnsT2AG1HwpsQ"
-              attribution='&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> contributors'
-            />
-          </LayersControl.BaseLayer>
-          <LayersControl.BaseLayer name="OpenStreetMap">
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            />
-          </LayersControl.BaseLayer>
-        </LayersControl> */}
+      <LocateControl position={position} />
+      
+      {renderMarkers(hotels, "Hotels")}
+      {renderMarkers(restaurants, "Restaurants")}
+      {renderMarkers(places, "places")}
+      {routeLayer}
 
-        <LocateControl position={position} />
-
-        {selectedFilters.includes("Hotels") && (
-          <MarkerClusterGroup>
-            {hotels.length > 0 &&
-              hotels.map((hotel, index) => {
-                return (
-                  <Marker position={[hotel.lat, hotel.lon]} key={index}>
-                    <Popup>
-                      <HotelCard hotel={hotel} num={234} />
-                    </Popup>
-                  </Marker>
-                );
-              })}
-          </MarkerClusterGroup>
-        )}
-
-        {selectedFilters.includes("Restaurants") && (
-          <MarkerClusterGroup>
-            {hotels.length > 0 &&
-              hotels.map((hotel, index) => {
-                return (
-                  <Marker position={[hotel.lat, hotel.lon]} key={index}>
-                    <Popup>
-                      <HotelCard hotel={hotel} num={234} />
-                    </Popup>
-                  </Marker>
-                );
-              })}
-          </MarkerClusterGroup>
-        )}
-
-        {selectedFilters.includes("places") && (
-          <MarkerClusterGroup>
-            {hotels.length > 0 &&
-              hotels.map((hotel, index) => {
-                return (
-                  <Marker position={[hotel.lat, hotel.lon]} key={index}>
-                    <Popup>
-                      <HotelCard hotel={hotel} num={234} />
-                    </Popup>
-                  </Marker>
-                );
-              })}
-          </MarkerClusterGroup>
-        )}
-
-        {route.length > 0 && (
-          <>
-            {" "}
-            <Polyline
-              positions={route}
-              color="blue"
-              weight={3}
-              opacity={0.7}
-            />{" "}
-            <Marker position={[destinationLat, destinationLon]} />
-          </>
-        )}
-        <NominatimSearch
-          setSelectedFilters={setSelectedFilters}
-          selectedFilters={selectedFilters}
-        />
-      </MapContainer>
-    )
+      <NominatimSearch
+        setSelectedFilters={setSelectedFilters}
+        selectedFilters={selectedFilters}
+      />
+    </MapContainer>
   );
 };
 

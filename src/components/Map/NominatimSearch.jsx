@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import {
   Chip,
   InputAdornment,
@@ -21,7 +21,11 @@ import {
   RiTaxiLine,
 } from "react-icons/ri";
 
-// Separate the filters configuration
+// Constants
+const DEBOUNCE_DELAY = 500;
+const SEARCH_LIMIT = 5;
+const COUNTRY_CODE = "dz";
+
 const FILTERS = {
   HOTELS: "Hotels",
   RESTAURANTS: "Restaurants",
@@ -49,85 +53,83 @@ const filters = [
   },
 ];
 
-// Separate API service
-const searchService = {
-  async searchPlaces(query, filters = []) {
-    if (!query.trim()) return [];
-
-    try {
-      const baseParams = {
-        countrycodes: "dz",
-        format: "json",
-        addressdetails: 1,
-        limit: 5,
-      };
-
-      if (filters.length === 0) {
-        // General search if no filters selected
-        const response = await axios.get(
-          "https://nominatim.openstreetmap.org/search",
-          {
-            params: {
-              q: query,
-              ...baseParams,
-            },
-          }
-        );
-        return response.data;
-      }
-
-      // Search with filters
-      const amenities = filters
-        .map(
-          (filterName) => filters.find((f) => f.name === filterName)?.amenity
-        )
-        .filter(Boolean);
-
-      // You'll need to implement these specific search functions
-      const results = await Promise.all([
-        ...amenities.map((amenity) => searchByAmenity(query, amenity)),
-      ]);
-
-      return results.flat().slice(0, 5); // Limit to 5 total results
-    } catch (error) {
-      console.error("Search error:", error);
-      return [];
-    }
+// Memoized styles
+const textFieldStyles = {
+  backgroundColor: "white",
+  borderRadius: "99px",
+  width: "100%",
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "#dfdfdf",
+      borderRadius: "99px",
+    },
+    "&:hover fieldset": {
+      borderColor: "#dfdfdf",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#dfdfdf",
+    },
+    "& .MuiInputBase-input": {
+      padding: "16px 16px 16px 0px",
+    },
+    border: "1px solid #dfdfdf",
   },
 };
 
-// Template functions for specific searches - implement these based on your needs
-async function searchByAmenity(query, amenity) {
-  // Example implementation using Overpass API
-  const overpassQuery = `
-    [out:json][timeout:25];
-    area["name"="Algeria"]->.searchArea;
-    (
-      nwr["amenity"="${amenity}"](area.searchArea);
-    );
-    out body;
-    >;
-    out skel qt;
-  `;
+// API Service with caching
+const searchService = (() => {
+  const cache = new Map();
+  const getCacheKey = (query, filters) => `${query}-${filters.sort().join(',')}`;
 
-  try {
-    const response = await axios.post(
-      "https://overpass-api.de/api/interpreter",
-      overpassQuery
-    );
-    return response.data.elements.map((element) => ({
-      // Transform the response to match your needed format
-      display_name: element.tags.name || "Unnamed location",
-      lat: element.lat,
-      lon: element.lon,
-      type: amenity,
-      // Add other properties as needed
-    }));
-  } catch (error) {
-    console.error(`Error searching for ${amenity}:`, error);
-    return [];
-  }
-}
+  return {
+    async searchPlaces(query, filters = []) {
+      const trimmedQuery = query.trim();
+      if (!trimmedQuery) return [];
+
+      const cacheKey = getCacheKey(trimmedQuery, filters);
+      if (cache.has(cacheKey)) return cache.get(cacheKey);
+
+      try {
+        const baseParams = {
+          countrycodes: COUNTRY_CODE,
+          format: "json",
+          addressdetails: 1,
+          limit: SEARCH_LIMIT,
+        };
+
+        let response;
+        if (filters.length === 0) {
+          response = await axios.get("https://nominatim.openstreetmap.org/search", {
+            params: {
+              q: trimmedQuery,
+              ...baseParams,
+            },
+          });
+        } else {
+          const amenities = filters
+            .map(filter => filters.find(f => f.name === filter)?.amenity)
+            .filter(Boolean);
+
+          const results = await Promise.all(
+            amenities.map(amenity => this.searchByAmenity(trimmedQuery, amenity))
+          );
+          response = { data: results.flat().slice(0, SEARCH_LIMIT) };
+        }
+
+        cache.set(cacheKey, response.data);
+        return response.data;
+      } catch (error) {
+        console.error("Search error:", error);
+        return [];
+      }
+    },
+
+    async searchByAmenity(query, amenity) {
+      // Implement specific amenity search logic here
+      return [];
+    }
+  };
+})();
 
 const NominatimSearch = ({ selectedFilters, setSelectedFilters }) => {
   const [query, setQuery] = useState("");
@@ -137,85 +139,90 @@ const NominatimSearch = ({ selectedFilters, setSelectedFilters }) => {
   const map = useMap();
   const debounceTimeoutRef = useRef(null);
   const markersRef = useRef([]);
+  const containerRef = useRef(null);
 
-  const clearMarkers = () => {
-    markersRef.current.forEach((marker) => marker.remove());
+  const clearMarkers = useCallback(() => {
+    markersRef.current.forEach(marker => marker.remove());
     markersRef.current = [];
-  };
+  }, []);
+
+  const handleSearch = useCallback(async () => {
+    if (!query.trim()) {
+      setResults([]);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const searchResults = await searchService.searchPlaces(query, selectedFilters);
+      setResults(searchResults);
+    } catch (error) {
+      console.error("Search failed:", error);
+      setResults([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [query, selectedFilters]);
 
   useEffect(() => {
-    const handleSearch = async () => {
-      if (query.trim() === "") {
-        setResults([]);
-        return;
-      }
-
-      setIsLoading(true);
-      try {
-        const searchResults = await searchService.searchPlaces(
-          query,
-          selectedFilters
-        );
-        setResults(searchResults);
-      } catch (error) {
-        console.error("Search failed:", error);
-        setResults([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     if (debounceTimeoutRef.current) {
       clearTimeout(debounceTimeoutRef.current);
     }
 
-    debounceTimeoutRef.current = setTimeout(handleSearch, 500);
+    debounceTimeoutRef.current = setTimeout(handleSearch, DEBOUNCE_DELAY);
 
     return () => {
-      if (debounceTimeoutRef.current) {
-        clearTimeout(debounceTimeoutRef.current);
-      }
+      clearTimeout(debounceTimeoutRef.current);
     };
-  }, [query, selectedFilters]);
+  }, [handleSearch]);
 
-  const handleResultClick = (lat, lon) => {
+  const handleResultClick = useCallback((lat, lon) => {
     setResults([]);
     clearMarkers();
     const marker = L.marker([lat, lon]);
     marker.addTo(map);
     markersRef.current.push(marker);
     map.flyTo([lat, lon], 17);
-  };
-
-  const containerRef = useRef(null);
+  }, [map, clearMarkers]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target)
-      ) {
+      if (containerRef.current && !containerRef.current.contains(event.target)) {
         setResults([]);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSelect = (filter) => {
-    setSelectedFilters((prev) =>
+  const handleSelect = useCallback((filter) => {
+    setSelectedFilters(prev =>
       prev.includes(filter)
-        ? prev.filter((f) => f !== filter)
+        ? prev.filter(f => f !== filter)
         : [...prev, filter]
     );
-  };
+  }, [setSelectedFilters]);
 
-  useEffect(() => {
-    console.log(selectedFilters);
-  }, [selectedFilters]);
+  const renderChip = useCallback((filter, index) => (
+    <SwiperSlide key={index} style={{ width: "fit-content" }}>
+      <Chip
+        icon={selectedFilters.includes(filter.name) ? filter.selectedIcon : filter.icon}
+        label={filter.name}
+        sx={{
+          border: "1px solid #dfdfdf",
+          fontSize: "14px",
+          padding: "4px 8px",
+        }}
+        onClick={() => handleSelect(filter.name)}
+        className={`${
+          selectedFilters.includes(filter.name)
+            ? "!bg-green-700 !text-background transition-colors duration-100"
+            : "!text-primary !bg-white transition-colors duration-100"
+        } !shadow-md`}
+      />
+    </SwiperSlide>
+  ), [selectedFilters, handleSelect]);
 
   return (
     <div className="z-500 top-0 px-4 py-6 w-full absolute flex items-center justify-center gap-4 flex-col">
@@ -228,35 +235,13 @@ const NominatimSearch = ({ selectedFilters, setSelectedFilters }) => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <CiSearch
-                  className={`text-2xl ${isLoading ? "animate-spin" : ""}`}
-                />
+                <CiSearch className={`text-2xl ${isLoading ? "animate-spin" : ""}`} />
               </InputAdornment>
             ),
           }}
           value={query}
           className="!shadow-md"
-          sx={{
-            backgroundColor: "white",
-            borderRadius: "99px",
-            width: "100%",
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#dfdfdf",
-                borderRadius: "99px",
-              },
-              "&:hover fieldset": {
-                borderColor: "#dfdfdf",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#dfdfdf",
-              },
-              "& .MuiInputBase-input": {
-                padding: "16px 16px 16px 0px",
-              },
-              border: "1px solid #dfdfdf",
-            },
-          }}
+          sx={textFieldStyles}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search for a place"
         />
@@ -289,35 +274,13 @@ const NominatimSearch = ({ selectedFilters, setSelectedFilters }) => {
           </List>
         )}
       </div>
-      <div className="w-full">
+      <div className={`w-full ${results.length > 0 ? "hidden" : "block"}`}>
         <Swiper spaceBetween={4} slidesPerView="auto">
-          {filters.map((filter, index) => (
-            <SwiperSlide key={index} style={{ width: "fit-content" }}>
-              <Chip
-                icon={
-                  selectedFilters.includes(filter.name)
-                    ? filter.selectedIcon
-                    : filter.icon
-                }
-                label={filter.name}
-                sx={{
-                  border: "1px solid #dfdfdf",
-                  fontSize: "14px",
-                  padding: "4px 8px",
-                }}
-                onClick={() => handleSelect(filter.name)}
-                className={`${
-                  selectedFilters.includes(filter.name)
-                    ? `!bg-green-700 !text-background transition-colors duration-100`
-                    : "!text-primary !bg-background transition-colors duration-100"
-                } !shadow-md`}
-              />
-            </SwiperSlide>
-          ))}
+          {filters.map((filter, index) => renderChip(filter, index))}
         </Swiper>
       </div>
     </div>
   );
 };
 
-export default NominatimSearch;
+export default React.memo(NominatimSearch);
