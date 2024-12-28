@@ -35,17 +35,18 @@ const LocationCard = ({ data }) => {
               <div className="relative">
                 {loading && (
                   <>
-                    <div className="w-full h-[194px] sm:h-[300px] flex items-center justify-center flex-col m-auto">
+                    <div className="w-full h-[194px] rounded-t-lg sm:h-[300px] flex items-center justify-center flex-col m-auto">
                       <OneEightyRingWithBg className="!text-primary" />
                     </div>
                   </>
                 )}
+
                 <img
                   src={data.image_url != null ? data.image_url[0] : hotelImage}
                   alt="hotel"
                   loading="lazy"
                   onLoad={handleImageLoad}
-                  className="h-auto w-full relative max-h-[300px] rounded-t-lg"
+                  className="h-auto w-full relative max-h-[194px] sm:max-h-[300px] rounded-t-lg "
                 />
               </div>
               <div className="py-2 px-4 items-start justify-between w-full h-[30%]">

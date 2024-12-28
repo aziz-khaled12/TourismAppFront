@@ -125,7 +125,7 @@ const Navbar = () => {
       </nav>
 
       <div
-        className={`w-full p-4 gap-1 sm:hidden fixed flex flex-col shadow-md items-center bg-black ${
+        className={`w-full p-4 gap-1 sm:hidden fixed flex flex-col shadow-md items-center bg-background ${
           currentTab === "Map" ? "bg-transparent" : ""
         } transition-all duration-1000 z-[60] justify-center`}
       >

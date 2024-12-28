@@ -153,8 +153,8 @@ const BookingDrawer = ({
       onClose={handleClose}
       onOpen={handleOpen}
     >
-      <div className="w-[full] h-[90vh] relative flex flex-col items-center justify-start">
-        <div className="w-full mt-10 border-[#6e6e6e] border-b border-solid">
+      <div className="w-[full] h-[95vh] relative flex flex-col items-center justify-start">
+        <div className="w-full mt-6 border-[#6e6e6e] border-b border-solid">
           <div className="w-full flex justify-between p-4 mb-3">
             <div className="flex items-center font-[600] text-2xl ">
               Booking
@@ -162,12 +162,12 @@ const BookingDrawer = ({
           </div>
         </div>
 
-        <Stack spacing={4} sx={{ width: "100%", padding: "16px" }}>
-          <Stack direction={"column"} spacing={4}>
+        <Stack  sx={{ width: "100%", padding: "1rem", justifyContent: "space-between", height: "90vh" }}>
+          <Stack direction={"column"} height={"70vh"} spacing={"1.5rem"}>
             {bookingData.map((data, index) => {
               return (
-                <Stack direction={"column"} spacing={1} key={index}>
-                  <Typography sx={{ fontWeight: "600", fontSize: "22px" }}>
+                <Stack direction={"column"}  key={index}>
+                  <Typography sx={{ fontWeight: "600", fontSize: "1rem" }}>
                     {data.title}
                   </Typography>
                   <TextField

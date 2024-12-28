@@ -91,9 +91,13 @@ const WilayaDrawer = ({ open, handleOpen, handleClose }) => {
             </div>
           </div>
 
-          <Stack spacing={4} sx={{ width: "100%", padding: "16px" }}>
-            <WilayaSearchBox handleResultClick={handleResultClick} />
-            <div className="w-full mt-8">
+          <Stack
+            justifyContent={"space-between"}
+            sx={{ width: "100%", padding: "16px", height: "90vh" }}
+          >
+            <Stack spacing={4}>
+              <WilayaSearchBox handleResultClick={handleResultClick} />
+              <div className="w-full">
               <div className="text-sm mb-5 font-medium">
                 Popular destinations
               </div>
@@ -129,7 +133,8 @@ const WilayaDrawer = ({ open, handleOpen, handleClose }) => {
                   );
                 })}
               </List>
-            </div>
+              </div>
+            </Stack>
             <Stack sx={{ width: "100%" }}>
               <Button
                 variant="contained"

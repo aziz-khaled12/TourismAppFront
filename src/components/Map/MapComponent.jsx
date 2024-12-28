@@ -63,6 +63,7 @@ const MapComponent = () => {
             position.coords.longitude,
           ];
           setPosition(currentPosition);
+          console.log(currentPosition);
 
           if (destinationLat && destinationLon) {
             const destination = [
