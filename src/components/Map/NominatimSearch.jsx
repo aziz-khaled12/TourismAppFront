@@ -20,16 +20,16 @@ import {
   RiTaxiFill,
   RiTaxiLine,
 } from "react-icons/ri";
+import {MdAttractions, MdOutlineAttractions} from 'react-icons/md';
 
 // Constants
 const DEBOUNCE_DELAY = 500;
-const SEARCH_LIMIT = 5;
-const COUNTRY_CODE = "dz";
 
 const FILTERS = {
   HOTELS: "Hotels",
   RESTAURANTS: "Restaurants",
   CAR_AGENCIES: "Car Agencies",
+  PLACES: "Places",
 };
 
 const filters = [
@@ -50,6 +50,12 @@ const filters = [
     icon: <RiTaxiLine className="text-xl text-primary" />,
     selectedIcon: <RiTaxiFill className="text-xl !text-background" />,
     amenity: "car_rental",
+  },
+  {
+    name: FILTERS.PLACES,
+    icon: <MdOutlineAttractions className="text-xl text-primary" />,
+    selectedIcon: <MdAttractions className="text-xl !text-background" />,
+    amenity: "attractions",
   },
 ];
 
@@ -76,60 +82,7 @@ const textFieldStyles = {
   },
 };
 
-// API Service with caching
-const searchService = (() => {
-  const cache = new Map();
-  const getCacheKey = (query, filters) => `${query}-${filters.sort().join(',')}`;
 
-  return {
-    async searchPlaces(query, filters = []) {
-      const trimmedQuery = query.trim();
-      if (!trimmedQuery) return [];
-
-      const cacheKey = getCacheKey(trimmedQuery, filters);
-      if (cache.has(cacheKey)) return cache.get(cacheKey);
-
-      try {
-        const baseParams = {
-          countrycodes: COUNTRY_CODE,
-          format: "json",
-          addressdetails: 1,
-          limit: SEARCH_LIMIT,
-        };
-
-        let response;
-        if (filters.length === 0) {
-          response = await axios.get("https://nominatim.openstreetmap.org/search", {
-            params: {
-              q: trimmedQuery,
-              ...baseParams,
-            },
-          });
-        } else {
-          const amenities = filters
-            .map(filter => filters.find(f => f.name === filter)?.amenity)
-            .filter(Boolean);
-
-          const results = await Promise.all(
-            amenities.map(amenity => this.searchByAmenity(trimmedQuery, amenity))
-          );
-          response = { data: results.flat().slice(0, SEARCH_LIMIT) };
-        }
-
-        cache.set(cacheKey, response.data);
-        return response.data;
-      } catch (error) {
-        console.error("Search error:", error);
-        return [];
-      }
-    },
-
-    async searchByAmenity(query, amenity) {
-      // Implement specific amenity search logic here
-      return [];
-    }
-  };
-})();
 
 const NominatimSearch = ({ selectedFilters, setSelectedFilters }) => {
   const [query, setQuery] = useState("");

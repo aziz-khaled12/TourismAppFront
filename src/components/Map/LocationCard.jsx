@@ -11,7 +11,7 @@ const LocationCard = ({ location, num }) => {
           src={
             location.image_url && location.image_url[0] !== null
               ? location.image_url[0]
-              : hotelImage
+              : "https://placehold.co/"
           }
           alt="location"
           className="h-full w-full relative rounded-t-lg max-h-[180px]"

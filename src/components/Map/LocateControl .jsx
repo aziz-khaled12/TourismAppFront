@@ -10,19 +10,20 @@ import { CiLocationArrow1 } from "react-icons/ci";
 const customIcon = L.divIcon({
   className: "custom-icon",
   html: `
-    <div class="marker-container">
-      <div class="circle"></div>
-      <div class="pulse"></div>
-    </div>
+  
+      <div class="marker-container">
+        <div class="absolute inset-0 -z-[1] m-auto opacity-75 animate-ping w-[100%] h-[100%] rounded-full bg-[#007bff]"></div>
+        <div class="circle""></div>
+      </div>
+
   `,
-  iconSize: [40, 40],
+  iconSize: [12, 12],
 });
 
-const LocateControl = ({position}) => {
+const LocateControl = ({ position }) => {
   const map = useMap();
   const [clicked, setClicked] = useState(false);
   const [marker, setMarker] = useState();
-
 
   const handleClick = () => {
     const bounds = map.getBounds();
@@ -41,24 +42,24 @@ const LocateControl = ({position}) => {
 
     if (!clicked) {
       if (marker) {
-        marker.remove(); 
+        marker.remove();
       }
       const newMarker = L.marker(position, { icon: customIcon }).addTo(map);
       setMarker(newMarker);
       map.flyTo(position, 15);
     } else {
       if (marker) {
-        marker.remove(); 
-        setMarker(null); 
+        marker.remove();
+        setMarker(null);
       }
     }
   };
 
   useEffect(() => {
     const newMarker = L.marker(position, { icon: customIcon }).addTo(map);
-      setMarker(newMarker);
-      map.flyTo(position, 17);
-  },[])
+    setMarker(newMarker);
+    map.flyTo(position, 17);
+  }, []);
 
   return (
     <div

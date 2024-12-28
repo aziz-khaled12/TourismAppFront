@@ -9,6 +9,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+     
+      animation: {
+        "ping-slow": "ping 2s linear infinite",
+      },
       boxShadow: {
         custom: "0px 0px 22px -6px black !important",
         upperFade: "0px -20px 17px 13px #f9f9f9",
@@ -23,8 +27,8 @@ module.exports = {
         lightBackgroundHover: "#eaeaea",
       },
       zIndex: {
-        1000 : "1000"
-      }
+        1000: "1000",
+      },
     },
   },
   plugins: [],

@@ -56,12 +56,12 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className={`w-full py-4 fixed shadow-lg h-[20vh] transition-all duration-300 ease-in-out sm:block hidden z-[60]`}
+        className={`w-full py-4 fixed ${isScrolled ? "bg-background" : "bg-transparent"} shadow-lg h-[20vh] transition-all duration-300 ease-in-out sm:block hidden z-[60]`}
       >
         <div className="w-full  px-10 flex justify-between items-center ">
           <div
             className={`font-semibold sm:text-xl lg:text-2xl transition-all duration-300 ${
-              isScrolled ? "text-primary" : "text-black"
+              isScrolled ? "text-primary " : "text-black"
             }`}
           >
             <span className="text-green-700">Tourism </span>App
@@ -139,7 +139,7 @@ const Navbar = () => {
         <ServicesSwiper />
       </div>
 
-      <div className={`h-[16vh]`}></div>
+      <div className={`h-[16vh] `}></div>
     </>
   );
 };
