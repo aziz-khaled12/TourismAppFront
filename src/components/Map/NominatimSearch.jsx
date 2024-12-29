@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
 import {
   Chip,
   InputAdornment,
@@ -7,87 +13,24 @@ import {
   ListItemText,
   TextField,
 } from "@mui/material";
-import axios from "axios";
 import TruncateMarkup from "react-truncate-markup";
 import { useMap } from "react-leaflet";
 import { CiSearch } from "react-icons/ci";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
-  RiHotelBedFill,
-  RiHotelBedLine,
-  RiRestaurantFill,
-  RiRestaurantLine,
-  RiTaxiFill,
-  RiTaxiLine,
-} from "react-icons/ri";
-import {MdAttractions, MdOutlineAttractions} from 'react-icons/md';
+  DEBOUNCE_DELAY,
+  searchService,
+  filters,
+  textFieldStyles,
+} from "./consts";
 
-// Constants
-const DEBOUNCE_DELAY = 500;
-
-const FILTERS = {
-  HOTELS: "Hotels",
-  RESTAURANTS: "Restaurants",
-  CAR_AGENCIES: "Car Agencies",
-  PLACES: "Places",
-};
-
-const filters = [
-  {
-    name: FILTERS.HOTELS,
-    icon: <RiHotelBedLine className="text-xl text-primary" />,
-    selectedIcon: <RiHotelBedFill className="text-xl !text-background" />,
-    amenity: "hotel",
-  },
-  {
-    name: FILTERS.RESTAURANTS,
-    icon: <RiRestaurantLine className="text-xl text-primary" />,
-    selectedIcon: <RiRestaurantFill className="text-xl !text-background" />,
-    amenity: "restaurant",
-  },
-  {
-    name: FILTERS.CAR_AGENCIES,
-    icon: <RiTaxiLine className="text-xl text-primary" />,
-    selectedIcon: <RiTaxiFill className="text-xl !text-background" />,
-    amenity: "car_rental",
-  },
-  {
-    name: FILTERS.PLACES,
-    icon: <MdOutlineAttractions className="text-xl text-primary" />,
-    selectedIcon: <MdAttractions className="text-xl !text-background" />,
-    amenity: "attractions",
-  },
-];
-
-// Memoized styles
-const textFieldStyles = {
-  backgroundColor: "white",
-  borderRadius: "99px",
-  width: "100%",
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderColor: "#dfdfdf",
-      borderRadius: "99px",
-    },
-    "&:hover fieldset": {
-      borderColor: "#dfdfdf",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#dfdfdf",
-    },
-    "& .MuiInputBase-input": {
-      padding: "16px 16px 16px 0px",
-    },
-    border: "1px solid #dfdfdf",
-  },
-};
-
-
-
-const NominatimSearch = ({ selectedFilters, setSelectedFilters }) => {
+const NominatimSearch = ({
+  selectedFilters,
+  setSelectedFilters,
+  setIsDragging,
+}) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   const map = useMap();
   const debounceTimeoutRef = useRef(null);
@@ -95,7 +38,7 @@ const NominatimSearch = ({ selectedFilters, setSelectedFilters }) => {
   const containerRef = useRef(null);
 
   const clearMarkers = useCallback(() => {
-    markersRef.current.forEach(marker => marker.remove());
+    markersRef.current.forEach((marker) => marker.remove());
     markersRef.current = [];
   }, []);
 
@@ -105,15 +48,12 @@ const NominatimSearch = ({ selectedFilters, setSelectedFilters }) => {
       return;
     }
 
-    setIsLoading(true);
     try {
-      const searchResults = await searchService.searchPlaces(query, selectedFilters);
+      const searchResults = await searchService.searchPlaces(query);
       setResults(searchResults);
     } catch (error) {
       console.error("Search failed:", error);
       setResults([]);
-    } finally {
-      setIsLoading(false);
     }
   }, [query, selectedFilters]);
 
@@ -129,18 +69,24 @@ const NominatimSearch = ({ selectedFilters, setSelectedFilters }) => {
     };
   }, [handleSearch]);
 
-  const handleResultClick = useCallback((lat, lon) => {
-    setResults([]);
-    clearMarkers();
-    const marker = L.marker([lat, lon]);
-    marker.addTo(map);
-    markersRef.current.push(marker);
-    map.flyTo([lat, lon], 17);
-  }, [map, clearMarkers]);
+  const handleResultClick = useCallback(
+    (lat, lon) => {
+      setResults([]);
+      clearMarkers();
+      const marker = L.marker([lat, lon]);
+      marker.addTo(map);
+      markersRef.current.push(marker);
+      map.flyTo([lat, lon], 17);
+    },
+    [map, clearMarkers]
+  );
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (containerRef.current && !containerRef.current.contains(event.target)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target)
+      ) {
         setResults([]);
       }
     };
@@ -149,18 +95,25 @@ const NominatimSearch = ({ selectedFilters, setSelectedFilters }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSelect = useCallback((filter) => {
-    setSelectedFilters(prev =>
-      prev.includes(filter)
-        ? prev.filter(f => f !== filter)
-        : [...prev, filter]
-    );
-  }, [setSelectedFilters]);
+  const handleSelect = useCallback(
+    (filter) => {
+      setSelectedFilters((prev) =>
+        prev.includes(filter)
+          ? prev.filter((f) => f !== filter)
+          : [...prev, filter]
+      );
+    },
+    [setSelectedFilters]
+  );
 
-  const renderChip = useCallback((filter, index) => (
+  const renderChip = (filter, index) => (
     <SwiperSlide key={index} style={{ width: "fit-content" }}>
       <Chip
-        icon={selectedFilters.includes(filter.name) ? filter.selectedIcon : filter.icon}
+        icon={
+          selectedFilters.includes(filter.name)
+            ? filter.selectedIcon
+            : filter.icon
+        }
         label={filter.name}
         sx={{
           border: "1px solid #dfdfdf",
@@ -175,10 +128,14 @@ const NominatimSearch = ({ selectedFilters, setSelectedFilters }) => {
         } !shadow-md`}
       />
     </SwiperSlide>
-  ), [selectedFilters, handleSelect]);
+  );
 
   return (
-    <div className="z-500 top-0 px-4 py-6 w-full absolute flex items-center justify-center gap-4 flex-col">
+    <div
+      className="z-1000 top-0 px-4 py-6 w-full fixed flex items-center justify-center gap-4 flex-col"
+      onTouchStart={() => setIsDragging(true)}
+      onTouchEnd={() => setIsDragging(false)}
+    >
       <div ref={containerRef} className="w-full">
         <TextField
           id="outlined-search"
@@ -188,7 +145,7 @@ const NominatimSearch = ({ selectedFilters, setSelectedFilters }) => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <CiSearch className={`text-2xl ${isLoading ? "animate-spin" : ""}`} />
+                <CiSearch className={`text-2xl`} />
               </InputAdornment>
             ),
           }}

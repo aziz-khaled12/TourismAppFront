@@ -6,6 +6,7 @@ import "leaflet.locatecontrol";
 import L from "leaflet";
 import "../../styles/LocateControl.css"; // Import the CSS file for custom styles
 import { CiLocationArrow1 } from "react-icons/ci";
+import { MdMyLocation } from "react-icons/md";
 
 const customIcon = L.divIcon({
   className: "custom-icon",
@@ -20,7 +21,7 @@ const customIcon = L.divIcon({
   iconSize: [12, 12],
 });
 
-const LocateControl = ({ position }) => {
+const LocateControl = ({ position, setIsDragging }) => {
   const map = useMap();
   const [clicked, setClicked] = useState(false);
   const [marker, setMarker] = useState();
@@ -63,10 +64,13 @@ const LocateControl = ({ position }) => {
 
   return (
     <div
-      className="rounded-md p-2 text-xl text-white absolute bottom-10 right-5 bg-primary shadow-sm transition-all duration-200 hover:bg-primary/90 flex items-center justify-center cursor-pointer z-500"
+      onTouchStart={() => setIsDragging(true)}
+      onTouchEnd={() => setIsDragging(false)}
+      className="p-3 text-2xl text-green-700 absolute bottom-[120px] sm:bottom-8 shadow-custom right-5 bg-background rounded-full transition-all duration-200 hover:bg-green-700 hover:text-background flex items-center justify-center cursor-pointer z-500"
       onClick={handleClick}
     >
-      <CiLocationArrow1 />
+      {/* <CiLocationArrow1 className="text-primary"/> */}
+      <MdMyLocation />
     </div>
   );
 };

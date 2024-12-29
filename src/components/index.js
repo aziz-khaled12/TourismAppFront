@@ -1,0 +1,23 @@
+// components/index.js
+export { default as HotelDashboard } from "./HotelsInterface/HotelDashboard";
+export { default as RestaurantDashboard } from "./RestaurantInterface/RestaurantDashboard";
+export { default as Navbar } from "./Navigation/Navbar";
+export { default as AppBar } from "./Navigation/AppBar";
+export { default as AlertMessage } from "./Helpers/AlertMessage";
+export { default as Signup } from "./Auth/Signup";
+export { default as SignupRole } from "./Auth/SignupRole";
+export { default as Login } from "./Auth/Login";
+export { default as RoleForm } from "./Auth/RoleForm";
+export { default as Home } from "./Home/Home";
+export { default as HotelSearch } from "./Hotels/HotelSearch";
+export { default as HotelResults } from "./Hotels/HotelResults";
+export { default as HotelDetails } from "./Hotels/HotelDetails";
+export { default as HotelRooms } from "./Hotels/HotelRooms";
+export { default as RestaurantSearch } from "./Restaurants/RestaurantSearch";
+export { default as RestaurantResults } from "./Restaurants/RestaurantResults";
+export { default as RestaurantDetails } from "./Restaurants/RestaurantDetails";
+export { default as RestaurantMenu } from "./Restaurants/RestaurantMenu";
+export { default as Places } from "./Places/Places";
+export { default as PlaceDetails } from "./Places/PlaceDetails";
+export { default as MapComponent } from "./Map/MapComponent";
+export { default as CarBooking } from "./CarBooking/CarBooking";

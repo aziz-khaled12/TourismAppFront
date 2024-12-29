@@ -6,7 +6,7 @@ import {
   Popup,
   Polyline,
 } from "react-leaflet";
-import LocateControl from "./Map/LocateControl ";
+import LocateControl from "../Map/LocateControl ";
 
 const mapBoxToken = import.meta.env.VITE_AccessToken;
 

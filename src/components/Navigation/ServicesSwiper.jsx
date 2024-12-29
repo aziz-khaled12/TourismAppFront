@@ -21,7 +21,7 @@ import { Pagination, FreeMode } from "swiper/modules";
 const ServicesSwiper = ({ other = "" }) => {
   const wilaya = useSelector((state) => state.selectedTab.wilaya);
   const dispatch = useDispatch();
-  const services = [
+  const NavbarServices = [
     {
       id: 0,
       icon: <RiHome5Line className="text-2xl" />,
@@ -73,7 +73,7 @@ const ServicesSwiper = ({ other = "" }) => {
   useEffect(() => {
     const currentPath = location.pathname;
 
-    const matchedService = services.find((service) => {
+    const matchedService = NavbarServices.find((service) => {
       if (service.link === "/") {
         return currentPath === "/";
       }
@@ -83,7 +83,7 @@ const ServicesSwiper = ({ other = "" }) => {
     if (matchedService && matchedService.name !== selected) {
       dispatch(setSelectedTab(matchedService.name));
     }
-  }, [dispatch, selected, services]);
+  }, [dispatch, selected, NavbarServices]);
 
   const swiperRef = useRef(null);
   const [isAtStart, setIsAtStart] = useState(true);
@@ -148,7 +148,7 @@ const ServicesSwiper = ({ other = "" }) => {
             slidesPerView="auto"
             modules={[Pagination, FreeMode]}
           >
-            {services.map((service) => (
+            {NavbarServices.map((service) => (
               <SwiperSlide className="w-fit" key={service.id}>
                 <div
                   key={service.id}
