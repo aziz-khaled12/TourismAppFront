@@ -6,6 +6,7 @@ import bookingReducer from './hotelInterface/bookingSlice';
 import menuReducer from './restaurantsInterface/menuSlice';
 import alertReducer from './alertSlice'
 import selectedTabReducer from './selectedTabSlice';
+import mapReducer from './mapSlice';
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     bookings: bookingReducer,
     menu: menuReducer,
     selectedTab: selectedTabReducer, 
-    alert: alertReducer
+    alert: alertReducer,
+    map: mapReducer,
   },
 });

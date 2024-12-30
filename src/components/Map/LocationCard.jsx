@@ -2,16 +2,16 @@ import React from "react";
 import hotelImage from "../../assets/hotelImage.jpg";
 import Rating from "@mui/material/Rating";
 
-const LocationCard = ({ location, num }) => {
+const LocationCard = ({ location, num, fullWidth = false, height = "30", shadow = false }) => {
   console.log(location);
   return (
-    <div className="h-30 w-[250px]">
+    <div className={`h-${height} ${fullWidth ? "w-full" : "w-[250px]"} ${shadow ? "shadow-xl" : ""} `}>
       <div className="relative">
         <img
           src={
             location.image_url && location.image_url[0] !== null
               ? location.image_url[0]
-              : "https://placehold.co/"
+              : hotelImage
           }
           alt="location"
           className="h-full w-full relative rounded-t-lg max-h-[180px]"
@@ -20,7 +20,7 @@ const LocationCard = ({ location, num }) => {
           2500DZD
         </div>
       </div>
-      <div className="p-2 items-start justify-between w-full h-[30%]">
+      <div className="p-2 flex flex-col items-start justify-between w-full h-[30%]">
         <h4 className="my-1 font-semibold text-xl">{location.name}</h4>
         <h1 className="my-1 text-base font-medium"> {location.road}</h1>
         <div className="my-2 text-base flex items-center gap-1">

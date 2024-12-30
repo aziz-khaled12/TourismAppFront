@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import {
   Chip,
   InputAdornment,
@@ -24,6 +18,9 @@ import {
   textFieldStyles,
 } from "./consts";
 
+import { toggleFilter } from "../../redux/mapSlice";
+import { useDispatch } from "react-redux";
+
 const NominatimSearch = ({
   selectedFilters,
   setSelectedFilters,
@@ -32,6 +29,7 @@ const NominatimSearch = ({
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
 
+  const dispatch = useDispatch();
   const map = useMap();
   const debounceTimeoutRef = useRef(null);
   const markersRef = useRef([]);
@@ -97,13 +95,9 @@ const NominatimSearch = ({
 
   const handleSelect = useCallback(
     (filter) => {
-      setSelectedFilters((prev) =>
-        prev.includes(filter)
-          ? prev.filter((f) => f !== filter)
-          : [...prev, filter]
-      );
+      dispatch(toggleFilter(filter));
     },
-    [setSelectedFilters]
+    [dispatch]
   );
 
   const renderChip = (filter, index) => (
