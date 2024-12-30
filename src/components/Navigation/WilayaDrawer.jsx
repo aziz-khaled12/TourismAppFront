@@ -18,7 +18,7 @@ import axios from "axios";
 
 const WilayaDrawer = ({ open, handleOpen, handleClose }) => {
   const dispatch = useDispatch();
-  const [position, setPosition] = useState([]); // Default position
+  const position = useSelector((state) => state.map.position);
   const wilaya = useSelector((state) => state.selectedTab.wilaya);
 
   const popularLocations = [
@@ -45,17 +45,7 @@ const WilayaDrawer = ({ open, handleOpen, handleClose }) => {
     handleClose();
   };
 
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setPosition([position.coords.latitude, position.coords.longitude]);
-        console.log("position: ", position);
-      },
-      (error) => {
-        console.error("Error getting location:", error);
-      }
-    );
-  }, []);
+
 
   const handleMyLocation = async () => {
     try {

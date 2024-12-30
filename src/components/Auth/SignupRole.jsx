@@ -9,17 +9,18 @@ import {
 } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { MdCloudUpload } from "react-icons/md";
-import LocateControl from "../Map/LocateControl ";
+import LocateControl from "../Map/LocateControl";
 import { Typography, TextField, Button } from "@mui/material";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const url = import.meta.env.VITE_LOCAL_BACK_END_URL;
 
 const SignupRole = () => {
   const { role } = useParams();
   const [preview, setPreview] = useState();
-  const [position, setPosition] = useState();
+  const position = useSelector((state) => state.map.userPosition);
   const [workStart, setWorkStart] = useState(new Date());
   const [workEnd, setWorkEnd] = useState(new Date());
   const [matricule, setMatricule] = useState();
@@ -39,18 +40,6 @@ const SignupRole = () => {
     road: "",
     image: "",
   });
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setPosition([position.coords.latitude, position.coords.longitude]);
-        localStorage.setItem("position", JSON.stringify(position));
-      },
-      (error) => {
-        console.error("Error getting location:", error);
-      }
-    );
-  }, []);
 
   useEffect(() => {
     console.log("Location updated:", formData.location);
@@ -74,7 +63,7 @@ const SignupRole = () => {
 
   const handleMapClick = async (e) => {
     const address = await getAddress(e.latlng.lat, e.latlng.lng);
-    console.log("address: ", address)
+    console.log("address: ", address);
     setFormData((prev) => ({
       ...prev,
       location: { lat: e.latlng.lat, lon: e.latlng.lng },
@@ -109,16 +98,18 @@ const SignupRole = () => {
 
     if (role === "Taxi") {
       try {
-        const res = await axios.post(`${url}/add/${role.toLowerCase()}`, {
-          matricule: matricule,
-          user_id: user.id,
-        }, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
+        const res = await axios.post(
+          `${url}/add/${role.toLowerCase()}`,
+          {
+            matricule: matricule,
+            user_id: user.id,
           },
-        }
-      
-      );
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
         if (res.status == 200) {
           navigate("/");
         }

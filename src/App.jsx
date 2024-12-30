@@ -10,7 +10,6 @@ import {
   Signup,
   SignupRole,
   Login,
-  RoleForm,
   Home,
   HotelSearch,
   HotelResults,
@@ -27,6 +26,8 @@ import {
   AppBar,
 } from "./components";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useDispatch } from "react-redux";
+import { setUserPosition } from "./redux/mapSlice";
 
 // Create a theme with custom breakpoints
 const theme = createTheme({
@@ -67,10 +68,24 @@ function App() {
   ];
   const { verifyToken, isAuthenticated, accessToken } = useAuth();
   const { pathname } = useLocation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const currentPosition = [
+          position.coords.latitude,
+          position.coords.longitude,
+        ];
+        dispatch(setUserPosition(currentPosition));
+      },
+      (error) => console.error("Error getting location:", error)
+    );
+  }, []);
 
   useEffect(() => {
     verifyToken();
@@ -79,9 +94,8 @@ function App() {
     return () => clearInterval(intervalId);
   }, []);
 
-  const isPathWithoutBar = (paths) => paths.some((pattern) =>
-    matchPath(pattern, pathname)
-  );
+  const isPathWithoutBar = (paths) =>
+    paths.some((pattern) => matchPath(pattern, pathname));
 
   return (
     <>

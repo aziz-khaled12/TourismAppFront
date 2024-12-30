@@ -6,22 +6,12 @@ import {
   Popup,
   Polyline,
 } from "react-leaflet";
-import LocateControl from "../Map/LocateControl ";
+import LocateControl from "../Map/LocateControl";
 
 const mapBoxToken = import.meta.env.VITE_AccessToken;
 
 const CarBooking = () => {
-  const [position, setPosition] = useState(); // Default position
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setPosition([position.coords.latitude, position.coords.longitude]);
-      },
-      (error) => {
-        console.error("Error getting location:", error);
-      }
-    );
-  }, []);
+  const position = useSelector((state) => state.map.position);
 
   return (
     position && (
