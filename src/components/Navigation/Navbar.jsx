@@ -139,7 +139,7 @@ const Navbar = () => {
         <ServicesSwiper />
       </div>
 
-      <div className={`h-[16vh] `}></div>
+      <div className={`h-[152px]`}></div>
     </>
   );
 };
