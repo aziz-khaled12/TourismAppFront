@@ -27,21 +27,6 @@ import {
 } from "./components";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
-import { setUserPosition } from "./redux/mapSlice";
-
-// Create a theme with custom breakpoints
-const theme = createTheme({
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      custom: 800,
-      md: 900,
-      lg: 1200,
-      xl: 1536,
-    },
-  },
-});
 
 function App() {
   const pathsWithoutNavBar = [
@@ -70,22 +55,28 @@ function App() {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
 
+  const customTheme = createTheme({
+    palette: {
+      primary: {
+        main: "#15803d", // Your custom primary color
+        contrastText: "#FFFFFF", // Text color on primary background
+      },
+    },
+    breakpoints: {
+      values: {
+        xs: 0,
+        sm: 600,
+        custom: 800,
+        md: 900,
+        lg: 1200,
+        xl: 1536,
+      },
+    },
+  });
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const currentPosition = [
-          position.coords.latitude,
-          position.coords.longitude,
-        ];
-        dispatch(setUserPosition(currentPosition));
-      },
-      (error) => console.error("Error getting location:", error)
-    );
-  }, []);
 
   useEffect(() => {
     verifyToken();
@@ -100,52 +91,54 @@ function App() {
   return (
     <>
       <div className="w-full bg-[#f9f9f9] relative overflow-hidden">
-        {isAuthenticated && !isPathWithoutBar(pathsWithoutNavBar) && <Navbar />}
+        <ThemeProvider theme={customTheme}>
+          {isAuthenticated && !isPathWithoutBar(pathsWithoutNavBar) && (
+            <Navbar />
+          )}
 
-        <AlertMessage />
-        <Routes>
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/signup/:role" element={<SignupRole />} />
-          <Route path="/login" element={<Login />} />
-          <Route element={<PortectedRoutes />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/hotels" element={<HotelSearch />} />
-            <Route path="/hotels/:wilaya" element={<HotelResults />} />
-            <Route path="/hotels/:wilaya/:id" element={<HotelDetails />} />
-            <Route
-              path="/hotels/:wilaya/:id/rooms"
-              element={
-                <ThemeProvider theme={theme}>
-                  <HotelRooms />
-                </ThemeProvider>
-              }
-            />
-            <Route path="/hotels/dashboard" element={<HotelDashboard />} />
+          <AlertMessage />
+          <Routes>
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/signup/:role" element={<SignupRole />} />
+            <Route path="/login" element={<Login />} />
+            <Route element={<PortectedRoutes />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/hotels" element={<HotelSearch />} />
+              <Route path="/hotels/:wilaya" element={<HotelResults />} />
+              <Route path="/hotels/:wilaya/:id" element={<HotelDetails />} />
+              <Route
+                path="/hotels/:wilaya/:id/rooms"
+                element={<HotelRooms />}
+              />
+              <Route path="/hotels/dashboard" element={<HotelDashboard />} />
 
-            <Route path="/restaurants" element={<RestaurantSearch />} />
-            <Route
-              path="/restaurants/admin"
-              element={<RestaurantDashboard />}
-            />
-            <Route
-              path="/restaurants/:wilaya"
-              element={<RestaurantResults />}
-            />
-            <Route
-              path="/restaurants/:wilaya/:id"
-              element={<RestaurantDetails />}
-            />
-            <Route
-              path="/restaurants/:wilaya/:id/menu"
-              element={<RestaurantMenu />}
-            />
-            <Route path="/places" element={<Places />}></Route>
-            <Route path="/places/:id" element={<PlaceDetails />}></Route>
-            <Route path="/map" element={<MapComponent />} />
-            <Route path="/map/cars" element={<CarBooking />} />
-          </Route>
-        </Routes>
-        {isAuthenticated && !isPathWithoutBar(pathsWithoutAppBar) && <AppBar />}
+              <Route path="/restaurants" element={<RestaurantSearch />} />
+              <Route
+                path="/restaurants/admin"
+                element={<RestaurantDashboard />}
+              />
+              <Route
+                path="/restaurants/:wilaya"
+                element={<RestaurantResults />}
+              />
+              <Route
+                path="/restaurants/:wilaya/:id"
+                element={<RestaurantDetails />}
+              />
+              <Route
+                path="/restaurants/:wilaya/:id/menu"
+                element={<RestaurantMenu />}
+              />
+              <Route path="/places" element={<Places />}></Route>
+              <Route path="/places/:id" element={<PlaceDetails />}></Route>
+              <Route path="/map" element={<MapComponent />} />
+              <Route path="/map/cars" element={<CarBooking />} />
+            </Route>
+          </Routes>
+          {isAuthenticated && !isPathWithoutBar(pathsWithoutAppBar) && (
+            <AppBar />
+          )}
+        </ThemeProvider>
       </div>
     </>
   );

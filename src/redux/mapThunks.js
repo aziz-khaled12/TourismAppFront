@@ -5,7 +5,9 @@ const accessToken = import.meta.env.VITE_AccessToken;
 
 export const fetchDirections =
   (userPosition, selectedLocations) => async (dispatch) => {
-    if (!selectedLocations || selectedLocations.length < 2) return;
+    console.log(userPosition);
+    console.log(selectedLocations);
+    if (!selectedLocations || selectedLocations.length < 1) return;
 
     dispatch(setLoadingRoute(true));
     try {

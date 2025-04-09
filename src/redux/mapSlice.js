@@ -1,7 +1,60 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
+import { request, PERMISSIONS, RESULTS } from "react-native-permissions";
+
+export const getUserLocation = createAsyncThunk(
+  "map/getUserLocation",
+  async (_, thunkAPI) => {
+    try {
+
+      // For Tauri Android
+    if (window.__TAURI__) {
+      // Request location permissions
+      const permission = await request(
+        PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
+      );
+
+      if (permission !== RESULTS.GRANTED) {
+        throw new Error("Location permission denied");
+      }
+    }
+     
+
+      // Get location
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
+        });
+      });
+
+      const { latitude, longitude } = position.coords;
+
+      // Reverse geocode location (fetch address)
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+      );
+      const locationData = await response.json();
+
+      const currentLocation = {
+        display_name: locationData.display_name,
+        lat: latitude,
+        lon: longitude,
+      };
+
+      console.log(currentLocation);
+      return currentLocation;
+    } catch (error) {
+      console.error("Error getting location:", error.message);
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
 
 const initialState = {
   userPosition: null,
+  status: "idle",
   selectedLocations: [],
   route: [],
   hotels: [],
@@ -11,23 +64,24 @@ const initialState = {
   isDragging: false,
   zoom: 17,
   isLoadingRoute: false,
-  error: null
+  error: null,
 };
 
 const mapSlice = createSlice({
-  name: 'map',
+  name: "map",
   initialState,
   reducers: {
     setUserPosition: (state, action) => {
       state.userPosition = action.payload;
     },
     addLocation: (state, action) => {
+      state.selectedLocations = [];
       state.selectedLocations.push(...action.payload);
     },
     removeLocation: (state, action) => {
-        state.selectedLocations = state.selectedLocations.filter(
-          (_, index) => !action.payload.includes(index)
-        );
+      state.selectedLocations = state.selectedLocations.filter(
+        (_, index) => !action.payload.includes(index)
+      );
     },
     setRoute: (state, action) => {
       state.route = action.payload;
@@ -64,8 +118,22 @@ const mapSlice = createSlice({
     },
     resetMap: (state) => {
       return initialState;
-    }
-  }
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getUserLocation.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getUserLocation.fulfilled, (state, action) => {
+        state.status = "succeded";
+        state.userPosition = action.payload;
+      })
+      .addCase(getUserLocation.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      });
+  },
 });
 
 export const {
@@ -81,7 +149,7 @@ export const {
   setZoom,
   setLoadingRoute,
   setError,
-  resetMap
+  resetMap,
 } = mapSlice.actions;
 
 export default mapSlice.reducer;

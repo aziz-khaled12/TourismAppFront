@@ -10,7 +10,9 @@ import TruncateMarkup from "react-truncate-markup";
 import { useAuth } from "../../context/AuthContext";
 import { GetPlace } from "../../datafetch/locations";
 import RestoImage from "../../assets/resto.jpg";
-import { RiMapPin2Fill, RiRestaurantFill } from "react-icons/ri";
+import { RiMapPin2Fill } from "react-icons/ri";
+import { useDispatch } from "react-redux";
+import { addLocation } from "../../redux/mapSlice";
 
 const PlaceDetails = () => {
   const { id } = useParams();
@@ -19,10 +21,21 @@ const PlaceDetails = () => {
   const [place, setPlace] = useState();
   const navigate = useNavigate();
   const [turncate, setTurncate] = useState(true);
+  const dispatch = useDispatch();
 
   const goBack = () => {
     navigate(-1);
   };
+
+  const handleDirectionsClick = () => {
+    dispatch(
+      addLocation([
+        [place.lat, place.lon],
+      ])
+    );
+    navigate("/map");
+  };
+
   useEffect(() => {
     const fetchPlace = async () => {
       await GetPlace(setPlace, id, accessToken);
@@ -161,7 +174,11 @@ const PlaceDetails = () => {
       </section>
       <div className="h-[50px] w-full bg-background"></div>
       <div className="fixed bottom-0 left-0 w-full bg-white p-4 z-1000 shadow-lg flex justify-around">
-        <Button variant="contained" className="flex-1 mx-2 !bg-green-700" onClick={() => {navigate(`/map?lon=${place.lon}&lat=${place.lat}`)}}>
+        <Button
+          variant="contained"
+          className="flex-1 mx-2 !bg-green-700"
+          onClick={handleDirectionsClick}
+        >
           <RiMapPin2Fill className="mr-2" />
           Directions
         </Button>

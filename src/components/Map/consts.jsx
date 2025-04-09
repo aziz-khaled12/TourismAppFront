@@ -49,27 +49,27 @@ export const filters = [
 ];
 
 // Memoized styles
-export const textFieldStyles = {
-  backgroundColor: "white",
-  borderRadius: "99px",
-  width: "100%",
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderColor: "#dfdfdf",
-      borderRadius: "99px",
-    },
-    "&:hover fieldset": {
-      borderColor: "#dfdfdf",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#dfdfdf",
-    },
-    "& .MuiInputBase-input": {
-      padding: "16px 16px 16px 0px",
-    },
-    border: "1px solid #dfdfdf",
-  },
-};
+// export const textFieldStyles = {
+//   backgroundColor: "white",
+//   borderRadius: "99px",
+//   width: "100%",
+//   "& .MuiOutlinedInput-root": {
+//     "& fieldset": {
+//       borderColor: "#dfdfdf",
+//       borderRadius: "99px",
+//     },
+//     "&:hover fieldset": {
+//       borderColor: "#dfdfdf",
+//     },
+//     "&.Mui-focused fieldset": {
+//       borderColor: "#dfdfdf",
+//     },
+//     "& .MuiInputBase-input": {
+//       padding: "16px 16px 16px 0px",
+//     },
+//     border: "1px solid #dfdfdf",
+//   },
+// };
 
 // Separate API service
  export const searchService = {

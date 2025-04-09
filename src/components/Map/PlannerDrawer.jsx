@@ -6,6 +6,7 @@ import {
   styled,
   SwipeableDrawer,
   TextField,
+  Typography,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { CiSearch } from "react-icons/ci";
@@ -33,7 +34,8 @@ const PlannerDrawer = ({ drawerOpen, setDrawerOpen }) => {
 
   const { accessToken } = useAuth();
   const dispatch = useDispatch();
-  const position = useSelector((state) => state.map.userPosition);
+  const { userPosition } = useSelector((state) => state.map);
+  const position = [userPosition.lat, userPosition.lon];
   const handlePlanSubmit = useCallback(async () => {
     if (!planInput.trim()) return;
 
@@ -70,102 +72,105 @@ const PlannerDrawer = ({ drawerOpen, setDrawerOpen }) => {
     <SwipeableDrawer
       anchor="bottom"
       open={drawerOpen}
-      sx={{ height: "60vh" }}
       onClose={() => setDrawerOpen(false)}
       onOpen={() => setDrawerOpen(true)}
     >
-      <Box
-        pb={3}
-        px={3}
-        sx={{ height: "60vh", position: "relative", overflow: "auto" }}
-      >
+      <Box sx={{ position: "relative", overflow: "auto", maxHeight: "70vh" }}>
         <Box
           sx={{
             position: "sticky",
             top: 0,
             backgroundColor: "white",
-            zIndex: 1,
+            zIndex: "100",
             paddingBottom: 1,
             display: "flex",
             justifyContent: "center",
-            padding: "8px",
+            padding: "8px"
           }}
         >
           <Puller />
         </Box>
 
-        <Box mt={2}>
-          <Stack direction={"column"} spacing={4}>
-            <Stack direction="column" spacing={2}>
-              <TextField
-                fullWidth
-                placeholder="Tell us about your trip"
-                onChange={(e) => setPlanInput(e.target.value)}
-                multiline
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <CiSearch className=" text-2xl" />
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "8px",
-                    "& fieldset": {
-                      borderColor: "gray", // default border color
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "gray", // border color on hover
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "green", // border color when focused
-                    },
+        <Box
+          p={3}
+          sx={{
+            position: "sticky",
+            top: 23,
+            backgroundColor: "white",
+            zIndex: "100",
+          }}
+        >
+          <Stack direction="column" spacing={2}>
+            <TextField
+              fullWidth
+              placeholder="Tell us about your trip"
+              onChange={(e) => setPlanInput(e.target.value)}
+              multiline
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <CiSearch className=" text-2xl" />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "8px",
+                  "& fieldset": {
+                    borderColor: "gray", // default border color
                   },
-                }}
-              />
+                  "&:hover fieldset": {
+                    borderColor: "gray", // border color on hover
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "green", // border color when focused
+                  },
+                },
+              }}
+            />
+            <Button
+              onClick={handlePlanSubmit}
+              variant="contained"
+              fullWidth
+              className="!bg-green-700"
+            >
+              {isLoading ? (
+                <OneEightyRingWithBg color="white" />
+              ) : (
+                "Discover your Trip"
+              )}
+            </Button>
+          </Stack>
+        </Box>
+        {plan.length > 0 && (
+          <>
+            <Box p={3}>
+              <Stack direction={"column"} spacing={2} mb={2}>
+                {plan.map((venue, index) => {
+                  return (
+                    <LocationCard
+                      key={index}
+                      location={venue}
+                      num={123}
+                      fullWidth
+                      height="40"
+                      shadow
+                    />
+                  );
+                })}
+              </Stack>
+
               <Button
-                onClick={handlePlanSubmit}
                 variant="contained"
                 fullWidth
                 className="!bg-green-700"
+                onClick={showRoute}
               >
-                {isLoading ? (
-                  <OneEightyRingWithBg color="white" />
-                ) : (
-                  "Discover your Trip"
-                )}
+                Show Route
               </Button>
-            </Stack>
-            {plan.length > 0 && (
-              <>
-                <Stack direction={"column"} spacing={2}>
-                  {plan.map((venue, index) => {
-                    return (
-                      <LocationCard
-                        key={index}
-                        location={venue}
-                        num={123}
-                        fullWidth
-                        height="40"
-                        shadow
-                      />
-                    );
-                  })}
-                </Stack>
-
-                <Button
-                  variant="contained"
-                  fullWidth
-                  className="!bg-green-700"
-                  onClick={showRoute}
-                >
-                  Show Route
-                </Button>
-              </>
-            )}
-          </Stack>
-        </Box>
+            </Box>
+          </>
+        )}
       </Box>
     </SwipeableDrawer>
   );

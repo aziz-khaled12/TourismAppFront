@@ -118,7 +118,7 @@ const Home = () => {
           </div>
         </div> */}
 
-        <div className="h-screen w-full sm:flex sm:justify-center sm:items-center hidden ">
+        <div className="h-[60vh] w-full sm:flex sm:justify-center sm:items-center hidden ">
           <div className="w-[70%]  text-center relative z-20">
             <h1 className="!leading-snug md:text-6xl sm:text-5xl text-black font-bold mb-8 ">
               Discover <span className="text-green-700"> Algeria </span> Like
