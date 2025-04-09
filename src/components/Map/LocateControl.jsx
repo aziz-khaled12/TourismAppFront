@@ -25,7 +25,8 @@ const customIcon = L.divIcon({
 const LocateControl = () => {
   const map = useMap();
   const dispatch = useDispatch();
-  const position = useSelector((state) => state.map.userPosition);
+  const { userPosition } = useSelector((state) => state.map);
+  const position = [userPosition.lat, userPosition.lon];
   const [clicked, setClicked] = useState(false);
   const [marker, setMarker] = useState();
 
@@ -60,15 +61,11 @@ const LocateControl = () => {
   };
 
   useEffect(() => {
-    console.log(position);
     const newMarker = L.marker(position, { icon: customIcon }).addTo(map);
     setMarker(newMarker);
     map.flyTo(position, 17);
   }, []);
 
-  useEffect(() => {
-    console.log(position);
-  }, [position]);
 
   return (
     <div
