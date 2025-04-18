@@ -18,6 +18,9 @@ import RestaurantCard from "../Restaurants/RestaurantCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { OneEightyRingWithBg } from "react-svg-spinners";
 
+const mapBoxToken = import.meta.env.VITE_AccessToken;
+
+
 const HotelDetails = () => {
   const { wilaya, id } = useParams();
   const { accessToken } = useAuth();
@@ -250,7 +253,7 @@ const HotelDetails = () => {
           minZoom={5}
         >
           <TileLayer
-            url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=sk.eyJ1Ijoia2hhbGVkYXppejExIiwiYSI6ImNseWhnM3FvNDA0MWgya3F5ZzVsMzRwYWEifQ.rA8VFAxykZnsT2AG1HwpsQ"
+            url={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=${mapBoxToken}`}
             attribution='&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> contributors'
           />
           <Marker position={[hotel.lat, hotel.lon]}></Marker>

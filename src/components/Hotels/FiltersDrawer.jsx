@@ -149,7 +149,7 @@ const FiltersDrawer = ({ confirmDetails, applyDate, toggleDrawer, roomsNum, peop
                   }}
                   variant="contained"
                   sx={{
-                    fontSize: "16px",
+                    fontSize: "14px",
                     fontWeight: "medium",
                     backgroundColor: "#15803d",
                     textTransform: "none",
@@ -213,7 +213,7 @@ const FiltersDrawer = ({ confirmDetails, applyDate, toggleDrawer, roomsNum, peop
                     }}
                     variant="contained"
                     sx={{
-                      fontSize: "16px",
+                      fontSize: "14px",
                       fontWeight: "medium",
                       backgroundColor: "#15803d",
                       textTransform: "none",

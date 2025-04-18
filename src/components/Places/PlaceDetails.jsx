@@ -14,6 +14,9 @@ import { RiMapPin2Fill } from "react-icons/ri";
 import { useDispatch } from "react-redux";
 import { addLocation } from "../../redux/mapSlice";
 
+
+const mapBoxToken = import.meta.env.VITE_AccessToken;
+
 const PlaceDetails = () => {
   const { id } = useParams();
   const { accessToken } = useAuth();
@@ -165,7 +168,7 @@ const PlaceDetails = () => {
             minZoom={5}
           >
             <TileLayer
-              url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=sk.eyJ1Ijoia2hhbGVkYXppejExIiwiYSI6ImNseWhnM3FvNDA0MWgya3F5ZzVsMzRwYWEifQ.rA8VFAxykZnsT2AG1HwpsQ"
+              url={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=${mapBoxToken}`}
               attribution='&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> contributors'
             />
             <Marker position={[place.lat, place.lon]}></Marker>

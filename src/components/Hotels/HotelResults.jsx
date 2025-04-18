@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SlArrowLeft } from "react-icons/sl";
-import { CiMap } from "react-icons/ci";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { GetWilayaHotels } from "../../datafetch/hotels";
 import { useAuth } from "../../context/AuthContext";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
@@ -231,9 +229,9 @@ const HotelResults = () => {
             </div>
           </div>
 
-          <div className="w-full flex px-4 flex-col items-center justify-start">
+          <div className="w-full flex p-4 flex-col gap-4 items-center justify-start">
             <div
-              className={`w-full py-8  ${
+              className={`w-full   ${
                 selectedOption == 3 ? "hidden" : "block"
               }`}
             >
@@ -267,19 +265,19 @@ const HotelResults = () => {
                 } items-baseline !border !border-[#9e9e9e] !border-solid !mr-2`}
               >
                 <span className="flex mr-3 items-center justify-end">
-                  <IoBedOutline className="!text-3xl !flex !items-center !mr-2" />{" "}
+                  <IoBedOutline className="!text-xl !flex !items-center !mr-2" />{" "}
                   {preRooms}
                 </span>
                 <span className="flex items-center justify-end">
-                  <GoPeople className="!text-3xl !flex !items-center !ml-2 mr-2" />{" "}
+                  <GoPeople className="!text-xl !flex !items-center !ml-2 mr-2" />{" "}
                   {prePeople}
                 </span>
               </Button>
             </div>
 
-            <div className="w-full flex flex-col items-center justify-center">
+            
               {selectedOption == 1 ? (
-                <div className="w-full flex flex-col justify-between items-center h-[60vh]">
+                <div className="w-full flex flex-col justify-between items-center gap-4">
                   <DateRange
                     className="bg-[#eff2f7]  rounded-lg"
                     editableDateInputs={true}
@@ -291,7 +289,7 @@ const HotelResults = () => {
                   <Button
                     onClick={applyDate}
                     variant="contained"
-                    className="!text-xl !py-4 !px-5 !rounded-full !bg-green-700 !normal-case"
+                    className="!text-sm !py-4 !px-5 !rounded-full !bg-green-700 !normal-case"
                   >
                     Apply Changes
                   </Button>
@@ -348,7 +346,7 @@ const HotelResults = () => {
                     <Button
                       onClick={confirmDetails}
                       variant="contained"
-                      className="!text-xl !py-4 !px-5 !rounded-full !bg-green-700 !normal-case"
+                      className="!text-sm !py-4 !px-5 !rounded-full !bg-green-700 !normal-case"
                     >
                       Apply Changes
                     </Button>
@@ -359,7 +357,6 @@ const HotelResults = () => {
               ) : (
                 "nothing"
               )}
-            </div>
           </div>
 
           <Puller />
