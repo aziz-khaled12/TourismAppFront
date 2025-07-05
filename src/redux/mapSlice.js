@@ -1,25 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { request, PERMISSIONS, RESULTS } from "react-native-permissions";
 
 export const getUserLocation = createAsyncThunk(
   "map/getUserLocation",
   async (_, thunkAPI) => {
     try {
-
-      // For Tauri Android
-    if (window.__TAURI__) {
-      // Request location permissions
-      const permission = await request(
-        PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
-      );
-
-      if (permission !== RESULTS.GRANTED) {
-        throw new Error("Location permission denied");
-      }
-    }
      
-
       // Get location
       const position = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
